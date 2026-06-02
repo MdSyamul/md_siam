@@ -54,7 +54,43 @@ class SiteSectionBlock extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             child,
+            const SiteSectionEndMarker(),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class SiteSectionEndMarker extends StatelessWidget {
+  const SiteSectionEndMarker({super.key, this.onDark = false});
+
+  final bool onDark;
+
+  @override
+  Widget build(BuildContext context) {
+    final narrow = MediaQuery.sizeOf(context).width < 760;
+    final lineColor = onDark
+        ? Colors.white.withValues(alpha: 0.34)
+        : SiteColors.line;
+    return Padding(
+      padding: EdgeInsets.only(top: narrow ? 26 : 34),
+      child: Center(
+        child: SizedBox(
+          width: narrow ? 96 : 132,
+          height: 2,
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(999),
+              gradient: LinearGradient(
+                colors: [
+                  lineColor.withValues(alpha: 0),
+                  lineColor,
+                  lineColor.withValues(alpha: 0),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );
@@ -692,6 +728,20 @@ class SiteFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox(height: 34);
+    final narrow = MediaQuery.sizeOf(context).width < 760;
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: [
+            SiteColors.navy.withValues(alpha: 0.06),
+            SiteColors.navy.withValues(alpha: 0),
+          ],
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+        ),
+      ),
+      child: SizedBox(height: narrow ? 54 : 78, width: double.infinity),
+    );
   }
 }

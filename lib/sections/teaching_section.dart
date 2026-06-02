@@ -24,10 +24,10 @@ class TeachingSection extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 14),
-              Text(
-                'Courses explicitly confirmed in your CV.',
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
+              // Text(
+              //   'Courses explicitly confirmed in your CV.',
+              //   style: Theme.of(context).textTheme.bodyMedium,
+              // ),
               const SizedBox(height: 18),
               Wrap(
                 spacing: 10,
@@ -49,10 +49,10 @@ class TeachingSection extends StatelessWidget {
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 14),
-              Text(
-                'Additional teaching areas from your university profile that can be highlighted as needed.',
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
+              // Text(
+              //   'Additional teaching areas from your university profile that can be highlighted as needed.',
+              //   style: Theme.of(context).textTheme.bodyMedium,
+              // ),
               const SizedBox(height: 18),
               Wrap(
                 spacing: 10,

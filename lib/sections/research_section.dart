@@ -1,67 +1,51 @@
 import 'package:flutter/material.dart';
 
-import '../site_content.dart';
-import '../site_theme.dart';
 import '../widgets/site_widgets.dart';
 
 class ResearchSection extends StatelessWidget {
-  const ResearchSection({super.key, required this.compact});
+  const ResearchSection({
+    super.key,
+    required this.compact,
+    required this.onOpenResearchProfile,
+    required this.onOpenResearchPage,
+  });
 
   final bool compact;
+  final VoidCallback onOpenResearchProfile;
+  final VoidCallback onOpenResearchPage;
 
   @override
   Widget build(BuildContext context) {
-    return AdaptiveWrapGrid(
-      minItemWidth: compact ? 240 : 260,
-      maxColumns: compact ? 1 : 3,
-      spacing: 18,
-      children: [
-        for (final item in researchAreas)
-          SiteHoverPanel(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                CircleAvatar(
-                  radius: 23,
-                  backgroundColor: SiteColors.surfaceMuted,
-                  child: Icon(item.icon, color: SiteColors.navy),
-                ),
-                const SizedBox(height: 18),
-                Text(item.title, style: Theme.of(context).textTheme.titleLarge),
-                const SizedBox(height: 12),
-                Text(
-                  item.summary,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                const SizedBox(height: 14),
-                for (final application in item.applications)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 8),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.only(top: 8),
-                          child: Icon(
-                            Icons.circle,
-                            size: 6,
-                            color: SiteColors.cyan,
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Text(
-                            application,
-                            style: Theme.of(context).textTheme.bodyMedium,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-              ],
-            ),
+    final copy = Text(
+      'A focused research profile spanning Physical AI, intelligent engineering systems, control, and learning-driven mechanical design.',
+      style: Theme.of(context).textTheme.bodyLarge,
+    );
+
+    final pageAction = ElevatedButton.icon(
+      onPressed: onOpenResearchPage,
+      icon: const Icon(Icons.arrow_forward_rounded),
+      label: const Text('Explore Research'),
+    );
+
+    final profileAction = OutlinedButton.icon(
+      onPressed: onOpenResearchProfile,
+      icon: const Icon(Icons.school_rounded),
+      label: const Text('View Scholar Profile'),
+    );
+
+    return SiteInfoPanel(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          copy,
+          const SizedBox(height: 18),
+          Wrap(
+            spacing: 12,
+            runSpacing: 12,
+            children: [pageAction, profileAction],
           ),
-      ],
+        ],
+      ),
     );
   }
 }

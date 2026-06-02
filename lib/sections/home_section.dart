@@ -8,17 +8,17 @@ class HomeSection extends StatelessWidget {
   const HomeSection({
     super.key,
     required this.compact,
-    required this.onViewResearch,
-    required this.onViewTeaching,
-    required this.onOpenCv,
-    required this.onContact,
+    required this.onUniversityProfile,
+    required this.onGoogleScholar,
+    required this.onLinkedIn,
+    required this.onGitHub,
   });
 
   final bool compact;
-  final VoidCallback onViewResearch;
-  final VoidCallback onViewTeaching;
-  final VoidCallback onOpenCv;
-  final VoidCallback onContact;
+  final VoidCallback onUniversityProfile;
+  final VoidCallback onGoogleScholar;
+  final VoidCallback onLinkedIn;
+  final VoidCallback onGitHub;
 
   @override
   Widget build(BuildContext context) {
@@ -34,95 +34,104 @@ class HomeSection extends StatelessWidget {
     );
 
     return ContentShell(
-      child: Container(
-        margin: EdgeInsets.only(top: veryNarrow ? 18 : 26),
-        padding: EdgeInsets.all(
-          veryNarrow
-              ? 18
-              : compact
-              ? 24
-              : 40,
-        ),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(veryNarrow ? 24 : 36),
-          gradient: const LinearGradient(
-            colors: [Color(0xFF102B3A), Color(0xFF20465A), Color(0xFF2E6B73)],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: SiteColors.navy.withValues(alpha: 0.18),
-              blurRadius: 40,
-              offset: const Offset(0, 24),
+      child: Column(
+        children: [
+          Container(
+            margin: EdgeInsets.only(top: veryNarrow ? 18 : 26),
+            padding: EdgeInsets.all(
+              veryNarrow
+                  ? 18
+                  : compact
+                  ? 24
+                  : 40,
             ),
-          ],
-        ),
-        child: Stack(
-          children: [
-            Positioned(
-              top: -50,
-              right: -20,
-              child: Container(
-                width: 180,
-                height: 180,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color(0x1FFFFFFF),
-                ),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(veryNarrow ? 24 : 36),
+              gradient: const LinearGradient(
+                colors: [
+                  Color(0xFF102B3A),
+                  Color(0xFF20465A),
+                  Color(0xFF2E6B73),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
               ),
-            ),
-            Positioned(
-              bottom: -70,
-              left: -30,
-              child: Container(
-                width: 220,
-                height: 220,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Color(0x14F5D6AA),
+              boxShadow: [
+                BoxShadow(
+                  color: SiteColors.navy.withValues(alpha: 0.18),
+                  blurRadius: 40,
+                  offset: const Offset(0, 24),
                 ),
-              ),
+              ],
             ),
-            compact
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _HeroCopy(
-                        headingStyle: headingStyle,
-                        onViewResearch: onViewResearch,
-                        onViewTeaching: onViewTeaching,
-                        onOpenCv: onOpenCv,
-                        onContact: onContact,
-                        compact: compact,
-                      ),
-                      const SizedBox(height: 28),
-                      const _HeroPortrait(compact: true),
-                    ],
-                  )
-                : Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        flex: 6,
-                        child: _HeroCopy(
-                          headingStyle: headingStyle,
-                          onViewResearch: onViewResearch,
-                          onViewTeaching: onViewTeaching,
-                          onOpenCv: onOpenCv,
-                          onContact: onContact,
-                          compact: compact,
-                        ),
-                      ),
-                      const SizedBox(width: 28),
-                      const Expanded(
-                        flex: 5,
-                        child: _HeroPortrait(compact: false),
-                      ),
-                    ],
+            child: Stack(
+              children: [
+                Positioned(
+                  top: -50,
+                  right: -20,
+                  child: Container(
+                    width: 180,
+                    height: 180,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0x1FFFFFFF),
+                    ),
                   ),
-          ],
-        ),
+                ),
+                Positioned(
+                  bottom: -70,
+                  left: -30,
+                  child: Container(
+                    width: 220,
+                    height: 220,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Color(0x14F5D6AA),
+                    ),
+                  ),
+                ),
+                compact
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _HeroCopy(
+                            headingStyle: headingStyle,
+                            onUniversityProfile: onUniversityProfile,
+                            onGoogleScholar: onGoogleScholar,
+                            onLinkedIn: onLinkedIn,
+                            onGitHub: onGitHub,
+                            compact: compact,
+                          ),
+                          const SizedBox(height: 28),
+                          const _HeroPortrait(compact: true),
+                        ],
+                      )
+                    : Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            flex: 6,
+                            child: _HeroCopy(
+                              headingStyle: headingStyle,
+                              onUniversityProfile: onUniversityProfile,
+                              onGoogleScholar: onGoogleScholar,
+                              onLinkedIn: onLinkedIn,
+                              onGitHub: onGitHub,
+                              compact: compact,
+                            ),
+                          ),
+                          const SizedBox(width: 28),
+                          const Expanded(
+                            flex: 5,
+                            child: _HeroPortrait(compact: false),
+                          ),
+                        ],
+                      ),
+              ],
+            ),
+          ),
+          const SiteSectionEndMarker(),
+        ],
       ),
     );
   }
@@ -131,18 +140,18 @@ class HomeSection extends StatelessWidget {
 class _HeroCopy extends StatelessWidget {
   const _HeroCopy({
     required this.headingStyle,
-    required this.onViewResearch,
-    required this.onViewTeaching,
-    required this.onOpenCv,
-    required this.onContact,
+    required this.onUniversityProfile,
+    required this.onGoogleScholar,
+    required this.onLinkedIn,
+    required this.onGitHub,
     required this.compact,
   });
 
   final TextStyle? headingStyle;
-  final VoidCallback onViewResearch;
-  final VoidCallback onViewTeaching;
-  final VoidCallback onOpenCv;
-  final VoidCallback onContact;
+  final VoidCallback onUniversityProfile;
+  final VoidCallback onGoogleScholar;
+  final VoidCallback onLinkedIn;
+  final VoidCallback onGitHub;
   final bool compact;
 
   @override
@@ -185,44 +194,13 @@ class _HeroCopy extends StatelessWidget {
             fontSize: compact ? 15 : 16,
           ),
         ),
-        const SizedBox(height: 20),
-        Wrap(
-          spacing: 10,
-          runSpacing: 10,
-          children: [
-            for (final keyword in heroKeywords)
-              Container(
-                constraints: BoxConstraints(
-                  maxWidth: MediaQuery.sizeOf(context).width - 72,
-                ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8,
-                ),
-                decoration: BoxDecoration(
-                  color: const Color(0x12FFFFFF),
-                  borderRadius: BorderRadius.circular(999),
-                  border: Border.all(color: const Color(0x30FFFFFF)),
-                ),
-                child: Text(
-                  keyword,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  softWrap: true,
-                ),
-              ),
-          ],
-        ),
         const SizedBox(height: 24),
         Wrap(
           spacing: 12,
           runSpacing: 12,
           children: [
             ElevatedButton.icon(
-              onPressed: onViewResearch,
+              onPressed: onUniversityProfile,
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFFF0C78D),
                 foregroundColor: SiteColors.navy,
@@ -231,11 +209,11 @@ class _HeroCopy extends StatelessWidget {
                   vertical: 14,
                 ),
               ),
-              icon: const Icon(Icons.biotech_outlined),
-              label: const Text('View Research'),
+              icon: const Icon(Icons.account_balance_rounded),
+              label: const Text('University Profile'),
             ),
             OutlinedButton.icon(
-              onPressed: onViewTeaching,
+              onPressed: onGoogleScholar,
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: Color(0x55FFFFFF)),
                 foregroundColor: Colors.white,
@@ -244,11 +222,11 @@ class _HeroCopy extends StatelessWidget {
                   vertical: 14,
                 ),
               ),
-              icon: const Icon(Icons.menu_book_rounded),
-              label: const Text('Teaching'),
+              icon: const Icon(Icons.school_rounded),
+              label: const Text('Google Scholar'),
             ),
             OutlinedButton.icon(
-              onPressed: onOpenCv,
+              onPressed: onLinkedIn,
               style: OutlinedButton.styleFrom(
                 side: const BorderSide(color: Color(0x55FFFFFF)),
                 foregroundColor: Colors.white,
@@ -257,20 +235,21 @@ class _HeroCopy extends StatelessWidget {
                   vertical: 14,
                 ),
               ),
-              icon: const Icon(Icons.download_rounded),
-              label: const Text('Download CV'),
+              icon: const Icon(Icons.business_center_rounded),
+              label: const Text('LinkedIn'),
             ),
-            TextButton.icon(
-              onPressed: onContact,
-              style: TextButton.styleFrom(
+            OutlinedButton.icon(
+              onPressed: onGitHub,
+              style: OutlinedButton.styleFrom(
+                side: const BorderSide(color: Color(0x55FFFFFF)),
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 8,
+                  horizontal: 18,
                   vertical: 14,
                 ),
               ),
-              icon: const Icon(Icons.arrow_downward_rounded),
-              label: const Text('Contact'),
+              icon: const Icon(Icons.code_rounded),
+              label: const Text('GitHub'),
             ),
           ],
         ),

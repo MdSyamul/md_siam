@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'pages/blog_page.dart';
+import 'pages/research_page.dart';
 import 'sections/blog_section.dart';
 import 'sections/contact_section.dart';
 import 'sections/home_section.dart';
@@ -25,7 +26,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: buildSiteTheme(),
       home: const SiteHomePage(),
-      routes: {BlogPage.routeName: (context) => const BlogPage()},
+      routes: {
+        BlogPage.routeName: (context) => const BlogPage(),
+        ResearchPage.routeName: (context) => const ResearchPage(),
+      },
     );
   }
 }
@@ -102,6 +106,10 @@ class _SiteHomePageState extends State<SiteHomePage> {
     Navigator.of(context).pushNamed(BlogPage.routeName);
   }
 
+  void _openResearchPage() {
+    Navigator.of(context).pushNamed(ResearchPage.routeName);
+  }
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width;
@@ -142,13 +150,12 @@ class _SiteHomePageState extends State<SiteHomePage> {
                               child: HomeSection(
                                 key: _sectionKeys[SiteSection.home],
                                 compact: compact,
-                                onViewResearch: () =>
-                                    _scrollToSection(SiteSection.research),
-                                onViewTeaching: () =>
-                                    _scrollToSection(SiteSection.teaching),
-                                onOpenCv: _openCv,
-                                onContact: () =>
-                                    _scrollToSection(SiteSection.contact),
+                                onUniversityProfile: () =>
+                                    _openUrl(universityProfileUrl),
+                                onGoogleScholar: () =>
+                                    _openUrl(googleScholarUrl),
+                                onLinkedIn: () => _openUrl(linkedInUrl),
+                                onGitHub: () => _openUrl(githubRepositoriesUrl),
                               ),
                             ),
                             // SiteAnimatedReveal(
@@ -180,8 +187,13 @@ class _SiteHomePageState extends State<SiteHomePage> {
                                 eyebrow: 'Research',
                                 title: 'Research Areas',
                                 subtitle:
-                                    'Themes that connect your current teaching, publications, and funded work.',
-                                child: ResearchSection(compact: compact),
+                                    'Physical artificial intelligence, intelligent design & manufacturing, system dynamics and control',
+                                child: ResearchSection(
+                                  compact: compact,
+                                  onOpenResearchProfile: () =>
+                                      _openUrl(googleScholarUrl),
+                                  onOpenResearchPage: _openResearchPage,
+                                ),
                               ),
                             ),
                             // SiteAnimatedReveal(
@@ -203,9 +215,9 @@ class _SiteHomePageState extends State<SiteHomePage> {
                               child: SiteSectionBlock(
                                 key: _sectionKeys[SiteSection.teaching],
                                 eyebrow: 'Teaching',
-                                title: 'Teaching Experience',
+                                title: 'Courses Taught',
                                 subtitle:
-                                    'Core undergraduate courses taught in mechanical engineering and computing.',
+                                    'Core undergraduate courses taught in the Mechanical Engineering Department.',
                                 child: TeachingSection(compact: compact),
                               ),
                             ),
@@ -216,7 +228,7 @@ class _SiteHomePageState extends State<SiteHomePage> {
                                 eyebrow: 'Blog',
                                 title: 'Writing',
                                 subtitle:
-                                    'Short-form thinking on research, teaching, and applied engineering practice.',
+                                    'Short-form thinking on research, teaching, and philosophy practice.',
                                 child: BlogSection(
                                   compact: compact,
                                   onOpenBlog: _openBlog,
@@ -261,20 +273,10 @@ class _SiteHomePageState extends State<SiteHomePage> {
                             // ),
                             SiteAnimatedReveal(
                               delay: const Duration(milliseconds: 860),
-                              child: SiteSectionBlock(
+                              child: ContactSection(
                                 key: _sectionKeys[SiteSection.contact],
-                                eyebrow: 'Contact',
-                                title: 'Get in Touch',
-                                subtitle:
-                                    'Clear contact routes for students, collaborators, and academic partners.',
-                                child: ContactSection(
-                                  compact: compact,
-                                  onEmail: () =>
-                                      _openUrl('mailto:$emailAddress'),
-                                  onPhone: () => _openUrl('tel:$phoneNumber'),
-                                  onGitHub: () => _openUrl(githubUrl),
-                                  onCv: _openCv,
-                                ),
+                                onEmail: () => _openUrl('mailto:$emailAddress'),
+                                onPhone: () => _openUrl('tel:$phoneNumber'),
                               ),
                             ),
                             const SiteFooter(),

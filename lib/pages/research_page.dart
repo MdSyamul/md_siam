@@ -1,42 +1,43 @@
 import 'package:flutter/material.dart';
 
-import '../blog_content.dart';
+import '../research_content.dart';
 import '../site_content.dart';
 import '../site_theme.dart';
+import '../utils/external_link.dart' as external_link;
 import '../widgets/site_widgets.dart';
 
-class BlogPage extends StatefulWidget {
-  const BlogPage({super.key});
+class ResearchPage extends StatefulWidget {
+  const ResearchPage({super.key});
 
-  static const routeName = '/blog';
+  static const routeName = '/research';
 
   @override
-  State<BlogPage> createState() => _BlogPageState();
+  State<ResearchPage> createState() => _ResearchPageState();
 }
 
-class _BlogPageState extends State<BlogPage> {
+class _ResearchPageState extends State<ResearchPage> {
   final TextEditingController _searchController = TextEditingController();
   String _query = '';
-  String? _selectedCategory;
+  ResearchContentType? _selectedType;
 
-  List<BlogPost> get _filteredPosts {
+  List<ResearchContentItem> get _filteredItems {
     final normalizedQuery = _query.trim().toLowerCase();
 
-    return blogPosts.where((post) {
-      final matchesCategory =
-          _selectedCategory == null || post.category == _selectedCategory;
+    return researchItems.where((item) {
+      final matchesType =
+          _selectedType == null || item.type.id == _selectedType!.id;
       final matchesSearch =
           normalizedQuery.isEmpty ||
-          post.searchableText.contains(normalizedQuery);
+          item.searchableText.contains(normalizedQuery);
 
-      return matchesCategory && matchesSearch;
+      return matchesType && matchesSearch;
     }).toList();
   }
 
-  void _openPost(BlogPost post) {
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute<void>(builder: (_) => BlogPostPage(post: post)));
+  void _openItem(ResearchContentItem item) {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(builder: (_) => ResearchDetailPage(item: item)),
+    );
   }
 
   @override
@@ -48,7 +49,7 @@ class _BlogPageState extends State<BlogPage> {
   @override
   Widget build(BuildContext context) {
     final compact = MediaQuery.sizeOf(context).width < 760;
-    final filteredPosts = _filteredPosts;
+    final filteredItems = _filteredItems;
 
     return Scaffold(
       body: DecoratedBox(
@@ -63,7 +64,7 @@ class _BlogPageState extends State<BlogPage> {
           bottom: false,
           child: Column(
             children: [
-              const _BlogTopBar(),
+              const _ResearchTopBar(),
               Expanded(
                 child: SingleChildScrollView(
                   child: ContentShell(
@@ -75,42 +76,42 @@ class _BlogPageState extends State<BlogPage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Blog',
+                            'Research',
                             style: Theme.of(context).textTheme.displaySmall,
                           ),
                           const SizedBox(height: 12),
                           ConstrainedBox(
                             constraints: const BoxConstraints(maxWidth: 760),
                             child: Text(
-                              'Notes on research, teaching, engineering systems, and applied AI.',
+                              'Research areas, active projects, and publications across Physical AI, intelligent engineering systems, control, and design.',
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ),
                           const SizedBox(height: 24),
-                          _BlogFilters(
+                          _ResearchFilters(
                             controller: _searchController,
                             query: _query,
-                            selectedCategory: _selectedCategory,
+                            selectedType: _selectedType,
                             onQueryChanged: (value) {
                               setState(() => _query = value);
                             },
-                            onCategoryChanged: (value) {
-                              setState(() => _selectedCategory = value);
+                            onTypeChanged: (value) {
+                              setState(() => _selectedType = value);
                             },
                           ),
                           const SizedBox(height: 22),
-                          if (filteredPosts.isEmpty)
-                            const SiteInfoPanel(child: _NoPostsFound())
+                          if (filteredItems.isEmpty)
+                            const SiteInfoPanel(child: _NoResearchFound())
                           else
                             AdaptiveWrapGrid(
                               minItemWidth: compact ? 260 : 330,
                               maxColumns: 3,
                               spacing: 18,
                               children: [
-                                for (final post in filteredPosts)
-                                  _BlogPostCard(
-                                    post: post,
-                                    onRead: () => _openPost(post),
+                                for (final item in filteredItems)
+                                  _ResearchCard(
+                                    item: item,
+                                    onOpen: () => _openItem(item),
                                   ),
                               ],
                             ),
@@ -129,10 +130,10 @@ class _BlogPageState extends State<BlogPage> {
   }
 }
 
-class BlogPostPage extends StatelessWidget {
-  const BlogPostPage({super.key, required this.post});
+class ResearchDetailPage extends StatelessWidget {
+  const ResearchDetailPage({super.key, required this.item});
 
-  final BlogPost post;
+  final ResearchContentItem item;
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +152,7 @@ class BlogPostPage extends StatelessWidget {
           bottom: false,
           child: Column(
             children: [
-              _BlogTopBar(title: post.title),
+              _ResearchTopBar(title: item.title),
               Expanded(
                 child: SingleChildScrollView(
                   child: ContentShell(
@@ -162,7 +163,7 @@ class BlogPostPage extends StatelessWidget {
                       child: Align(
                         alignment: Alignment.topLeft,
                         child: ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 840),
+                          constraints: const BoxConstraints(maxWidth: 860),
                           child: SiteInfoPanel(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -171,7 +172,7 @@ class BlogPostPage extends StatelessWidget {
                                   radius: compact ? 22 : 26,
                                   backgroundColor: SiteColors.surfaceMuted,
                                   child: Icon(
-                                    post.icon,
+                                    item.icon,
                                     color: SiteColors.navy,
                                   ),
                                 ),
@@ -180,14 +181,13 @@ class BlogPostPage extends StatelessWidget {
                                   spacing: 8,
                                   runSpacing: 8,
                                   children: [
-                                    SiteCategoryPill(label: post.category),
-                                    SiteCategoryPill(label: post.publishedDate),
-                                    SiteCategoryPill(label: post.readTime),
+                                    SiteCategoryPill(label: item.type.label),
+                                    SiteCategoryPill(label: item.meta),
                                   ],
                                 ),
                                 const SizedBox(height: 18),
                                 Text(
-                                  post.title,
+                                  item.title,
                                   style: Theme.of(context)
                                       .textTheme
                                       .displaySmall
@@ -195,30 +195,25 @@ class BlogPostPage extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 14),
                                 Text(
-                                  post.summary,
+                                  item.summary,
                                   style: Theme.of(context).textTheme.bodyLarge,
                                 ),
-                                const SizedBox(height: 22),
-                                const Divider(color: SiteColors.line),
-                                const SizedBox(height: 8),
-                                for (final paragraph in post.paragraphs) ...[
-                                  const SizedBox(height: 16),
-                                  Text(
-                                    paragraph,
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.bodyLarge,
+                                if (item.details.isNotEmpty) ...[
+                                  const SizedBox(height: 22),
+                                  const Divider(color: SiteColors.line),
+                                  const SizedBox(height: 14),
+                                  for (final detail in item.details)
+                                    SiteMiniBullet(label: detail),
+                                ],
+                                if (item.url != null) ...[
+                                  const SizedBox(height: 22),
+                                  ElevatedButton.icon(
+                                    onPressed: () =>
+                                        external_link.openExternal(item.url!),
+                                    icon: const Icon(Icons.open_in_new_rounded),
+                                    label: const Text('Open Link'),
                                   ),
                                 ],
-                                const SizedBox(height: 24),
-                                Wrap(
-                                  spacing: 8,
-                                  runSpacing: 8,
-                                  children: [
-                                    for (final tag in post.tags)
-                                      SiteSkillChip(label: tag),
-                                  ],
-                                ),
                               ],
                             ),
                           ),
@@ -236,8 +231,8 @@ class BlogPostPage extends StatelessWidget {
   }
 }
 
-class _BlogTopBar extends StatelessWidget {
-  const _BlogTopBar({this.title});
+class _ResearchTopBar extends StatelessWidget {
+  const _ResearchTopBar({this.title});
 
   final String? title;
 
@@ -266,7 +261,7 @@ class _BlogTopBar extends StatelessWidget {
           const SizedBox(width: 6),
           Expanded(
             child: Text(
-              title ?? '$siteName Blog',
+              title ?? '$siteName Research',
               style: Theme.of(context).textTheme.titleLarge,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -278,20 +273,20 @@ class _BlogTopBar extends StatelessWidget {
   }
 }
 
-class _BlogFilters extends StatelessWidget {
-  const _BlogFilters({
+class _ResearchFilters extends StatelessWidget {
+  const _ResearchFilters({
     required this.controller,
     required this.query,
-    required this.selectedCategory,
+    required this.selectedType,
     required this.onQueryChanged,
-    required this.onCategoryChanged,
+    required this.onTypeChanged,
   });
 
   final TextEditingController controller;
   final String query;
-  final String? selectedCategory;
+  final ResearchContentType? selectedType;
   final ValueChanged<String> onQueryChanged;
-  final ValueChanged<String?> onCategoryChanged;
+  final ValueChanged<ResearchContentType?> onTypeChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -305,7 +300,7 @@ class _BlogFilters extends StatelessWidget {
             controller: controller,
             onChanged: onQueryChanged,
             decoration: InputDecoration(
-              hintText: 'Search posts',
+              hintText: 'Search research',
               prefixIcon: const Icon(Icons.search_rounded),
               suffixIcon: query.isEmpty
                   ? null
@@ -340,15 +335,16 @@ class _BlogFilters extends StatelessWidget {
             children: [
               ChoiceChip(
                 label: const Text('All'),
-                selected: selectedCategory == null,
-                onSelected: (_) => onCategoryChanged(null),
+                selected: selectedType == null,
+                onSelected: (_) => onTypeChanged(null),
                 avatar: compact ? null : const Icon(Icons.apps_rounded),
               ),
-              for (final category in blogCategories)
+              for (final type in researchTypes)
                 ChoiceChip(
-                  label: Text(category),
-                  selected: selectedCategory == category,
-                  onSelected: (_) => onCategoryChanged(category),
+                  label: Text(type.label),
+                  selected: selectedType?.id == type.id,
+                  onSelected: (_) => onTypeChanged(type),
+                  avatar: compact ? null : Icon(type.icon),
                 ),
             ],
           ),
@@ -358,54 +354,45 @@ class _BlogFilters extends StatelessWidget {
   }
 }
 
-class _BlogPostCard extends StatelessWidget {
-  const _BlogPostCard({required this.post, required this.onRead});
+class _ResearchCard extends StatelessWidget {
+  const _ResearchCard({required this.item, required this.onOpen});
 
-  final BlogPost post;
-  final VoidCallback onRead;
+  final ResearchContentItem item;
+  final VoidCallback onOpen;
 
   @override
   Widget build(BuildContext context) {
     return SiteHoverPanel(
-      onTap: onRead,
+      onTap: onOpen,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           CircleAvatar(
             radius: 22,
             backgroundColor: SiteColors.surfaceMuted,
-            child: Icon(post.icon, color: SiteColors.navy),
+            child: Icon(item.icon, color: SiteColors.navy),
           ),
           const SizedBox(height: 16),
           Wrap(
             spacing: 8,
             runSpacing: 8,
             children: [
-              SiteCategoryPill(label: post.category),
-              SiteCategoryPill(label: post.publishedDate),
+              SiteCategoryPill(label: item.type.label),
+              SiteCategoryPill(label: item.meta),
             ],
           ),
           const SizedBox(height: 16),
-          Text(post.title, style: Theme.of(context).textTheme.titleLarge),
+          Text(item.title, style: Theme.of(context).textTheme.titleLarge),
           const SizedBox(height: 10),
-          Text(post.summary, style: Theme.of(context).textTheme.bodyMedium),
+          Text(item.summary, style: Theme.of(context).textTheme.bodyMedium),
           const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  post.readTime,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.labelLarge?.copyWith(color: SiteColors.textMuted),
-                ),
-              ),
-              TextButton.icon(
-                onPressed: onRead,
-                icon: const Icon(Icons.arrow_forward_rounded, size: 18),
-                label: const Text('Read'),
-              ),
-            ],
+          Align(
+            alignment: Alignment.centerRight,
+            child: TextButton.icon(
+              onPressed: onOpen,
+              icon: const Icon(Icons.arrow_forward_rounded, size: 18),
+              label: const Text('View'),
+            ),
           ),
         ],
       ),
@@ -413,8 +400,8 @@ class _BlogPostCard extends StatelessWidget {
   }
 }
 
-class _NoPostsFound extends StatelessWidget {
-  const _NoPostsFound();
+class _NoResearchFound extends StatelessWidget {
+  const _NoResearchFound();
 
   @override
   Widget build(BuildContext context) {
@@ -435,12 +422,12 @@ class _NoPostsFound extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'No posts found',
+                'No research items found',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
               const SizedBox(height: 8),
               Text(
-                'Try a different title, topic, or category.',
+                'Try a different keyword or research type.',
                 style: Theme.of(context).textTheme.bodyLarge,
               ),
             ],

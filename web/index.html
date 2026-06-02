@@ -35,8 +35,13 @@
 <body>
   <script>
     window.downloadFile = function(url, fileName) {
+      const parsedUrl = new URL(url, window.location.href);
+      if (parsedUrl.origin !== window.location.origin || !['http:', 'https:'].includes(parsedUrl.protocol)) {
+        return;
+      }
+
       const link = document.createElement('a');
-      link.href = url;
+      link.href = parsedUrl.href;
       link.download = fileName || '';
       link.rel = 'noopener';
       document.body.appendChild(link);

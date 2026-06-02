@@ -4,7 +4,7 @@ const String siteName = 'Md. Syamul Bashar';
 const String siteHeroStatement =
     'Physical AI, intelligent engineering systems, control theory, and reinforcement learning for real-world mechanical applications.';
 const String siteHeroSummary =
-    'Assistant Professor in the Department of Mechanical Engineering at Shahjalal University of Science and Technology, with research spanning robotics, adaptive thermal comfort control, and data-driven airfoil design.';
+    'Assistant Professor in the Department of Mechanical Engineering at Shahjalal University of Science and Technology, with research spanning Physical AI, Intelligent Design and Manufacturing, Control Theory and System Dynamics';
 const String siteBiography =
     '''I am an Assistant Professor in the Department of Mechanical Engineering at Shahjalal University of Science and Technology. My work sits at the intersection of Physical AI, intelligent design and manufacturing, control systems, reinforcement learning, and computational modeling. I earned my B.Sc. in Mechanical Engineering with Distinction from SUST, and I continue to build applied research in thermal comfort, robotics, smart agriculture, airfoil design, and fluid dynamics.''';
 
@@ -16,6 +16,14 @@ const String phoneNumber = '+8801307486552';
 const String departmentAddress =
     'Department of Mechanical Engineering, Shahjalal University of Science and Technology, Sylhet-3114, Bangladesh';
 const String githubUrl = 'https://github.com/MdSyamul';
+const String universityProfileUrl =
+    'https://www.sust.edu/departments/mee/faculty/md.syamul-mee@sust.edu';
+const String googleScholarUrl =
+    'https://scholar.google.com/citations?user=6Xqz7xgAAAAJ&hl=en';
+const String linkedInUrl =
+    'https://www.linkedin.com/in/md-syamul-bashar-9293a8161/';
+const String githubRepositoriesUrl =
+    'https://github.com/MdSyamul?tab=repositories';
 
 const List<String> heroKeywords = [
   'Physical AI',
@@ -394,17 +402,14 @@ const List<PublicationItem> conferencePublications = [
 ];
 
 const List<String> teachingCourses = [
-  'Programming Methodology',
   'Control Engineering',
   'Numerical Analysis',
-  'Applied Statistics for Engineers',
   'Fluid Mechanics',
-  'Instrumentation and Measurements',
+  'Basic Thermodynamics',
 ];
 
 const List<String> additionalTeachingCourses = [
-  'Engineering Mechanics',
-  'Basic Thermodynamics',
+  'Programming Methodology',
   'Applied Statistics for Engineers',
 ];
 
