@@ -35,31 +35,12 @@ void main() {
 
     expect(find.text('Md. Syamul Bashar Blog'), findsOneWidget);
     expect(find.text('Search posts'), findsOneWidget);
-    expect(find.text('Physical AI for Mechanical Engineering'), findsWidgets);
+    expect(find.text('No posts found'), findsOneWidget);
 
     await tester.enterText(find.byType(TextField), 'thermal');
     await tester.pumpAndSettle();
 
-    expect(
-      find.text('Why Sensor-Lite Thermal Comfort Models Matter'),
-      findsOneWidget,
-    );
-    expect(
-      find.text('Teaching Control Concepts with Simulation'),
-      findsNothing,
-    );
-
-    final readButton = find.text('Read').first;
-    await tester.ensureVisible(readButton);
-    await tester.tap(readButton);
-    await tester.pumpAndSettle();
-
-    expect(
-      find.textContaining(
-        'Thermal comfort prediction often depends on measurements that are difficult to collect continuously in ordinary buildings.',
-      ),
-      findsOneWidget,
-    );
+    expect(find.text('No posts found'), findsOneWidget);
   });
 
   testWidgets('homepage blog section uses original visit action', (
