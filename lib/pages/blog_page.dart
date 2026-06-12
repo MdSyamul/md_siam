@@ -5,50 +5,20 @@ import '../site_content.dart';
 import '../site_theme.dart';
 import '../widgets/site_widgets.dart';
 
-class BlogPage extends StatefulWidget {
+class BlogPage extends StatelessWidget {
   const BlogPage({super.key});
 
   static const routeName = '/blog';
 
-  @override
-  State<BlogPage> createState() => _BlogPageState();
-}
-
-class _BlogPageState extends State<BlogPage> {
-  final TextEditingController _searchController = TextEditingController();
-  String _query = '';
-  String? _selectedCategory;
-
-  List<BlogPost> get _filteredPosts {
-    final normalizedQuery = _query.trim().toLowerCase();
-
-    return blogPosts.where((post) {
-      final matchesCategory =
-          _selectedCategory == null || post.category == _selectedCategory;
-      final matchesSearch =
-          normalizedQuery.isEmpty ||
-          post.searchableText.contains(normalizedQuery);
-
-      return matchesCategory && matchesSearch;
-    }).toList();
-  }
-
-  void _openPost(BlogPost post) {
+  void _openPost(BuildContext context, BlogPost post) {
     Navigator.of(
       context,
     ).push(MaterialPageRoute<void>(builder: (_) => BlogPostPage(post: post)));
   }
 
   @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final compact = MediaQuery.sizeOf(context).width < 760;
-    final filteredPosts = _filteredPosts;
 
     return Scaffold(
       body: DecoratedBox(
@@ -86,34 +56,19 @@ class _BlogPageState extends State<BlogPage> {
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ),
-                          const SizedBox(height: 24),
-                          _BlogFilters(
-                            controller: _searchController,
-                            query: _query,
-                            selectedCategory: _selectedCategory,
-                            onQueryChanged: (value) {
-                              setState(() => _query = value);
-                            },
-                            onCategoryChanged: (value) {
-                              setState(() => _selectedCategory = value);
-                            },
-                          ),
                           const SizedBox(height: 22),
-                          if (filteredPosts.isEmpty)
-                            const SiteInfoPanel(child: _NoPostsFound())
-                          else
-                            AdaptiveWrapGrid(
-                              minItemWidth: compact ? 260 : 330,
-                              maxColumns: 3,
-                              spacing: 18,
-                              children: [
-                                for (final post in filteredPosts)
-                                  _BlogPostCard(
-                                    post: post,
-                                    onRead: () => _openPost(post),
-                                  ),
-                              ],
-                            ),
+                          AdaptiveWrapGrid(
+                            minItemWidth: compact ? 260 : 330,
+                            maxColumns: 3,
+                            spacing: 18,
+                            children: [
+                              for (final post in blogPosts)
+                                _BlogPostCard(
+                                  post: post,
+                                  onRead: () => _openPost(context, post),
+                                ),
+                            ],
+                          ),
                           const SizedBox(height: 34),
                         ],
                       ),
@@ -167,22 +122,11 @@ class BlogPostPage extends StatelessWidget {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                CircleAvatar(
-                                  radius: compact ? 22 : 26,
-                                  backgroundColor: SiteColors.surfaceMuted,
-                                  child: Icon(
-                                    post.icon,
-                                    color: SiteColors.navy,
-                                  ),
-                                ),
-                                const SizedBox(height: 20),
                                 Wrap(
                                   spacing: 8,
                                   runSpacing: 8,
                                   children: [
                                     SiteCategoryPill(label: post.category),
-                                    SiteCategoryPill(label: post.publishedDate),
-                                    SiteCategoryPill(label: post.readTime),
                                   ],
                                 ),
                                 const SizedBox(height: 18),
@@ -192,11 +136,6 @@ class BlogPostPage extends StatelessWidget {
                                       .textTheme
                                       .displaySmall
                                       ?.copyWith(fontSize: compact ? 29 : 36),
-                                ),
-                                const SizedBox(height: 14),
-                                Text(
-                                  post.summary,
-                                  style: Theme.of(context).textTheme.bodyLarge,
                                 ),
                                 const SizedBox(height: 22),
                                 const Divider(color: SiteColors.line),
@@ -210,15 +149,6 @@ class BlogPostPage extends StatelessWidget {
                                     ).textTheme.bodyLarge,
                                   ),
                                 ],
-                                const SizedBox(height: 24),
-                                Wrap(
-                                  spacing: 8,
-                                  runSpacing: 8,
-                                  children: [
-                                    for (final tag in post.tags)
-                                      SiteSkillChip(label: tag),
-                                  ],
-                                ),
                               ],
                             ),
                           ),
@@ -278,86 +208,6 @@ class _BlogTopBar extends StatelessWidget {
   }
 }
 
-class _BlogFilters extends StatelessWidget {
-  const _BlogFilters({
-    required this.controller,
-    required this.query,
-    required this.selectedCategory,
-    required this.onQueryChanged,
-    required this.onCategoryChanged,
-  });
-
-  final TextEditingController controller;
-  final String query;
-  final String? selectedCategory;
-  final ValueChanged<String> onQueryChanged;
-  final ValueChanged<String?> onCategoryChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final compact = MediaQuery.sizeOf(context).width < 620;
-
-    return SiteInfoPanel(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TextField(
-            controller: controller,
-            onChanged: onQueryChanged,
-            decoration: InputDecoration(
-              hintText: 'Search posts',
-              prefixIcon: const Icon(Icons.search_rounded),
-              suffixIcon: query.isEmpty
-                  ? null
-                  : IconButton(
-                      tooltip: 'Clear search',
-                      onPressed: () {
-                        controller.clear();
-                        onQueryChanged('');
-                      },
-                      icon: const Icon(Icons.close_rounded),
-                    ),
-              filled: true,
-              fillColor: Colors.white.withValues(alpha: 0.8),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(18),
-                borderSide: const BorderSide(color: SiteColors.line),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(18),
-                borderSide: const BorderSide(color: SiteColors.line),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(18),
-                borderSide: const BorderSide(color: SiteColors.cyan, width: 2),
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              ChoiceChip(
-                label: const Text('All'),
-                selected: selectedCategory == null,
-                onSelected: (_) => onCategoryChanged(null),
-                avatar: compact ? null : const Icon(Icons.apps_rounded),
-              ),
-              for (final category in blogCategories)
-                ChoiceChip(
-                  label: Text(category),
-                  selected: selectedCategory == category,
-                  onSelected: (_) => onCategoryChanged(category),
-                ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _BlogPostCard extends StatelessWidget {
   const _BlogPostCard({required this.post, required this.onRead});
 
@@ -371,82 +221,33 @@ class _BlogPostCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CircleAvatar(
-            radius: 22,
-            backgroundColor: SiteColors.surfaceMuted,
-            child: Icon(post.icon, color: SiteColors.navy),
-          ),
-          const SizedBox(height: 16),
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: [
-              SiteCategoryPill(label: post.category),
-              SiteCategoryPill(label: post.publishedDate),
-            ],
+            children: [SiteCategoryPill(label: post.category)],
           ),
           const SizedBox(height: 16),
           Text(post.title, style: Theme.of(context).textTheme.titleLarge),
-          const SizedBox(height: 10),
-          Text(post.summary, style: Theme.of(context).textTheme.bodyMedium),
+          if (post.paragraphs.isNotEmpty) ...[
+            const SizedBox(height: 10),
+            Text(
+              post.paragraphs.first,
+              style: Theme.of(context).textTheme.bodyMedium,
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
           const SizedBox(height: 16),
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  post.readTime,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.labelLarge?.copyWith(color: SiteColors.textMuted),
-                ),
-              ),
-              TextButton.icon(
-                onPressed: onRead,
-                icon: const Icon(Icons.arrow_forward_rounded, size: 18),
-                label: const Text('Read'),
-              ),
-            ],
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton.icon(
+              onPressed: onRead,
+              icon: const Icon(Icons.arrow_forward_rounded, size: 18),
+              label: const Text('Read'),
+            ),
           ),
         ],
       ),
-    );
-  }
-}
-
-class _NoPostsFound extends StatelessWidget {
-  const _NoPostsFound();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CircleAvatar(
-          radius: 22,
-          backgroundColor: SiteColors.surfaceMuted,
-          child: Icon(
-            Icons.search_off_rounded,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-        ),
-        const SizedBox(width: 14),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'No posts found',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Try a different title, topic, or category.',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }

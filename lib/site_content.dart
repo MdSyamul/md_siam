@@ -9,8 +9,6 @@ const String siteBiography =
     '''I am an Assistant Professor in the Department of Mechanical Engineering at Shahjalal University of Science and Technology. My work sits at the intersection of Physical AI, intelligent design and manufacturing, control systems, reinforcement learning, and computational modeling. I earned my B.Sc. in Mechanical Engineering with Distinction from SUST, and I continue to build applied research in thermal comfort, robotics, smart agriculture, airfoil design, and fluid dynamics.''';
 
 const String profileImagePath = 'assets/siam.jpeg';
-const String cvFileName = 'CV_MdSyamul.pdf';
-const String cvAssetPath = 'assets/$cvFileName';
 const String emailAddress = 'md.syamul-mee@sust.edu';
 const String phoneNumber = '+8801307486552';
 const String departmentAddress =

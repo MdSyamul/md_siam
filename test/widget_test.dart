@@ -34,13 +34,17 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Md. Syamul Bashar Blog'), findsOneWidget);
-    expect(find.text('Search posts'), findsOneWidget);
-    expect(find.text('No posts found'), findsOneWidget);
+    expect(find.byType(TextField), findsNothing);
+    expect(find.text('Self'), findsWidgets);
+    expect(find.text('A quite ruin of self'), findsWidgets);
 
-    await tester.enterText(find.byType(TextField), 'thermal');
+    final readButton = find.text('Read').first;
+    await tester.ensureVisible(readButton);
+    await tester.tap(readButton);
     await tester.pumpAndSettle();
 
-    expect(find.text('No posts found'), findsOneWidget);
+    expect(find.text('Self'), findsWidgets);
+    expect(find.text('A quite ruin of self'), findsOneWidget);
   });
 
   testWidgets('homepage blog section uses original visit action', (

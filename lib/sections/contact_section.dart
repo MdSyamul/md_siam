@@ -31,7 +31,7 @@ class ContactSection extends StatelessWidget {
         const SizedBox(height: 18),
         SiteContactRow(
           icon: Icons.call_outlined,
-          label: 'Phone',
+          label: 'WhatsApp',
           value: phoneNumber,
           onTap: onPhone,
         ),

@@ -72,13 +72,6 @@ class _SiteHomePageState extends State<SiteHomePage> {
     external_link.openExternal(url);
   }
 
-  void _openCv() {
-    external_link.downloadFile(
-      Uri.base.resolve('assets/$cvAssetPath').toString(),
-      fileName: cvFileName,
-    );
-  }
-
   void _scrollToSection(SiteSection section) {
     if (section == SiteSection.home) {
       _scrollController.animateTo(
@@ -135,7 +128,6 @@ class _SiteHomePageState extends State<SiteHomePage> {
                   _TopBar(
                     compact: compactNavigation,
                     onSectionSelected: _scrollToSection,
-                    onOpenCv: _openCv,
                   ),
                   Expanded(
                     child: Scrollbar(
@@ -296,15 +288,10 @@ class _SiteHomePageState extends State<SiteHomePage> {
 }
 
 class _TopBar extends StatelessWidget {
-  const _TopBar({
-    required this.compact,
-    required this.onSectionSelected,
-    required this.onOpenCv,
-  });
+  const _TopBar({required this.compact, required this.onSectionSelected});
 
   final bool compact;
   final ValueChanged<SiteSection> onSectionSelected;
-  final VoidCallback onOpenCv;
 
   @override
   Widget build(BuildContext context) {
@@ -378,18 +365,6 @@ class _TopBar extends StatelessWidget {
                                   onSectionSelected(item.section);
                                 },
                               ),
-                            const SizedBox(height: 8),
-                            SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton.icon(
-                                onPressed: () {
-                                  Navigator.of(sheetContext).pop();
-                                  onOpenCv();
-                                },
-                                icon: const Icon(Icons.download_rounded),
-                                label: const Text('Download CV'),
-                              ),
-                            ),
                           ],
                         ),
                       ),
@@ -413,12 +388,6 @@ class _TopBar extends StatelessWidget {
                     ),
                 ],
               ),
-            ),
-            const SizedBox(width: 12),
-            ElevatedButton.icon(
-              onPressed: onOpenCv,
-              icon: const Icon(Icons.download_rounded),
-              label: const Text('Download CV'),
             ),
           ],
         ],

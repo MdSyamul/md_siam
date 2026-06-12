@@ -6,50 +6,20 @@ import '../site_theme.dart';
 import '../utils/external_link.dart' as external_link;
 import '../widgets/site_widgets.dart';
 
-class ResearchPage extends StatefulWidget {
+class ResearchPage extends StatelessWidget {
   const ResearchPage({super.key});
 
   static const routeName = '/research';
 
-  @override
-  State<ResearchPage> createState() => _ResearchPageState();
-}
-
-class _ResearchPageState extends State<ResearchPage> {
-  final TextEditingController _searchController = TextEditingController();
-  String _query = '';
-  ResearchContentType? _selectedType;
-
-  List<ResearchContentItem> get _filteredItems {
-    final normalizedQuery = _query.trim().toLowerCase();
-
-    return researchItems.where((item) {
-      final matchesType =
-          _selectedType == null || item.type.id == _selectedType!.id;
-      final matchesSearch =
-          normalizedQuery.isEmpty ||
-          item.searchableText.contains(normalizedQuery);
-
-      return matchesType && matchesSearch;
-    }).toList();
-  }
-
-  void _openItem(ResearchContentItem item) {
+  void _openItem(BuildContext context, ResearchContentItem item) {
     Navigator.of(context).push(
       MaterialPageRoute<void>(builder: (_) => ResearchDetailPage(item: item)),
     );
   }
 
   @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     final compact = MediaQuery.sizeOf(context).width < 760;
-    final filteredItems = _filteredItems;
 
     return Scaffold(
       body: DecoratedBox(
@@ -87,34 +57,19 @@ class _ResearchPageState extends State<ResearchPage> {
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ),
-                          const SizedBox(height: 24),
-                          _ResearchFilters(
-                            controller: _searchController,
-                            query: _query,
-                            selectedType: _selectedType,
-                            onQueryChanged: (value) {
-                              setState(() => _query = value);
-                            },
-                            onTypeChanged: (value) {
-                              setState(() => _selectedType = value);
-                            },
-                          ),
                           const SizedBox(height: 22),
-                          if (filteredItems.isEmpty)
-                            const SiteInfoPanel(child: _NoResearchFound())
-                          else
-                            AdaptiveWrapGrid(
-                              minItemWidth: compact ? 260 : 330,
-                              maxColumns: 3,
-                              spacing: 18,
-                              children: [
-                                for (final item in filteredItems)
-                                  _ResearchCard(
-                                    item: item,
-                                    onOpen: () => _openItem(item),
-                                  ),
-                              ],
-                            ),
+                          AdaptiveWrapGrid(
+                            minItemWidth: compact ? 260 : 330,
+                            maxColumns: 3,
+                            spacing: 18,
+                            children: [
+                              for (final item in researchItems)
+                                _ResearchCard(
+                                  item: item,
+                                  onOpen: () => _openItem(context, item),
+                                ),
+                            ],
+                          ),
                           const SizedBox(height: 34),
                         ],
                       ),
@@ -273,87 +228,6 @@ class _ResearchTopBar extends StatelessWidget {
   }
 }
 
-class _ResearchFilters extends StatelessWidget {
-  const _ResearchFilters({
-    required this.controller,
-    required this.query,
-    required this.selectedType,
-    required this.onQueryChanged,
-    required this.onTypeChanged,
-  });
-
-  final TextEditingController controller;
-  final String query;
-  final ResearchContentType? selectedType;
-  final ValueChanged<String> onQueryChanged;
-  final ValueChanged<ResearchContentType?> onTypeChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    final compact = MediaQuery.sizeOf(context).width < 620;
-
-    return SiteInfoPanel(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TextField(
-            controller: controller,
-            onChanged: onQueryChanged,
-            decoration: InputDecoration(
-              hintText: 'Search research',
-              prefixIcon: const Icon(Icons.search_rounded),
-              suffixIcon: query.isEmpty
-                  ? null
-                  : IconButton(
-                      tooltip: 'Clear search',
-                      onPressed: () {
-                        controller.clear();
-                        onQueryChanged('');
-                      },
-                      icon: const Icon(Icons.close_rounded),
-                    ),
-              filled: true,
-              fillColor: Colors.white.withValues(alpha: 0.8),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(18),
-                borderSide: const BorderSide(color: SiteColors.line),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(18),
-                borderSide: const BorderSide(color: SiteColors.line),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(18),
-                borderSide: const BorderSide(color: SiteColors.cyan, width: 2),
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              ChoiceChip(
-                label: const Text('All'),
-                selected: selectedType == null,
-                onSelected: (_) => onTypeChanged(null),
-                avatar: compact ? null : const Icon(Icons.apps_rounded),
-              ),
-              for (final type in researchTypes)
-                ChoiceChip(
-                  label: Text(type.label),
-                  selected: selectedType?.id == type.id,
-                  onSelected: (_) => onTypeChanged(type),
-                  avatar: compact ? null : Icon(type.icon),
-                ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
 class _ResearchCard extends StatelessWidget {
   const _ResearchCard({required this.item, required this.onOpen});
 
@@ -396,44 +270,6 @@ class _ResearchCard extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _NoResearchFound extends StatelessWidget {
-  const _NoResearchFound();
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CircleAvatar(
-          radius: 22,
-          backgroundColor: SiteColors.surfaceMuted,
-          child: Icon(
-            Icons.search_off_rounded,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-        ),
-        const SizedBox(width: 14),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'No research items found',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Try a different keyword or research type.',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }
