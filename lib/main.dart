@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'blog_content.dart';
 import 'pages/blog_page.dart';
 import 'pages/research_page.dart';
 import 'sections/blog_section.dart';
@@ -97,6 +98,12 @@ class _SiteHomePageState extends State<SiteHomePage> {
 
   void _openBlog() {
     Navigator.of(context).pushNamed(BlogPage.routeName);
+  }
+
+  void _openBlogPost(BlogPost post) {
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute<void>(builder: (_) => BlogPostPage(post: post)));
   }
 
   void _openResearchPage() {
@@ -219,50 +226,15 @@ class _SiteHomePageState extends State<SiteHomePage> {
                                 key: _sectionKeys[SiteSection.blog],
                                 eyebrow: 'Blog',
                                 title: 'Writing',
-                                subtitle:
-                                    'Short-form thinking on research, teaching, and philosophy practice.',
+                                subtitle: subtitle,
                                 child: BlogSection(
                                   compact: compact,
                                   onOpenBlog: _openBlog,
+                                  onOpenPost: _openBlogPost,
                                 ),
                               ),
                             ),
-                            // SiteAnimatedReveal(
-                            //   delay: const Duration(milliseconds: 620),
-                            //   child: SiteSectionBlock(
-                            //     key: _sectionKeys[SiteSection.mentoring],
-                            //     eyebrow: 'Mentoring',
-                            //     title: 'Supervision',
-                            //     subtitle:
-                            //         'Ongoing and completed undergraduate research topics under your guidance.',
-                            //     child: MentoringSection(compact: compact),
-                            //   ),
-                            // ),
-                            // SiteAnimatedReveal(
-                            //   delay: const Duration(milliseconds: 700),
-                            //   child: SiteSectionBlock(
-                            //     key: _sectionKeys[SiteSection.projects],
-                            //     eyebrow: 'Projects',
-                            //     title: 'Projects and GitHub',
-                            //     subtitle:
-                            //         'Funded research initiatives alongside selected open repositories.',
-                            //     child: ProjectsSection(
-                            //       compact: compact,
-                            //       onOpenLink: _openUrl,
-                            //     ),
-                            //   ),
-                            // ),
-                            // SiteAnimatedReveal(
-                            //   delay: const Duration(milliseconds: 780),
-                            //   child: SiteSectionBlock(
-                            //     key: _sectionKeys[SiteSection.skills],
-                            //     eyebrow: 'Toolbox',
-                            //     title: 'Skills and Tools',
-                            //     subtitle:
-                            //         'Technical capabilities across AI, simulation, programming, and engineering design.',
-                            //     child: SkillsSection(compact: compact),
-                            //   ),
-                            // ),
+
                             SiteAnimatedReveal(
                               delay: const Duration(milliseconds: 860),
                               child: ContactSection(
@@ -410,3 +382,7 @@ const List<_NavItem> _visibleNavItems = [
   _NavItem('Blog', SiteSection.blog),
   _NavItem('Contact', SiteSection.contact),
 ];
+
+String subtitle =
+    '''These writings are intended primarily for myself. I have shared them here in the hope that they may also be of some value to others. If some of these thoughts sound familiar—if you feel that you have heard or read them before—you are probably right. As Herbert Paul once wrote, “And, after all, what is originality? It is merely undetected plagiarism.” I am not trying to rediscover anything or claim these ideas as entirely my own. I am simply gathering the thoughts, insights, and words that have become important to me.
+''';

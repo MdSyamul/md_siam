@@ -1,0 +1,24 @@
+{
+  "version": "2026-07-20-1",
+  "posts": [
+    {
+      "slug": "the-self-is-old",
+      "title": "Quiet Ruin of the Self",
+      "category": "Philosophy",
+      "summary": "The self is old - older than the universe.",
+      "publishedAt": "2026-07-18",
+      "updatedAt": "2026-07-18",
+      "coverImage": "blogs/the-self-is-old/cover.jpg",
+      "content": "blogs/the-self-is-old/content.html",
+      "images": [
+        "blogs/the-self-is-old/slide-01.jpg",
+        "blogs/the-self-is-old/slide-02.jpg",
+        "blogs/the-self-is-old/slide-03.jpg",
+        "blogs/the-self-is-old/slide-04.jpg",
+        "blogs/the-self-is-old/slide-05.jpg",
+        "blogs/the-self-is-old/slide-06.jpg"
+      ],
+      "paragraphs": []
+    }
+  ]
+}

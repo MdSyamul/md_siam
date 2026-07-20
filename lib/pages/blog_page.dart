@@ -4,11 +4,21 @@ import '../blog_content.dart';
 import '../site_content.dart';
 import '../site_theme.dart';
 import '../widgets/site_widgets.dart';
+import '../widgets/blog_html_view.dart';
 
-class BlogPage extends StatelessWidget {
+class BlogPage extends StatefulWidget {
   const BlogPage({super.key});
 
   static const routeName = '/blog';
+
+  @override
+  State<BlogPage> createState() => _BlogPageState();
+}
+
+class _BlogPageState extends State<BlogPage> {
+  late final Future<List<BlogPost>> _postsFuture = const BlogRepository()
+      .loadPosts();
+  String? _selectedCategory;
 
   void _openPost(BuildContext context, BlogPost post) {
     Navigator.of(
@@ -57,17 +67,71 @@ class BlogPage extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 22),
-                          AdaptiveWrapGrid(
-                            minItemWidth: compact ? 260 : 330,
-                            maxColumns: 3,
-                            spacing: 18,
-                            children: [
-                              for (final post in blogPosts)
-                                _BlogPostCard(
-                                  post: post,
-                                  onRead: () => _openPost(context, post),
-                                ),
-                            ],
+                          FutureBuilder<List<BlogPost>>(
+                            future: _postsFuture,
+                            builder: (context, snapshot) {
+                              final posts = snapshot.data ?? blogPosts;
+                              final categories = {
+                                for (final post in posts) post.category,
+                              }.toList()..sort();
+                              final filteredPosts = _selectedCategory == null
+                                  ? posts
+                                  : posts
+                                        .where(
+                                          (post) =>
+                                              post.category ==
+                                              _selectedCategory,
+                                        )
+                                        .toList();
+
+                              if (posts.isEmpty) {
+                                return const SiteInfoPanel(
+                                  child: Text('No blog posts are available.'),
+                                );
+                              }
+
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Wrap(
+                                    spacing: 8,
+                                    runSpacing: 8,
+                                    children: [
+                                      FilterChip(
+                                        label: const Text('All'),
+                                        selected: _selectedCategory == null,
+                                        onSelected: (_) => setState(
+                                          () => _selectedCategory = null,
+                                        ),
+                                      ),
+                                      for (final category in categories)
+                                        FilterChip(
+                                          label: Text(category),
+                                          selected:
+                                              _selectedCategory == category,
+                                          onSelected: (_) => setState(
+                                            () => _selectedCategory = category,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 18),
+                                  AdaptiveWrapGrid(
+                                    minItemWidth: compact ? 260 : 330,
+                                    maxColumns: 3,
+                                    spacing: 18,
+                                    children: [
+                                      for (final post in filteredPosts)
+                                        _BlogPostCard(
+                                          post: post,
+                                          onRead: () =>
+                                              _openPost(context, post),
+                                        ),
+                                    ],
+                                  ),
+                                ],
+                              );
+                            },
                           ),
                           const SizedBox(height: 34),
                         ],
@@ -137,17 +201,79 @@ class BlogPostPage extends StatelessWidget {
                                       .displaySmall
                                       ?.copyWith(fontSize: compact ? 29 : 36),
                                 ),
+                                if (post.summary.isNotEmpty) ...[
+                                  const SizedBox(height: 12),
+                                  Text(
+                                    post.summary,
+                                    style: Theme.of(context).textTheme.bodyLarge
+                                        ?.copyWith(
+                                          color: SiteColors.textMuted,
+                                          fontStyle: FontStyle.italic,
+                                        ),
+                                  ),
+                                ],
                                 const SizedBox(height: 22),
                                 const Divider(color: SiteColors.line),
-                                const SizedBox(height: 8),
-                                for (final paragraph in post.paragraphs) ...[
-                                  const SizedBox(height: 16),
-                                  Text(
-                                    paragraph,
-                                    style: Theme.of(
-                                      context,
-                                    ).textTheme.bodyLarge,
+                                if (post.displayDate != null) ...[
+                                  const SizedBox(height: 12),
+                                  Wrap(
+                                    spacing: 8,
+                                    runSpacing: 8,
+                                    children: [
+                                      if (post.publishedAt != null)
+                                        SiteCategoryPill(
+                                          label:
+                                              'Published ${post.publishedAt}',
+                                        ),
+                                      if (post.updatedAt != null &&
+                                          post.updatedAt != post.publishedAt)
+                                        SiteCategoryPill(
+                                          label: 'Updated ${post.updatedAt}',
+                                        ),
+                                    ],
                                   ),
+                                ],
+                                if (post.contentUrl != null) ...[
+                                  const SizedBox(height: 18),
+                                  BlogHtmlView(
+                                    sourceUrl: _blogImageUrl(post.contentUrl!),
+                                    compact: compact,
+                                  ),
+                                ] else
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      for (final paragraph
+                                          in post.paragraphs) ...[
+                                        const SizedBox(height: 16),
+                                        Text(
+                                          paragraph,
+                                          style: Theme.of(
+                                            context,
+                                          ).textTheme.bodyLarge,
+                                        ),
+                                      ],
+                                    ],
+                                  ),
+                                if (post.contentUrl == null &&
+                                    post.imageUrls.isNotEmpty) ...[
+                                  const SizedBox(height: 18),
+                                  for (
+                                    var i = 0;
+                                    i < post.imageUrls.length;
+                                    i++
+                                  )
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                        top: i == 0 ? 0 : 18,
+                                      ),
+                                      child: _BlogImageFrame(
+                                        imageUrl: post.imageUrls[i],
+                                        semanticLabel:
+                                            '${post.title}, page ${i + 1}',
+                                      ),
+                                    ),
                                 ],
                               ],
                             ),
@@ -190,7 +316,14 @@ class _BlogTopBar extends StatelessWidget {
         children: [
           IconButton(
             tooltip: 'Back',
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              final navigator = Navigator.of(context);
+              if (navigator.canPop()) {
+                navigator.pop();
+              } else {
+                navigator.pushNamedAndRemoveUntil('/', (route) => false);
+              }
+            },
             icon: const Icon(Icons.arrow_back_rounded),
           ),
           const SizedBox(width: 6),
@@ -224,14 +357,25 @@ class _BlogPostCard extends StatelessWidget {
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: [SiteCategoryPill(label: post.category)],
+            children: [
+              SiteCategoryPill(label: post.category),
+              if (post.displayDate != null)
+                SiteCategoryPill(label: post.displayDate!),
+            ],
           ),
+          if (post.coverImageUrl != null) ...[
+            const SizedBox(height: 16),
+            _BlogCardImage(
+              imageUrl: _blogImageUrl(post.coverImageUrl!),
+              semanticLabel: post.title,
+            ),
+          ],
           const SizedBox(height: 16),
           Text(post.title, style: Theme.of(context).textTheme.titleLarge),
-          if (post.paragraphs.isNotEmpty) ...[
+          if (post.summary.isNotEmpty || post.paragraphs.isNotEmpty) ...[
             const SizedBox(height: 10),
             Text(
-              post.paragraphs.first,
+              post.summary.isNotEmpty ? post.summary : post.paragraphs.first,
               style: Theme.of(context).textTheme.bodyMedium,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
@@ -250,4 +394,104 @@ class _BlogPostCard extends StatelessWidget {
       ),
     );
   }
+}
+
+class _BlogCardImage extends StatelessWidget {
+  const _BlogCardImage({required this.imageUrl, required this.semanticLabel});
+
+  final String imageUrl;
+  final String semanticLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: AspectRatio(
+        aspectRatio: 3 / 4,
+        child: Image.network(
+          _blogImageUrl(imageUrl),
+          fit: BoxFit.cover,
+          semanticLabel: semanticLabel,
+          loadingBuilder: _imageLoadingBuilder,
+          errorBuilder: _imageErrorBuilder,
+        ),
+      ),
+    );
+  }
+}
+
+class _BlogImageFrame extends StatelessWidget {
+  const _BlogImageFrame({required this.imageUrl, required this.semanticLabel});
+
+  final String imageUrl;
+  final String semanticLabel;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: SiteColors.surfaceMuted,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: SiteColors.line),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: AspectRatio(
+          aspectRatio: 3 / 4,
+          child: Image.network(
+            _blogImageUrl(imageUrl),
+            fit: BoxFit.contain,
+            semanticLabel: semanticLabel,
+            loadingBuilder: _imageLoadingBuilder,
+            errorBuilder: _imageErrorBuilder,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+Widget _imageLoadingBuilder(
+  BuildContext context,
+  Widget child,
+  ImageChunkEvent? loadingProgress,
+) {
+  if (loadingProgress == null) {
+    return child;
+  }
+
+  return ColoredBox(
+    color: SiteColors.surfaceMuted,
+    child: Center(
+      child: CircularProgressIndicator(
+        value: loadingProgress.expectedTotalBytes == null
+            ? null
+            : loadingProgress.cumulativeBytesLoaded /
+                  loadingProgress.expectedTotalBytes!,
+      ),
+    ),
+  );
+}
+
+String _blogImageUrl(String imageUrl) {
+  return Uri.parse(imageUrl).hasScheme
+      ? imageUrl
+      : Uri.base.resolve(imageUrl).toString();
+}
+
+Widget _imageErrorBuilder(
+  BuildContext context,
+  Object error,
+  StackTrace? stackTrace,
+) {
+  return ColoredBox(
+    color: SiteColors.surfaceMuted,
+    child: Center(
+      child: Icon(
+        Icons.broken_image_rounded,
+        color: SiteColors.textMuted.withValues(alpha: 0.7),
+        size: 38,
+      ),
+    ),
+  );
 }

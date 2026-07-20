@@ -35,19 +35,19 @@ void main() {
 
     expect(find.text('Md. Syamul Bashar Blog'), findsOneWidget);
     expect(find.byType(TextField), findsNothing);
-    expect(find.text('Self'), findsWidgets);
-    expect(find.text('A quite ruin of self'), findsWidgets);
+    expect(find.text('Quiet Ruin of the Self'), findsWidgets);
+    expect(find.text('Philosophy'), findsWidgets);
 
     final readButton = find.text('Read').first;
     await tester.ensureVisible(readButton);
     await tester.tap(readButton);
     await tester.pumpAndSettle();
 
-    expect(find.text('Self'), findsWidgets);
-    expect(find.text('A quite ruin of self'), findsOneWidget);
+    expect(find.text('Quiet Ruin of the Self'), findsWidgets);
+    expect(find.text('Philosophy'), findsOneWidget);
   });
 
-  testWidgets('homepage blog section uses original visit action', (
+  testWidgets('homepage blog section presents featured writing', (
     WidgetTester tester,
   ) async {
     await tester.pumpWidget(const MyApp());
@@ -59,10 +59,12 @@ void main() {
     expect(find.text('Visit Blog'), findsOneWidget);
     expect(
       find.text(
-        'Brief reflections for students and collaborators on how research ideas connect with teaching practice and engineering judgment.',
+        'Reflections on research, teaching, philosophy, and engineering judgment.',
       ),
       findsWidgets,
     );
+    expect(find.text('Browse all writing'), findsOneWidget);
+    expect(find.text('Quiet Ruin of the Self'), findsWidgets);
     expect(find.text('Physical AI for Mechanical Engineering'), findsNothing);
   });
 
