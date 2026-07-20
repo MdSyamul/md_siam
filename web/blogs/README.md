@@ -1,14 +1,16 @@
 # Runtime Blog Content
 
-The website reads blog posts from `web/blogs/blogs.json` at runtime. Each blog
-post renders a standalone `content.html` file.
+The website reads blog metadata from `web/blogs/blogs.json` at runtime. Each
+blog post renders a standalone `.html` or `.htm` file from `web/blogs/...`.
 
 ## Edit without rebuilding after deployment
 
-1. Upload the post images into the matching deployed `/blogs/` folder.
-2. Edit the deployed `/blogs/blogs.json` file.
-3. Edit the deployed post `content.html` file when the written content changes.
-4. Bump the top-level `version` value so browsers fetch the updated files.
+1. Replace the existing HTML file in the matching deployed `/blogs/` folder.
+2. Replace the cover image if the card preview changes.
+3. Edit the deployed `/blogs/blogs.json` file when title, summary, date, cover,
+   category, or HTML file path changes.
+4. Bump the top-level `version` value so browsers fetch updated metadata and
+   blog HTML.
 
 In this repository, keep the source copy under `web/blogs/`. After a full
 Flutter build, the publishable copy is under `build/web/blogs/`.
@@ -21,30 +23,23 @@ web/blogs/
   example-post/
     cover.jpg
     content.html
-    image-01.jpg
-    image-02.jpg
 ```
 
-Put the readable blog body in `content.html`. If the post is image-based,
-reference the images directly from that HTML file, for example
+Put the readable blog body in `content.html`. If the HTML references images,
+place them in the same post folder and use relative paths such as
 `<img src="image-01.jpg" alt="...">`.
 
 Each post in `blogs.json` should use this shape:
 
 ```json
 {
-  "slug": "example-post",
   "title": "Example Post",
   "category": "Research",
   "summary": "One clear sentence for blog cards.",
   "publishedAt": "2026-07-19",
   "updatedAt": "2026-07-19",
   "coverImage": "blogs/example-post/cover.jpg",
-  "content": "blogs/example-post/content.html",
-  "images": [
-    "blogs/example-post/image-01.jpg"
-  ],
-  "paragraphs": []
+  "content": "blogs/example-post/content.html"
 }
 ```
 
@@ -57,9 +52,10 @@ Blog title:
 Category:
 Summary:
 Published date:
+HTML file name:
 Main text or HTML content:
-Images/slides:
-Preferred order:
+Images used inside HTML:
+Cover image preference:
 ```
 
 Or send a folder:
@@ -67,10 +63,8 @@ Or send a folder:
 ```text
 My Blog Name/
   cover.png
-  1.png
-  2.png
   content.html
 ```
 
-I can convert that into the standard folder, optimize images, update
-`blogs.json`, and rebuild the site.
+I can convert that into the standard folder, update `blogs.json`, and rebuild
+the site.

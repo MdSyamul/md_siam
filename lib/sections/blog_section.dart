@@ -26,14 +26,6 @@ class BlogSection extends StatelessWidget {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 780),
-              child: Text(
-                'Reflections on research, teaching, philosophy, and engineering judgment.',
-                style: Theme.of(context).textTheme.bodyLarge,
-              ),
-            ),
-            const SizedBox(height: 18),
             if (posts.isNotEmpty)
               LayoutBuilder(
                 builder: (context, constraints) {
@@ -41,8 +33,8 @@ class BlogSection extends StatelessWidget {
                   final cardWidth = availableWidth < 360
                       ? availableWidth
                       : compact
-                      ? 300.0
-                      : 320.0;
+                      ? availableWidth
+                      : availableWidth.clamp(520.0, 620.0);
 
                   return Wrap(
                     spacing: 18,
@@ -60,23 +52,14 @@ class BlogSection extends StatelessWidget {
                   );
                 },
               ),
-            const SizedBox(height: 18),
-            Wrap(
-              spacing: 10,
-              runSpacing: 10,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                ElevatedButton.icon(
-                  onPressed: onOpenBlog,
-                  icon: const Icon(Icons.library_books_rounded),
-                  label: const Text('Visit Blog'),
-                ),
-                TextButton.icon(
-                  onPressed: onOpenBlog,
-                  icon: const Icon(Icons.tune_rounded, size: 18),
-                  label: const Text('Browse all writing'),
-                ),
-              ],
+            const SizedBox(height: 16),
+            Align(
+              alignment: compact ? Alignment.centerLeft : Alignment.centerRight,
+              child: TextButton.icon(
+                onPressed: onOpenBlog,
+                icon: const Icon(Icons.arrow_forward_rounded, size: 18),
+                label: const Text('Browse all writing'),
+              ),
             ),
           ],
         );
@@ -95,59 +78,100 @@ class _FeaturedBlogCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return SiteHoverPanel(
       onTap: onRead,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (post.coverImageUrl != null) ...[
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: AspectRatio(
-                aspectRatio: 16 / 9,
-                child: Image.network(
-                  Uri.base.resolve(post.coverImageUrl!).toString(),
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, _, _) => const ColoredBox(
-                    color: SiteColors.surfaceMuted,
-                    child: Center(
-                      child: Icon(
-                        Icons.broken_image_rounded,
-                        color: SiteColors.textMuted,
-                      ),
-                    ),
-                  ),
-                ),
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final horizontal = constraints.maxWidth >= 520;
+          final image = post.coverImageUrl == null
+              ? null
+              : _FeaturedBlogImage(
+                  imageUrl: Uri.base.resolve(post.coverImageUrl!).toString(),
+                );
+          final details = _FeaturedBlogDetails(post: post);
+
+          if (!horizontal || image == null) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (image != null) ...[image, const SizedBox(height: 14)],
+                details,
+              ],
+            );
+          }
+
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              SizedBox(width: 240, child: image),
+              const SizedBox(width: 20),
+              Expanded(child: details),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _FeaturedBlogImage extends StatelessWidget {
+  const _FeaturedBlogImage({required this.imageUrl});
+
+  final String imageUrl;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: AspectRatio(
+        aspectRatio: 16 / 9,
+        child: Image.network(
+          imageUrl,
+          fit: BoxFit.cover,
+          errorBuilder: (_, _, _) => const ColoredBox(
+            color: SiteColors.surfaceMuted,
+            child: Center(
+              child: Icon(
+                Icons.broken_image_rounded,
+                color: SiteColors.textMuted,
               ),
             ),
-            const SizedBox(height: 14),
-          ],
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              SiteCategoryPill(label: post.category),
-              if (post.displayDate != null)
-                SiteCategoryPill(label: post.displayDate!),
-            ],
           ),
-          const SizedBox(height: 12),
-          Text(post.title, style: Theme.of(context).textTheme.titleLarge),
-          if (post.summary.isNotEmpty) ...[
-            const SizedBox(height: 8),
-            Text(
-              post.summary,
-              maxLines: 3,
-              overflow: TextOverflow.ellipsis,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
+        ),
+      ),
+    );
+  }
+}
+
+class _FeaturedBlogDetails extends StatelessWidget {
+  const _FeaturedBlogDetails({required this.post});
+
+  final BlogPost post;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            SiteCategoryPill(label: post.category),
+            if (post.displayDate != null)
+              SiteCategoryPill(label: post.displayDate!),
           ],
-          const SizedBox(height: 14),
-          TextButton.icon(
-            onPressed: onRead,
-            icon: const Icon(Icons.arrow_forward_rounded, size: 18),
-            label: const Text('Read'),
+        ),
+        const SizedBox(height: 12),
+        Text(post.title, style: Theme.of(context).textTheme.titleLarge),
+        if (post.summary.isNotEmpty) ...[
+          const SizedBox(height: 8),
+          Text(
+            post.summary,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: Theme.of(context).textTheme.bodyMedium,
           ),
         ],
-      ),
+      ],
     );
   }
 }

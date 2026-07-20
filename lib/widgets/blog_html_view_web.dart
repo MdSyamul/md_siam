@@ -1,21 +1,23 @@
 // ignore_for_file: avoid_web_libraries_in_flutter, deprecated_member_use
 
+import 'dart:async';
+import 'dart:convert';
 import 'dart:html' as html;
 import 'dart:ui_web' as ui_web;
 
 import 'package:flutter/material.dart';
-
-import '../site_theme.dart';
 
 class BlogHtmlView extends StatefulWidget {
   const BlogHtmlView({
     super.key,
     required this.sourceUrl,
     required this.compact,
+    this.onScroll,
   });
 
   final String sourceUrl;
   final bool compact;
+  final ValueChanged<double>? onScroll;
 
   @override
   State<BlogHtmlView> createState() => _BlogHtmlViewState();
@@ -24,42 +26,176 @@ class BlogHtmlView extends StatefulWidget {
 class _BlogHtmlViewState extends State<BlogHtmlView> {
   late final String _viewType =
       'blog-html-${widget.sourceUrl.hashCode}-${identityHashCode(this)}';
-  late double _height = widget.compact ? 560 : 680;
+  late final String _resizeToken =
+      'blog-html-resize-${widget.sourceUrl.hashCode}-${identityHashCode(this)}';
+  late double _height = widget.compact ? 2200 : 2600;
+  html.IFrameElement? _iframe;
+  Timer? _heightPoller;
 
   @override
   void initState() {
     super.initState();
     html.window.addEventListener('message', _handleMessage);
     ui_web.platformViewRegistry.registerViewFactory(_viewType, (int viewId) {
-      return html.IFrameElement()
-        ..src = widget.sourceUrl
+      final iframe = html.IFrameElement()
         ..title = 'Blog content'
+        ..setAttribute('scrolling', 'no')
         ..style.border = '0'
         ..style.display = 'block'
         ..style.height = '100%'
+        ..style.overflow = 'hidden'
         ..style.width = '100%';
+      iframe.onLoad.listen((_) => _startHeightPolling());
+      _iframe = iframe;
+      _loadHtmlContent();
+      return iframe;
     });
   }
 
   @override
   void dispose() {
+    _heightPoller?.cancel();
     html.window.removeEventListener('message', _handleMessage);
     super.dispose();
+  }
+
+  Future<void> _loadHtmlContent() async {
+    final iframe = _iframe;
+    if (iframe == null) {
+      return;
+    }
+
+    try {
+      final htmlContent = await html.HttpRequest.getString(widget.sourceUrl);
+      if (!mounted || _iframe != iframe) {
+        return;
+      }
+      iframe.srcdoc = _withResizeScript(htmlContent);
+    } catch (_) {
+      if (!mounted || _iframe != iframe) {
+        return;
+      }
+      iframe.src = widget.sourceUrl;
+    }
+  }
+
+  String _withResizeScript(String htmlContent) {
+    final baseUrl = htmlEscape.convert(widget.sourceUrl);
+    final injection =
+        '''
+<base href="$baseUrl">
+<script>
+(function () {
+  var token = '$_resizeToken';
+  function measure() {
+    var body = document.body || {};
+    var root = document.documentElement || {};
+    var height = Math.max(
+      body.scrollHeight || 0,
+      body.offsetHeight || 0,
+      root.scrollHeight || 0,
+      root.offsetHeight || 0
+    );
+    parent.postMessage({ type: 'blog-content-height', token: token, height: height }, '*');
+  }
+  function forwardWheel(event) {
+    var multiplier = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? window.innerHeight : 1;
+    parent.postMessage({
+      type: 'blog-content-wheel',
+      token: token,
+      deltaY: event.deltaY * multiplier
+    }, '*');
+    event.preventDefault();
+  }
+  window.addEventListener('load', measure);
+  window.addEventListener('resize', measure);
+  window.addEventListener('wheel', forwardWheel, { passive: false });
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(measure).observe(document.documentElement);
+  }
+  setTimeout(measure, 0);
+  setTimeout(measure, 250);
+  setTimeout(measure, 1000);
+})();
+</script>
+''';
+
+    if (htmlContent.contains('</head>')) {
+      return htmlContent.replaceFirst('</head>', '$injection</head>');
+    }
+
+    return '$injection$htmlContent';
+  }
+
+  void _startHeightPolling() {
+    _heightPoller?.cancel();
+    var ticks = 0;
+    _updateHeightFromFrame();
+    _heightPoller = Timer.periodic(const Duration(milliseconds: 350), (timer) {
+      ticks++;
+      _updateHeightFromFrame();
+      if (ticks >= 12) {
+        timer.cancel();
+      }
+    });
+  }
+
+  void _updateHeightFromFrame() {
+    final iframe = _iframe;
+    if (iframe == null) {
+      return;
+    }
+
+    final document = (iframe as dynamic).contentDocument;
+    final body = document?.body;
+    final root = document?.documentElement;
+    final height =
+        [
+          body?.scrollHeight,
+          body?.offsetHeight,
+          root?.scrollHeight,
+          root?.offsetHeight,
+        ].whereType<num>().fold<double>(0, (current, next) {
+          return next > current ? next.toDouble() : current;
+        });
+
+    if (height > 0) {
+      _setHeight(height + 2);
+    }
   }
 
   void _handleMessage(html.Event event) {
     final message = event as html.MessageEvent;
     final data = message.data;
-    if (data is! Map || data['type'] != 'blog-content-height') {
+    if (data is! Map) {
+      return;
+    }
+    if (data['token'] != _resizeToken) {
       return;
     }
 
-    final height = data['height'];
-    if (height is! num) {
+    if (data['type'] == 'blog-content-height') {
+      final height = data['height'];
+      if (height is num) {
+        _setHeight(height.toDouble());
+      }
       return;
     }
 
-    final nextHeight = height.toDouble().clamp(360.0, 16000.0);
+    if (data['type'] == 'blog-content-wheel') {
+      final deltaY = data['deltaY'];
+      if (deltaY is num) {
+        widget.onScroll?.call(deltaY.toDouble());
+      }
+    }
+  }
+
+  void _setHeight(double height) {
+    if (!mounted) {
+      return;
+    }
+
+    final nextHeight = height.clamp(360.0, 50000.0);
     if ((nextHeight - _height).abs() < 1) {
       return;
     }
@@ -73,12 +209,8 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
       duration: const Duration(milliseconds: 220),
       width: double.infinity,
       height: _height,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: SiteColors.line),
-      ),
       clipBehavior: Clip.antiAlias,
+      decoration: const BoxDecoration(color: Colors.transparent),
       child: HtmlElementView(viewType: _viewType),
     );
   }

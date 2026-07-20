@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'blog_content.dart';
 import 'pages/blog_page.dart';
-import 'pages/research_page.dart';
 import 'sections/blog_section.dart';
 import 'sections/contact_section.dart';
 import 'sections/home_section.dart';
@@ -27,27 +26,12 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: buildSiteTheme(),
       home: const SiteHomePage(),
-      routes: {
-        BlogPage.routeName: (context) => const BlogPage(),
-        ResearchPage.routeName: (context) => const ResearchPage(),
-      },
+      routes: {BlogPage.routeName: (context) => const BlogPage()},
     );
   }
 }
 
-enum SiteSection {
-  home,
-  about,
-  highlights,
-  research,
-  publications,
-  teaching,
-  blog,
-  mentoring,
-  projects,
-  skills,
-  contact,
-}
+enum SiteSection { home, research, teaching, blog, contact }
 
 class SiteHomePage extends StatefulWidget {
   const SiteHomePage({super.key});
@@ -106,10 +90,6 @@ class _SiteHomePageState extends State<SiteHomePage> {
     ).push(MaterialPageRoute<void>(builder: (_) => BlogPostPage(post: post)));
   }
 
-  void _openResearchPage() {
-    Navigator.of(context).pushNamed(ResearchPage.routeName);
-  }
-
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width;
@@ -157,28 +137,6 @@ class _SiteHomePageState extends State<SiteHomePage> {
                                 onGitHub: () => _openUrl(githubRepositoriesUrl),
                               ),
                             ),
-                            // SiteAnimatedReveal(
-                            //   delay: const Duration(milliseconds: 140),
-                            //   child: SiteSectionBlock(
-                            //     key: _sectionKeys[SiteSection.about],
-                            //     eyebrow: 'Overview',
-                            //     title: 'About',
-                            //     subtitle:
-                            //         'A concise academic introduction for students, collaborators, and visitors.',
-                            //     child: AboutSection(compact: compact),
-                            //   ),
-                            // ),
-                            // SiteAnimatedReveal(
-                            //   delay: const Duration(milliseconds: 220),
-                            //   child: SiteSectionBlock(
-                            //     key: _sectionKeys[SiteSection.highlights],
-                            //     eyebrow: 'Credentials',
-                            //     title: 'Highlights',
-                            //     subtitle:
-                            //         'Core facts that establish your academic profile quickly.',
-                            //     child: HighlightsSection(compact: compact),
-                            //   ),
-                            // ),
                             SiteAnimatedReveal(
                               delay: const Duration(milliseconds: 300),
                               child: SiteSectionBlock(
@@ -186,29 +144,14 @@ class _SiteHomePageState extends State<SiteHomePage> {
                                 eyebrow: 'Research',
                                 title: 'Research Areas',
                                 subtitle:
-                                    'Physical artificial intelligence, intelligent design & manufacturing, system dynamics and control',
+                                    'Current interests guiding my academic and applied engineering work.',
                                 child: ResearchSection(
                                   compact: compact,
                                   onOpenResearchProfile: () =>
                                       _openUrl(googleScholarUrl),
-                                  onOpenResearchPage: _openResearchPage,
                                 ),
                               ),
                             ),
-                            // SiteAnimatedReveal(
-                            //   delay: const Duration(milliseconds: 380),
-                            //   child: SiteSectionBlock(
-                            //     key: _sectionKeys[SiteSection.publications],
-                            //     eyebrow: 'Scholarship',
-                            //     title: 'Publications',
-                            //     subtitle:
-                            //         'Published journal papers together with recent conference and submitted work.',
-                            //     child: PublicationsSection(
-                            //       compact: compact,
-                            //       onOpenLink: _openUrl,
-                            //     ),
-                            //   ),
-                            // ),
                             SiteAnimatedReveal(
                               delay: const Duration(milliseconds: 460),
                               child: SiteSectionBlock(
@@ -217,7 +160,7 @@ class _SiteHomePageState extends State<SiteHomePage> {
                                 title: 'Courses Taught',
                                 subtitle:
                                     'Core undergraduate courses taught in the Mechanical Engineering Department.',
-                                child: TeachingSection(compact: compact),
+                                child: const TeachingSection(),
                               ),
                             ),
                             SiteAnimatedReveal(
@@ -226,7 +169,7 @@ class _SiteHomePageState extends State<SiteHomePage> {
                                 key: _sectionKeys[SiteSection.blog],
                                 eyebrow: 'Blog',
                                 title: 'Writing',
-                                subtitle: subtitle,
+                                subtitle: blogSectionSubtitle,
                                 child: BlogSection(
                                   compact: compact,
                                   onOpenBlog: _openBlog,
@@ -383,6 +326,8 @@ const List<_NavItem> _visibleNavItems = [
   _NavItem('Contact', SiteSection.contact),
 ];
 
-String subtitle =
-    '''These writings are intended primarily for myself. I have shared them here in the hope that they may also be of some value to others. If some of these thoughts sound familiar—if you feel that you have heard or read them before—you are probably right. As Herbert Paul once wrote, “And, after all, what is originality? It is merely undetected plagiarism.” I am not trying to rediscover anything or claim these ideas as entirely my own. I am simply gathering the thoughts, insights, and words that have become important to me.
+const String blogSectionSubtitle = '''
+These writings are meant primarily for myself. I am simply gathering the thoughts, insights, and words of others that have helped me in one way or another. I have shared them here in the hope that they may also be of some help to others.
+
+If any of these thoughts resonate with you, perhaps it is because they were already yours. As Herbert Paul once wrote, "And, after all, what is originality? It is merely undetected plagiarism."
 ''';

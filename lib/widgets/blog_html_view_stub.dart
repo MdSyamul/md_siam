@@ -7,10 +7,12 @@ class BlogHtmlView extends StatelessWidget {
     super.key,
     required this.sourceUrl,
     required this.compact,
+    this.onScroll,
   });
 
   final String sourceUrl;
   final bool compact;
+  final ValueChanged<double>? onScroll;
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,7 @@ class BlogHtmlView extends StatelessWidget {
       width: double.infinity,
       padding: EdgeInsets.all(compact ? 16 : 20),
       decoration: BoxDecoration(
-        color: SiteColors.surfaceMuted,
+        color: Colors.white.withValues(alpha: 0.7),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: SiteColors.line),
       ),

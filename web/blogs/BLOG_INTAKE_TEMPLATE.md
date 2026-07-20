@@ -10,11 +10,11 @@ Published date:
 
 Updated date:
 
+HTML file name:
+
 Main text or HTML content:
 
-Images/slides:
-
-Preferred image order:
+Images used inside HTML:
 
 Cover image preference:
 

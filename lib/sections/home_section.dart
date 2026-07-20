@@ -178,22 +178,6 @@ class _HeroCopy extends StatelessWidget {
         ),
         const SizedBox(height: 20),
         Text(siteName, style: headingStyle),
-        // const SizedBox(height: 12),
-        // Text(
-        //   siteHeroStatement,
-        //   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-        //     color: Colors.white,
-        //     fontSize: compact ? 22 : 28,
-        //   ),
-        // ),
-        const SizedBox(height: 16),
-        Text(
-          siteHeroSummary,
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-            color: const Color(0xFFDCEAF0),
-            fontSize: compact ? 15 : 16,
-          ),
-        ),
         const SizedBox(height: 24),
         Wrap(
           spacing: 12,
@@ -253,16 +237,6 @@ class _HeroCopy extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 28),
-        // AdaptiveWrapGrid(
-        //   minItemWidth: compact ? 140 : 150,
-        //   maxColumns: compact ? 2 : 4,
-        //   spacing: 12,
-        //   children: [
-        //     for (final item in heroMetrics)
-        //       SiteMetricCard(value: item.value, label: item.label),
-        //   ],
-        // ),
       ],
     );
   }

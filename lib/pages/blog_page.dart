@@ -148,14 +148,42 @@ class _BlogPageState extends State<BlogPage> {
   }
 }
 
-class BlogPostPage extends StatelessWidget {
+class BlogPostPage extends StatefulWidget {
   const BlogPostPage({super.key, required this.post});
 
   final BlogPost post;
 
   @override
+  State<BlogPostPage> createState() => _BlogPostPageState();
+}
+
+class _BlogPostPageState extends State<BlogPostPage> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _handleHtmlScroll(double deltaY) {
+    if (!_scrollController.hasClients) {
+      return;
+    }
+
+    final position = _scrollController.position;
+    final nextOffset = (_scrollController.offset + deltaY).clamp(
+      position.minScrollExtent,
+      position.maxScrollExtent,
+    );
+
+    _scrollController.jumpTo(nextOffset);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final compact = MediaQuery.sizeOf(context).width < 760;
+    final post = widget.post;
 
     return Scaffold(
       body: DecoratedBox(
@@ -173,110 +201,20 @@ class BlogPostPage extends StatelessWidget {
               _BlogTopBar(title: post.title),
               Expanded(
                 child: SingleChildScrollView(
+                  controller: _scrollController,
                   child: ContentShell(
                     child: Padding(
                       padding: EdgeInsets.symmetric(
-                        vertical: compact ? 28 : 42,
+                        vertical: compact ? 20 : 34,
                       ),
                       child: Align(
-                        alignment: Alignment.topLeft,
+                        alignment: Alignment.topCenter,
                         child: ConstrainedBox(
-                          constraints: const BoxConstraints(maxWidth: 840),
-                          child: SiteInfoPanel(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Wrap(
-                                  spacing: 8,
-                                  runSpacing: 8,
-                                  children: [
-                                    SiteCategoryPill(label: post.category),
-                                  ],
-                                ),
-                                const SizedBox(height: 18),
-                                Text(
-                                  post.title,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .displaySmall
-                                      ?.copyWith(fontSize: compact ? 29 : 36),
-                                ),
-                                if (post.summary.isNotEmpty) ...[
-                                  const SizedBox(height: 12),
-                                  Text(
-                                    post.summary,
-                                    style: Theme.of(context).textTheme.bodyLarge
-                                        ?.copyWith(
-                                          color: SiteColors.textMuted,
-                                          fontStyle: FontStyle.italic,
-                                        ),
-                                  ),
-                                ],
-                                const SizedBox(height: 22),
-                                const Divider(color: SiteColors.line),
-                                if (post.displayDate != null) ...[
-                                  const SizedBox(height: 12),
-                                  Wrap(
-                                    spacing: 8,
-                                    runSpacing: 8,
-                                    children: [
-                                      if (post.publishedAt != null)
-                                        SiteCategoryPill(
-                                          label:
-                                              'Published ${post.publishedAt}',
-                                        ),
-                                      if (post.updatedAt != null &&
-                                          post.updatedAt != post.publishedAt)
-                                        SiteCategoryPill(
-                                          label: 'Updated ${post.updatedAt}',
-                                        ),
-                                    ],
-                                  ),
-                                ],
-                                if (post.contentUrl != null) ...[
-                                  const SizedBox(height: 18),
-                                  BlogHtmlView(
-                                    sourceUrl: _blogImageUrl(post.contentUrl!),
-                                    compact: compact,
-                                  ),
-                                ] else
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      for (final paragraph
-                                          in post.paragraphs) ...[
-                                        const SizedBox(height: 16),
-                                        Text(
-                                          paragraph,
-                                          style: Theme.of(
-                                            context,
-                                          ).textTheme.bodyLarge,
-                                        ),
-                                      ],
-                                    ],
-                                  ),
-                                if (post.contentUrl == null &&
-                                    post.imageUrls.isNotEmpty) ...[
-                                  const SizedBox(height: 18),
-                                  for (
-                                    var i = 0;
-                                    i < post.imageUrls.length;
-                                    i++
-                                  )
-                                    Padding(
-                                      padding: EdgeInsets.only(
-                                        top: i == 0 ? 0 : 18,
-                                      ),
-                                      child: _BlogImageFrame(
-                                        imageUrl: post.imageUrls[i],
-                                        semanticLabel:
-                                            '${post.title}, page ${i + 1}',
-                                      ),
-                                    ),
-                                ],
-                              ],
-                            ),
+                          constraints: const BoxConstraints(maxWidth: 980),
+                          child: BlogHtmlView(
+                            sourceUrl: _blogImageUrl(post.contentUrl),
+                            compact: compact,
+                            onScroll: _handleHtmlScroll,
                           ),
                         ),
                       ),
@@ -372,10 +310,10 @@ class _BlogPostCard extends StatelessWidget {
           ],
           const SizedBox(height: 16),
           Text(post.title, style: Theme.of(context).textTheme.titleLarge),
-          if (post.summary.isNotEmpty || post.paragraphs.isNotEmpty) ...[
+          if (post.summary.isNotEmpty) ...[
             const SizedBox(height: 10),
             Text(
-              post.summary.isNotEmpty ? post.summary : post.paragraphs.first,
+              post.summary,
               style: Theme.of(context).textTheme.bodyMedium,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
@@ -414,37 +352,6 @@ class _BlogCardImage extends StatelessWidget {
           semanticLabel: semanticLabel,
           loadingBuilder: _imageLoadingBuilder,
           errorBuilder: _imageErrorBuilder,
-        ),
-      ),
-    );
-  }
-}
-
-class _BlogImageFrame extends StatelessWidget {
-  const _BlogImageFrame({required this.imageUrl, required this.semanticLabel});
-
-  final String imageUrl;
-  final String semanticLabel;
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        color: SiteColors.surfaceMuted,
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: SiteColors.line),
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: AspectRatio(
-          aspectRatio: 3 / 4,
-          child: Image.network(
-            _blogImageUrl(imageUrl),
-            fit: BoxFit.contain,
-            semanticLabel: semanticLabel,
-            loadingBuilder: _imageLoadingBuilder,
-            errorBuilder: _imageErrorBuilder,
-          ),
         ),
       ),
     );

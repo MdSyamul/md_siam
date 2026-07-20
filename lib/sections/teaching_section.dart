@@ -4,64 +4,30 @@ import '../site_content.dart';
 import '../widgets/site_widgets.dart';
 
 class TeachingSection extends StatelessWidget {
-  const TeachingSection({super.key, required this.compact});
-
-  final bool compact;
+  const TeachingSection({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return AdaptiveWrapGrid(
-      minItemWidth: compact ? 240 : 320,
-      maxColumns: compact ? 1 : 2,
-      spacing: 18,
+    final courses = [
+      for (final course in teachingCourses) (title: course, emphasized: true),
+      for (final course in additionalTeachingCourses)
+        (title: course, emphasized: false),
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SiteInfoPanel(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 680),
+          child: Wrap(
+            spacing: 8,
+            runSpacing: 8,
             children: [
-              Text(
-                'Core Courses',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: 14),
-              // Text(
-              //   'Courses explicitly confirmed in your CV.',
-              //   style: Theme.of(context).textTheme.bodyMedium,
-              // ),
-              const SizedBox(height: 18),
-              Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                children: [
-                  for (final course in teachingCourses)
-                    SiteSkillChip(label: course, emphasized: true),
-                ],
-              ),
-            ],
-          ),
-        ),
-        SiteInfoPanel(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Extended Teaching Profile',
-                style: Theme.of(context).textTheme.titleLarge,
-              ),
-              const SizedBox(height: 14),
-              // Text(
-              //   'Additional teaching areas from your university profile that can be highlighted as needed.',
-              //   style: Theme.of(context).textTheme.bodyMedium,
-              // ),
-              const SizedBox(height: 18),
-              Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                children: [
-                  for (final course in additionalTeachingCourses)
-                    SiteSkillChip(label: course),
-                ],
-              ),
+              for (final course in courses)
+                SiteSkillChip(
+                  label: course.title,
+                  emphasized: course.emphasized,
+                ),
             ],
           ),
         ),

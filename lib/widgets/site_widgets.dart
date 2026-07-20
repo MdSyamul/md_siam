@@ -2,7 +2,6 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import '../site_content.dart';
 import '../site_theme.dart';
 
 class SiteSectionBlock extends StatelessWidget {
@@ -63,16 +62,12 @@ class SiteSectionBlock extends StatelessWidget {
 }
 
 class SiteSectionEndMarker extends StatelessWidget {
-  const SiteSectionEndMarker({super.key, this.onDark = false});
-
-  final bool onDark;
+  const SiteSectionEndMarker({super.key});
 
   @override
   Widget build(BuildContext context) {
     final narrow = MediaQuery.sizeOf(context).width < 760;
-    final lineColor = onDark
-        ? Colors.white.withValues(alpha: 0.34)
-        : SiteColors.line;
+    const lineColor = SiteColors.line;
     return Padding(
       padding: EdgeInsets.only(top: narrow ? 26 : 34),
       child: Center(
@@ -178,195 +173,6 @@ class _SiteHoverPanelState extends State<SiteHoverPanel> {
   }
 }
 
-class SiteMetricCard extends StatelessWidget {
-  const SiteMetricCard({super.key, required this.value, required this.label});
-
-  final String value;
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 18),
-      decoration: BoxDecoration(
-        color: const Color(0x16FFFFFF),
-        borderRadius: BorderRadius.circular(22),
-        border: Border.all(color: const Color(0x26FFFFFF)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            value,
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              color: Colors.white,
-              fontSize: 26,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            label,
-            style: Theme.of(
-              context,
-            ).textTheme.bodyMedium?.copyWith(color: const Color(0xFFDCEAF0)),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class SiteDetailList extends StatelessWidget {
-  const SiteDetailList({super.key, required this.items});
-
-  final List<DetailItem> items;
-
-  @override
-  Widget build(BuildContext context) {
-    final narrow = MediaQuery.sizeOf(context).width < 420;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Profile at a glance',
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-        const SizedBox(height: 18),
-        for (var i = 0; i < items.length; i++) ...[
-          if (i > 0) const Divider(height: 26, color: SiteColors.line),
-          if (narrow)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  items[i].label,
-                  style: Theme.of(
-                    context,
-                  ).textTheme.labelLarge?.copyWith(color: SiteColors.cyan),
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  items[i].value,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              ],
-            )
-          else
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: 118,
-                  child: Text(
-                    items[i].label,
-                    style: Theme.of(
-                      context,
-                    ).textTheme.labelLarge?.copyWith(color: SiteColors.cyan),
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    items[i].value,
-                    style: Theme.of(context).textTheme.bodyLarge,
-                  ),
-                ),
-              ],
-            ),
-        ],
-      ],
-    );
-  }
-}
-
-class SitePublicationCard extends StatelessWidget {
-  const SitePublicationCard({
-    super.key,
-    required this.item,
-    required this.onOpenLink,
-  });
-
-  final PublicationItem item;
-  final ValueChanged<String> onOpenLink;
-
-  @override
-  Widget build(BuildContext context) {
-    return SiteHoverPanel(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: [
-              SiteStatusBadge(label: item.status),
-              SiteCategoryPill(label: item.year),
-            ],
-          ),
-          const SizedBox(height: 16),
-          Text(item.title, style: Theme.of(context).textTheme.titleLarge),
-          const SizedBox(height: 10),
-          Text(
-            item.venue,
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: SiteColors.navy,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          if (item.note != null) ...[
-            const SizedBox(height: 10),
-            Text(item.note!, style: Theme.of(context).textTheme.bodyMedium),
-          ],
-          if (item.url != null) ...[
-            const SizedBox(height: 16),
-            TextButton.icon(
-              onPressed: () => onOpenLink(item.url!),
-              icon: const Icon(Icons.open_in_new_rounded, size: 18),
-              label: const Text('Open paper'),
-            ),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
-class SiteStatusBadge extends StatelessWidget {
-  const SiteStatusBadge({super.key, required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    final color = switch (label) {
-      'Published' => const Color(0xFF1E6C55),
-      'Submitted' => const Color(0xFF8A5C12),
-      'Manuscript Ready' => const Color(0xFF6B4AA1),
-      _ => SiteColors.navy,
-    };
-    final maxWidth = math.max(120.0, MediaQuery.sizeOf(context).width - 72);
-
-    return Container(
-      constraints: BoxConstraints(maxWidth: maxWidth),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(999),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: color,
-          fontSize: 12,
-          fontWeight: FontWeight.w700,
-        ),
-        softWrap: true,
-      ),
-    );
-  }
-}
-
 class SiteCategoryPill extends StatelessWidget {
   const SiteCategoryPill({super.key, required this.label});
 
@@ -430,29 +236,6 @@ class SiteSkillChip extends StatelessWidget {
   }
 }
 
-class SiteSubsectionIntro extends StatelessWidget {
-  const SiteSubsectionIntro({
-    super.key,
-    required this.title,
-    required this.caption,
-  });
-
-  final String title;
-  final String caption;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(title, style: Theme.of(context).textTheme.titleLarge),
-        const SizedBox(height: 6),
-        Text(caption, style: Theme.of(context).textTheme.bodyMedium),
-      ],
-    );
-  }
-}
-
 class SiteContactRow extends StatelessWidget {
   const SiteContactRow({
     super.key,
@@ -495,11 +278,7 @@ class SiteContactRow extends StatelessWidget {
                 onTap: onTap,
                 child: Text(
                   value,
-                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    decoration: onTap != null
-                        ? TextDecoration.underline
-                        : TextDecoration.none,
-                  ),
+                  style: Theme.of(context).textTheme.bodyLarge,
                   softWrap: true,
                 ),
               ),

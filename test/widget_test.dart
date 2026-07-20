@@ -29,8 +29,8 @@ void main() {
     await tester.pumpWidget(const MyApp());
     await tester.pump(const Duration(milliseconds: 900));
 
-    await tester.ensureVisible(find.text('Visit Blog'));
-    await tester.tap(find.text('Visit Blog'));
+    await tester.ensureVisible(find.text('Browse all writing'));
+    await tester.tap(find.text('Browse all writing'));
     await tester.pumpAndSettle();
 
     expect(find.text('Md. Syamul Bashar Blog'), findsOneWidget);
@@ -44,7 +44,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Quiet Ruin of the Self'), findsWidgets);
-    expect(find.text('Philosophy'), findsOneWidget);
+    expect(find.byTooltip('Back'), findsOneWidget);
   });
 
   testWidgets('homepage blog section presents featured writing', (
@@ -53,14 +53,12 @@ void main() {
     await tester.pumpWidget(const MyApp());
     await tester.pump(const Duration(milliseconds: 900));
 
-    await tester.ensureVisible(find.text('Visit Blog'));
+    await tester.ensureVisible(find.text('Browse all writing'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Visit Blog'), findsOneWidget);
+    expect(find.text('Visit Blog'), findsNothing);
     expect(
-      find.text(
-        'Reflections on research, teaching, philosophy, and engineering judgment.',
-      ),
+      find.text('The self is old - older than the universe.'),
       findsWidgets,
     );
     expect(find.text('Browse all writing'), findsOneWidget);

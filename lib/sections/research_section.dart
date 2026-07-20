@@ -1,48 +1,63 @@
 import 'package:flutter/material.dart';
 
-import '../widgets/site_widgets.dart';
+import '../site_content.dart';
+import '../site_theme.dart';
 
 class ResearchSection extends StatelessWidget {
   const ResearchSection({
     super.key,
     required this.compact,
     required this.onOpenResearchProfile,
-    required this.onOpenResearchPage,
   });
 
   final bool compact;
   final VoidCallback onOpenResearchProfile;
-  final VoidCallback onOpenResearchPage;
 
   @override
   Widget build(BuildContext context) {
-    final copy = Text(
-      'A focused research profile spanning Physical AI, intelligent engineering systems, control, and learning-driven mechanical design.',
-      style: Theme.of(context).textTheme.bodyLarge,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        for (final interest in researchInterests)
+          _ResearchInterestBullet(label: interest),
+        const SizedBox(height: 16),
+        Align(
+          alignment: compact ? Alignment.centerLeft : Alignment.centerRight,
+          child: TextButton.icon(
+            onPressed: onOpenResearchProfile,
+            icon: const Icon(Icons.school_rounded, size: 18),
+            label: const Text('View Scholar Profile'),
+          ),
+        ),
+      ],
     );
+  }
+}
 
-    final pageAction = ElevatedButton.icon(
-      onPressed: onOpenResearchPage,
-      icon: const Icon(Icons.arrow_forward_rounded),
-      label: const Text('Explore Research'),
-    );
+class _ResearchInterestBullet extends StatelessWidget {
+  const _ResearchInterestBullet({required this.label});
 
-    final profileAction = OutlinedButton.icon(
-      onPressed: onOpenResearchProfile,
-      icon: const Icon(Icons.school_rounded),
-      label: const Text('View Scholar Profile'),
-    );
+  final String label;
 
-    return SiteInfoPanel(
-      child: Column(
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10),
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          copy,
-          const SizedBox(height: 18),
-          Wrap(
-            spacing: 12,
-            runSpacing: 12,
-            children: [pageAction, profileAction],
+          const Padding(
+            padding: EdgeInsets.only(top: 9),
+            child: Icon(Icons.circle, size: 7, color: SiteColors.cyan),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              label,
+              style: Theme.of(
+                context,
+              ).textTheme.bodyLarge?.copyWith(fontSize: 17, height: 1.45),
+            ),
           ),
         ],
       ),
