@@ -26,10 +26,10 @@ class HomeSection extends StatelessWidget {
     final veryNarrow = width < 420;
     final headingStyle = Theme.of(context).textTheme.displayLarge?.copyWith(
       fontSize: veryNarrow
-          ? 34
+          ? 38
           : compact
-          ? 40
-          : 58,
+          ? 42
+          : null,
       color: Colors.white,
     );
 

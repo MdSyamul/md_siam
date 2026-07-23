@@ -101,15 +101,46 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
   function forwardWheel(event) {
     var multiplier = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? window.innerHeight : 1;
     parent.postMessage({
-      type: 'blog-content-wheel',
+      type: 'blog-content-scroll',
       token: token,
       deltaY: event.deltaY * multiplier
     }, '*');
     event.preventDefault();
   }
+  var lastTouchY = null;
+  function rememberTouch(event) {
+    if (event.touches.length === 1) {
+      lastTouchY = event.touches[0].clientY;
+    } else {
+      lastTouchY = null;
+    }
+  }
+  function forwardTouch(event) {
+    if (event.touches.length !== 1 || lastTouchY === null) {
+      return;
+    }
+    var currentTouchY = event.touches[0].clientY;
+    var deltaY = lastTouchY - currentTouchY;
+    lastTouchY = currentTouchY;
+    if (deltaY !== 0) {
+      parent.postMessage({
+        type: 'blog-content-scroll',
+        token: token,
+        deltaY: deltaY
+      }, '*');
+      event.preventDefault();
+    }
+  }
+  function clearTouch() {
+    lastTouchY = null;
+  }
   window.addEventListener('load', measure);
   window.addEventListener('resize', measure);
   window.addEventListener('wheel', forwardWheel, { passive: false });
+  window.addEventListener('touchstart', rememberTouch, { passive: true });
+  window.addEventListener('touchmove', forwardTouch, { passive: false });
+  window.addEventListener('touchend', clearTouch, { passive: true });
+  window.addEventListener('touchcancel', clearTouch, { passive: true });
   if ('ResizeObserver' in window) {
     new ResizeObserver(measure).observe(document.documentElement);
   }
@@ -182,7 +213,7 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
       return;
     }
 
-    if (data['type'] == 'blog-content-wheel') {
+    if (data['type'] == 'blog-content-scroll') {
       final deltaY = data['deltaY'];
       if (deltaY is num) {
         widget.onScroll?.call(deltaY.toDouble());

@@ -191,11 +191,9 @@ class SiteCategoryPill extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: const TextStyle(
-          color: SiteColors.navy,
-          fontSize: 12,
-          fontWeight: FontWeight.w700,
-        ),
+        style: Theme.of(
+          context,
+        ).textTheme.labelSmall?.copyWith(color: SiteColors.navy),
         softWrap: true,
       ),
     );
@@ -225,10 +223,8 @@ class SiteSkillChip extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: TextStyle(
+        style: Theme.of(context).textTheme.labelMedium?.copyWith(
           color: emphasized ? Colors.white : SiteColors.navy,
-          fontSize: 13,
-          fontWeight: FontWeight.w600,
         ),
         softWrap: true,
       ),
@@ -489,11 +485,9 @@ class SiteMiniBullet extends StatelessWidget {
           Expanded(
             child: Text(
               label,
-              style: const TextStyle(
-                fontSize: 13,
-                height: 1.4,
-                color: SiteColors.text,
-              ),
+              style: Theme.of(
+                context,
+              ).textTheme.bodySmall?.copyWith(color: SiteColors.text),
             ),
           ),
         ],

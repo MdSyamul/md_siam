@@ -1,6 +1,94 @@
 import 'package:flutter/material.dart';
 
 ThemeData buildSiteTheme() {
+  final uiTextTheme = const TextTheme().apply(fontFamily: 'IBM Plex Sans');
+  final textTheme = uiTextTheme.copyWith(
+    displayLarge: const TextStyle(
+      fontFamily: 'Merriweather',
+      fontSize: 56,
+      fontWeight: FontWeight.w700,
+      height: 1.08,
+      color: SiteColors.text,
+    ),
+    displayMedium: const TextStyle(
+      fontFamily: 'Merriweather',
+      fontSize: 42,
+      fontWeight: FontWeight.w700,
+      height: 1.1,
+      color: SiteColors.text,
+    ),
+    displaySmall: const TextStyle(
+      fontFamily: 'Merriweather',
+      fontSize: 34,
+      fontWeight: FontWeight.w700,
+      height: 1.15,
+      color: SiteColors.text,
+    ),
+    headlineMedium: const TextStyle(
+      fontFamily: 'Merriweather',
+      fontSize: 28,
+      fontWeight: FontWeight.w700,
+      height: 1.2,
+      color: SiteColors.text,
+    ),
+    titleLarge: const TextStyle(
+      fontFamily: 'Merriweather',
+      fontSize: 22,
+      fontWeight: FontWeight.w700,
+      height: 1.25,
+      color: SiteColors.text,
+    ),
+    titleMedium: const TextStyle(
+      fontFamily: 'Merriweather',
+      fontSize: 18,
+      fontWeight: FontWeight.w700,
+      height: 1.3,
+      color: SiteColors.text,
+    ),
+    bodyLarge: const TextStyle(
+      fontFamily: 'IBM Plex Sans',
+      fontSize: 16,
+      fontWeight: FontWeight.w400,
+      height: 1.65,
+      color: SiteColors.text,
+    ),
+    bodyMedium: const TextStyle(
+      fontFamily: 'IBM Plex Sans',
+      fontSize: 14,
+      fontWeight: FontWeight.w400,
+      height: 1.5,
+      color: SiteColors.textMuted,
+    ),
+    bodySmall: const TextStyle(
+      fontFamily: 'IBM Plex Sans',
+      fontSize: 13,
+      fontWeight: FontWeight.w400,
+      height: 1.5,
+      color: SiteColors.textMuted,
+    ),
+    labelLarge: const TextStyle(
+      fontFamily: 'IBM Plex Sans',
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+      height: 1.2,
+      color: SiteColors.navy,
+    ),
+    labelMedium: const TextStyle(
+      fontFamily: 'IBM Plex Sans',
+      fontSize: 13,
+      fontWeight: FontWeight.w600,
+      height: 1.25,
+      color: SiteColors.navy,
+    ),
+    labelSmall: const TextStyle(
+      fontFamily: 'IBM Plex Sans',
+      fontSize: 12,
+      fontWeight: FontWeight.w700,
+      height: 1.25,
+      color: SiteColors.navy,
+    ),
+  );
+
   return ThemeData(
     useMaterial3: true,
     scaffoldBackgroundColor: SiteColors.background,
@@ -12,51 +100,25 @@ ThemeData buildSiteTheme() {
       onSecondary: Colors.white,
       onSurface: SiteColors.text,
     ),
-    textTheme: const TextTheme(
-      displayLarge: TextStyle(
-        fontFamily: 'Georgia',
-        fontSize: 56,
-        fontWeight: FontWeight.w700,
-        height: 1.05,
-        color: SiteColors.text,
+    textTheme: textTheme,
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        textStyle: textTheme.labelLarge,
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
       ),
-      displaySmall: TextStyle(
-        fontFamily: 'Georgia',
-        fontSize: 34,
-        fontWeight: FontWeight.w700,
-        height: 1.1,
-        color: SiteColors.text,
+    ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        textStyle: textTheme.labelLarge,
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
       ),
-      headlineMedium: TextStyle(
-        fontFamily: 'Georgia',
-        fontSize: 28,
-        fontWeight: FontWeight.w700,
-        color: SiteColors.text,
-      ),
-      titleLarge: TextStyle(
-        fontFamily: 'Georgia',
-        fontSize: 22,
-        fontWeight: FontWeight.w700,
-        color: SiteColors.text,
-      ),
-      bodyLarge: TextStyle(
-        fontFamily: 'Verdana',
-        fontSize: 16,
-        height: 1.7,
-        color: SiteColors.text,
-      ),
-      bodyMedium: TextStyle(
-        fontFamily: 'Verdana',
-        fontSize: 14,
-        height: 1.6,
-        color: SiteColors.textMuted,
-      ),
-      labelLarge: TextStyle(
-        fontFamily: 'Verdana',
-        fontSize: 14,
-        fontWeight: FontWeight.w600,
-        color: SiteColors.navy,
-      ),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(textStyle: textTheme.labelLarge),
+    ),
+    chipTheme: ChipThemeData(
+      labelStyle: textTheme.labelMedium,
+      secondaryLabelStyle: textTheme.labelMedium?.copyWith(color: Colors.white),
     ),
   );
 }
