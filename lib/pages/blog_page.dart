@@ -61,10 +61,10 @@ class _BlogPageState extends State<BlogPage> {
                           const SizedBox(height: 12),
                           ConstrainedBox(
                             constraints: const BoxConstraints(maxWidth: 760),
-                            child: Text(
-                              'Notes on research, teaching, engineering systems, and applied AI.',
-                              style: Theme.of(context).textTheme.bodyLarge,
-                            ),
+                            // child: Text(
+                            //   'Notes on research, teaching, engineering systems, and applied AI.',
+                            //   style: Theme.of(context).textTheme.bodyLarge,
+                            // ),
                           ),
                           const SizedBox(height: 22),
                           FutureBuilder<List<BlogPost>>(
