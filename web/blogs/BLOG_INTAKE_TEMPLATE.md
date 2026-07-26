@@ -4,7 +4,7 @@ Blog title:
 
 Category:
 
-Summary:
+Subtitle:
 
 Published date:
 

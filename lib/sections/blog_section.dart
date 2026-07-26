@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../blog_content.dart';
+import '../blogs.dart';
 import '../site_theme.dart';
 import '../widgets/site_widgets.dart';
 
@@ -76,7 +76,7 @@ class _FeaturedBlogCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SiteHoverPanel(
+    return _FlatClickableBlogCard(
       onTap: onRead,
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -107,6 +107,57 @@ class _FeaturedBlogCard extends StatelessWidget {
             ],
           );
         },
+      ),
+    );
+  }
+}
+
+class _FlatClickableBlogCard extends StatefulWidget {
+  const _FlatClickableBlogCard({required this.child, required this.onTap});
+
+  final Widget child;
+  final VoidCallback onTap;
+
+  @override
+  State<_FlatClickableBlogCard> createState() => _FlatClickableBlogCardState();
+}
+
+class _FlatClickableBlogCardState extends State<_FlatClickableBlogCard> {
+  bool _hovering = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final narrow = MediaQuery.sizeOf(context).width < 420;
+    final radius = BorderRadius.circular(narrow ? 20 : 24);
+
+    return MouseRegion(
+      cursor: SystemMouseCursors.click,
+      onEnter: (_) => setState(() => _hovering = true),
+      onExit: (_) => setState(() => _hovering = false),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 180),
+        curve: Curves.easeOutCubic,
+        decoration: BoxDecoration(
+          color: _hovering
+              ? Colors.white
+              : Colors.white.withValues(alpha: 0.82),
+          borderRadius: radius,
+          border: Border.all(
+            color: _hovering ? SiteColors.cyan : SiteColors.line,
+            width: _hovering ? 1.4 : 1,
+          ),
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: radius,
+            onTap: widget.onTap,
+            child: Padding(
+              padding: EdgeInsets.all(narrow ? 18 : 24),
+              child: widget.child,
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -162,10 +213,10 @@ class _FeaturedBlogDetails extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         Text(post.title, style: Theme.of(context).textTheme.titleLarge),
-        if (post.summary.isNotEmpty) ...[
+        if (post.subtitle.isNotEmpty) ...[
           const SizedBox(height: 8),
           Text(
-            post.summary,
+            post.subtitle,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.bodyMedium,

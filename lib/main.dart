@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'blog_content.dart';
+import 'blogs.dart';
 import 'pages/blog_page.dart';
 import 'sections/blog_section.dart';
 import 'sections/contact_section.dart';
@@ -327,7 +327,5 @@ const List<_NavItem> _visibleNavItems = [
 ];
 
 const String blogSectionSubtitle = '''
-These writings are meant primarily for myself. I am simply gathering the thoughts, insights, and words of others that have helped me in one way or another. I have shared them here in the hope that they may also be of some help to others.
-
-If any of these thoughts resonate with you, perhaps it is because they were already yours. As Herbert Paul once wrote, "And, after all, what is originality? It is merely undetected plagiarism."
+These writings are meant primarily for myself. I am simply gathering the thoughts of others that have helped me along the way. I have shared them here in the hope that they may bring guidance and comfort to anyone who needs them. If any of these thoughts resonate with you, perhaps it is because they were already yours. As Herbert Paul once wrote, "And, after all, what is originality? It is merely undetected plagiarism."
 ''';

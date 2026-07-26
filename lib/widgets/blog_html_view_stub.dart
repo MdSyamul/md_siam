@@ -6,11 +6,13 @@ class BlogHtmlView extends StatelessWidget {
   const BlogHtmlView({
     super.key,
     required this.sourceUrl,
+    required this.subtitle,
     required this.compact,
     this.onScroll,
   });
 
   final String sourceUrl;
+  final String subtitle;
   final bool compact;
   final ValueChanged<double>? onScroll;
 

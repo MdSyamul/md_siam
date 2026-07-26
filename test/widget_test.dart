@@ -61,6 +61,7 @@ void main() {
       find.text('The self is old - older than the universe.'),
       findsWidgets,
     );
+    expect(find.text('Lightness'), findsWidgets);
     expect(find.text('Browse all writing'), findsOneWidget);
     expect(find.text('Quiet Ruin of the Self'), findsWidgets);
     expect(find.text('Physical AI for Mechanical Engineering'), findsNothing);

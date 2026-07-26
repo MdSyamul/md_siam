@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../blog_content.dart';
+import '../blogs.dart';
 import '../site_content.dart';
 import '../site_theme.dart';
 import '../widgets/site_widgets.dart';
@@ -116,18 +116,29 @@ class _BlogPageState extends State<BlogPage> {
                                     ],
                                   ),
                                   const SizedBox(height: 18),
-                                  AdaptiveWrapGrid(
-                                    minItemWidth: compact ? 260 : 330,
-                                    maxColumns: 3,
-                                    spacing: 18,
-                                    children: [
-                                      for (final post in filteredPosts)
-                                        _BlogPostCard(
-                                          post: post,
-                                          onRead: () =>
-                                              _openPost(context, post),
-                                        ),
-                                    ],
+                                  LayoutBuilder(
+                                    builder: (context, constraints) {
+                                      const cardWidth = 370.0;
+                                      final width = constraints.maxWidth
+                                          .clamp(0.0, cardWidth)
+                                          .toDouble();
+
+                                      return Wrap(
+                                        spacing: 18,
+                                        runSpacing: 18,
+                                        children: [
+                                          for (final post in filteredPosts)
+                                            SizedBox(
+                                              width: width,
+                                              child: _BlogPostCard(
+                                                post: post,
+                                                onRead: () =>
+                                                    _openPost(context, post),
+                                              ),
+                                            ),
+                                        ],
+                                      );
+                                    },
                                   ),
                                 ],
                               );
@@ -213,6 +224,7 @@ class _BlogPostPageState extends State<BlogPostPage> {
                           constraints: const BoxConstraints(maxWidth: 980),
                           child: BlogHtmlView(
                             sourceUrl: _blogImageUrl(post.contentUrl),
+                            subtitle: post.subtitle,
                             compact: compact,
                             onScroll: _handleHtmlScroll,
                           ),
@@ -310,10 +322,10 @@ class _BlogPostCard extends StatelessWidget {
           ],
           const SizedBox(height: 16),
           Text(post.title, style: Theme.of(context).textTheme.titleLarge),
-          if (post.summary.isNotEmpty) ...[
+          if (post.subtitle.isNotEmpty) ...[
             const SizedBox(height: 10),
             Text(
-              post.summary,
+              post.subtitle,
               style: Theme.of(context).textTheme.bodyMedium,
               maxLines: 3,
               overflow: TextOverflow.ellipsis,

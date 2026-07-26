@@ -11,11 +11,13 @@ class BlogHtmlView extends StatefulWidget {
   const BlogHtmlView({
     super.key,
     required this.sourceUrl,
+    required this.subtitle,
     required this.compact,
     this.onScroll,
   });
 
   final String sourceUrl;
+  final String subtitle;
   final bool compact;
   final ValueChanged<double>? onScroll;
 
@@ -45,6 +47,12 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
         ..style.height = '100%'
         ..style.overflow = 'hidden'
         ..style.width = '100%';
+      if (html.window.matchMedia('(pointer: coarse)').matches) {
+        // Let Flutter's parent scroll view receive touch gestures directly.
+        // This preserves native iPad momentum instead of relaying each move
+        // through postMessage and jumping the scroll position.
+        iframe.style.pointerEvents = 'none';
+      }
       iframe.onLoad.listen((_) => _startHeightPolling());
       _iframe = iframe;
       _loadHtmlContent();
@@ -81,12 +89,14 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
 
   String _withResizeScript(String htmlContent) {
     final baseUrl = htmlEscape.convert(widget.sourceUrl);
+    final subtitle = jsonEncode(widget.subtitle);
     final injection =
         '''
 <base href="$baseUrl">
 <script>
 (function () {
   var token = '$_resizeToken';
+  var subtitle = $subtitle;
   function measure() {
     var body = document.body || {};
     var root = document.documentElement || {};
@@ -97,6 +107,12 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
       root.offsetHeight || 0
     );
     parent.postMessage({ type: 'blog-content-height', token: token, height: height }, '*');
+  }
+  function updateSubtitle() {
+    var subtitleElement = document.querySelector('.subtitle');
+    if (subtitleElement) {
+      subtitleElement.textContent = subtitle;
+    }
   }
   function forwardWheel(event) {
     var multiplier = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? window.innerHeight : 1;
@@ -134,7 +150,11 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
   function clearTouch() {
     lastTouchY = null;
   }
-  window.addEventListener('load', measure);
+  updateSubtitle();
+  window.addEventListener('load', function () {
+    updateSubtitle();
+    measure();
+  });
   window.addEventListener('resize', measure);
   window.addEventListener('wheel', forwardWheel, { passive: false });
   window.addEventListener('touchstart', rememberTouch, { passive: true });
