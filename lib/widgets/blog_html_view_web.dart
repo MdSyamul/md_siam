@@ -35,7 +35,6 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
   late double _height = widget.compact ? 2200 : 2600;
   html.IFrameElement? _iframe;
   Timer? _heightPoller;
-  bool _isLoaded = false;
 
   @override
   void initState() {
@@ -100,14 +99,7 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
       // if a browser prevents direct document access.
     }
 
-    _markLoaded();
     _startHeightPolling();
-  }
-
-  void _markLoaded() {
-    if (!_isLoaded && mounted) {
-      setState(() => _isLoaded = true);
-    }
   }
 
   String get _resizeScript {
@@ -170,7 +162,6 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
     lastTouchY = null;
   }
   function ready() {
-    parent.postMessage({ type: 'blog-content-ready', token: token }, '*');
     updateSubtitle();
     measure();
   }
@@ -247,11 +238,6 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
       return;
     }
 
-    if (data['type'] == 'blog-content-ready') {
-      _markLoaded();
-      return;
-    }
-
     if (data['type'] == 'blog-content-height') {
       final height = data['height'];
       if (height is num) {
@@ -286,58 +272,14 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 220),
       width: double.infinity,
-      height: _isLoaded ? _height : 360,
+      height: _height,
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: SiteColors.surface,
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: SiteColors.line),
       ),
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: Opacity(
-              opacity: _isLoaded ? 1 : 0,
-              child: HtmlElementView(viewType: _viewType),
-            ),
-          ),
-          if (!_isLoaded)
-            const Positioned.fill(child: _BlogContentLoadingIndicator()),
-        ],
-      ),
-    );
-  }
-}
-
-class _BlogContentLoadingIndicator extends StatelessWidget {
-  const _BlogContentLoadingIndicator();
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(
-            width: 34,
-            height: 34,
-            child: CircularProgressIndicator(
-              strokeWidth: 3,
-              color: SiteColors.cyan,
-              backgroundColor: SiteColors.surfaceMuted,
-            ),
-          ),
-          SizedBox(height: 16),
-          Text(
-            'Loading blog content…',
-            style: TextStyle(
-              color: SiteColors.textMuted,
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ],
-      ),
+      child: HtmlElementView(viewType: _viewType),
     );
   }
 }
