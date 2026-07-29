@@ -49,12 +49,6 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
         ..style.height = '100%'
         ..style.overflow = 'hidden'
         ..style.width = '100%';
-      if (html.window.matchMedia('(pointer: coarse)').matches) {
-        // Let Flutter's parent scroll view receive touch gestures directly.
-        // This preserves native iPad momentum instead of relaying each move
-        // through postMessage and jumping the scroll position.
-        iframe.style.pointerEvents = 'none';
-      }
       iframe.onLoad.listen((_) => _handleIframeLoad());
       _iframe = iframe;
       iframe.src = widget.sourceUrl;
@@ -108,6 +102,10 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
 (function () {
   var token = '$_resizeToken';
   var subtitle = $subtitle;
+  function send(message) {
+    message.token = token;
+    parent.postMessage(JSON.stringify(message), '*');
+  }
   function measure() {
     var body = document.body || {};
     var root = document.documentElement || {};
@@ -117,7 +115,7 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
       root.scrollHeight || 0,
       root.offsetHeight || 0
     );
-    parent.postMessage({ type: 'blog-content-height', token: token, height: height }, '*');
+    send({ type: 'blog-content-height', height: height });
   }
   function updateSubtitle() {
     var subtitleElement = document.querySelector('.subtitle');
@@ -127,11 +125,10 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
   }
   function forwardWheel(event) {
     var multiplier = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? window.innerHeight : 1;
-    parent.postMessage({
+    send({
       type: 'blog-content-scroll',
-      token: token,
       deltaY: event.deltaY * multiplier
-    }, '*');
+    });
     event.preventDefault();
   }
   var lastTouchY = null;
@@ -150,11 +147,10 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
     var deltaY = lastTouchY - currentTouchY;
     lastTouchY = currentTouchY;
     if (deltaY !== 0) {
-      parent.postMessage({
+      send({
         type: 'blog-content-scroll',
-        token: token,
         deltaY: deltaY
-      }, '*');
+      });
       event.preventDefault();
     }
   }
@@ -230,10 +226,17 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
 
   void _handleMessage(html.Event event) {
     final message = event as html.MessageEvent;
-    final data = message.data;
-    if (data is! Map) {
+    final rawData = message.data;
+    final dynamic decodedData;
+    try {
+      decodedData = rawData is String ? jsonDecode(rawData) : rawData;
+    } catch (_) {
       return;
     }
+    if (decodedData is! Map) {
+      return;
+    }
+    final data = decodedData;
     if (data['token'] != _resizeToken) {
       return;
     }
