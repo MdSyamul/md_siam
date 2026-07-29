@@ -98,10 +98,14 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
       return;
     }
 
-    if (!_isLoaded) {
+    _markLoaded();
+    _startHeightPolling();
+  }
+
+  void _markLoaded() {
+    if (!_isLoaded && mounted) {
       setState(() => _isLoaded = true);
     }
-    _startHeightPolling();
   }
 
   String _withResizeScript(String htmlContent) {
@@ -167,7 +171,17 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
   function clearTouch() {
     lastTouchY = null;
   }
+  function ready() {
+    parent.postMessage({ type: 'blog-content-ready', token: token }, '*');
+    updateSubtitle();
+    measure();
+  }
   updateSubtitle();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', ready, { once: true });
+  } else {
+    ready();
+  }
   window.addEventListener('load', function () {
     updateSubtitle();
     measure();
@@ -242,6 +256,11 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
       return;
     }
 
+    if (data['type'] == 'blog-content-ready') {
+      _markLoaded();
+      return;
+    }
+
     if (data['type'] == 'blog-content-height') {
       final height = data['height'];
       if (height is num) {
@@ -292,9 +311,7 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
             ),
           ),
           if (!_isLoaded)
-            const Positioned.fill(
-              child: _BlogContentLoadingIndicator(),
-            ),
+            const Positioned.fill(child: _BlogContentLoadingIndicator()),
         ],
       ),
     );
