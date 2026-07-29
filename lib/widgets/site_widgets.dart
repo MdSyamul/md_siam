@@ -365,47 +365,23 @@ class ContentShell extends StatelessWidget {
   }
 }
 
-class SiteAnimatedReveal extends StatefulWidget {
+class SiteAnimatedReveal extends StatelessWidget {
   const SiteAnimatedReveal({
     super.key,
     required this.delay,
     required this.child,
   });
 
+  // Retained in the API so existing section declarations and their ordering
+  // do not need to change. Some Android in-app browsers aggressively throttle
+  // the delayed timers that previously controlled visibility, which could
+  // leave every section permanently transparent.
   final Duration delay;
   final Widget child;
 
   @override
-  State<SiteAnimatedReveal> createState() => _SiteAnimatedRevealState();
-}
-
-class _SiteAnimatedRevealState extends State<SiteAnimatedReveal> {
-  bool _visible = false;
-
-  @override
-  void initState() {
-    super.initState();
-    Future<void>.delayed(widget.delay, () {
-      if (!mounted) {
-        return;
-      }
-      setState(() => _visible = true);
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return AnimatedSlide(
-      offset: _visible ? Offset.zero : const Offset(0, 0.03),
-      duration: const Duration(milliseconds: 500),
-      curve: Curves.easeOutCubic,
-      child: AnimatedOpacity(
-        opacity: _visible ? 1 : 0,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeOutCubic,
-        child: widget.child,
-      ),
-    );
+    return child;
   }
 }
 
