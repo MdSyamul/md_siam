@@ -7,6 +7,8 @@ import 'dart:ui_web' as ui_web;
 
 import 'package:flutter/material.dart';
 
+import '../site_theme.dart';
+
 class BlogHtmlView extends StatefulWidget {
   const BlogHtmlView({
     super.key,
@@ -33,6 +35,8 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
   late double _height = widget.compact ? 2200 : 2600;
   html.IFrameElement? _iframe;
   Timer? _heightPoller;
+  bool _contentAssigned = false;
+  bool _isLoaded = false;
 
   @override
   void initState() {
@@ -53,7 +57,7 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
         // through postMessage and jumping the scroll position.
         iframe.style.pointerEvents = 'none';
       }
-      iframe.onLoad.listen((_) => _startHeightPolling());
+      iframe.onLoad.listen((_) => _handleIframeLoad());
       _iframe = iframe;
       _loadHtmlContent();
       return iframe;
@@ -78,13 +82,26 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
       if (!mounted || _iframe != iframe) {
         return;
       }
+      _contentAssigned = true;
       iframe.srcdoc = _withResizeScript(htmlContent);
     } catch (_) {
       if (!mounted || _iframe != iframe) {
         return;
       }
+      _contentAssigned = true;
       iframe.src = widget.sourceUrl;
     }
+  }
+
+  void _handleIframeLoad() {
+    if (!_contentAssigned || !mounted) {
+      return;
+    }
+
+    if (!_isLoaded) {
+      setState(() => _isLoaded = true);
+    }
+    _startHeightPolling();
   }
 
   String _withResizeScript(String htmlContent) {
@@ -259,10 +276,60 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 220),
       width: double.infinity,
-      height: _height,
+      height: _isLoaded ? _height : 360,
       clipBehavior: Clip.antiAlias,
-      decoration: const BoxDecoration(color: Colors.transparent),
-      child: HtmlElementView(viewType: _viewType),
+      decoration: BoxDecoration(
+        color: SiteColors.surface,
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(color: SiteColors.line),
+      ),
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: Opacity(
+              opacity: _isLoaded ? 1 : 0,
+              child: HtmlElementView(viewType: _viewType),
+            ),
+          ),
+          if (!_isLoaded)
+            const Positioned.fill(
+              child: _BlogContentLoadingIndicator(),
+            ),
+        ],
+      ),
+    );
+  }
+}
+
+class _BlogContentLoadingIndicator extends StatelessWidget {
+  const _BlogContentLoadingIndicator();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(
+            width: 34,
+            height: 34,
+            child: CircularProgressIndicator(
+              strokeWidth: 3,
+              color: SiteColors.cyan,
+              backgroundColor: SiteColors.surfaceMuted,
+            ),
+          ),
+          SizedBox(height: 16),
+          Text(
+            'Loading blog content…',
+            style: TextStyle(
+              color: SiteColors.textMuted,
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
