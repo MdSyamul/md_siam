@@ -35,7 +35,6 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
   late double _height = widget.compact ? 2200 : 2600;
   html.IFrameElement? _iframe;
   Timer? _heightPoller;
-  bool _contentAssigned = false;
   bool _isLoaded = false;
 
   @override
@@ -59,7 +58,7 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
       }
       iframe.onLoad.listen((_) => _handleIframeLoad());
       _iframe = iframe;
-      _loadHtmlContent();
+      iframe.src = widget.sourceUrl;
       return iframe;
     });
   }
@@ -71,31 +70,34 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
     super.dispose();
   }
 
-  Future<void> _loadHtmlContent() async {
+  void _handleIframeLoad() {
     final iframe = _iframe;
-    if (iframe == null) {
+    if (iframe == null || !mounted) {
       return;
     }
 
     try {
-      final htmlContent = await html.HttpRequest.getString(widget.sourceUrl);
-      if (!mounted || _iframe != iframe) {
+      final document = (iframe as dynamic).contentDocument;
+      final location = document?.location?.href as String?;
+      if (location == null || location == 'about:blank') {
         return;
       }
-      _contentAssigned = true;
-      iframe.srcdoc = _withResizeScript(htmlContent);
-    } catch (_) {
-      if (!mounted || _iframe != iframe) {
-        return;
-      }
-      _contentAssigned = true;
-      iframe.src = widget.sourceUrl;
-    }
-  }
 
-  void _handleIframeLoad() {
-    if (!_contentAssigned || !mounted) {
-      return;
+      final subtitleElement = document?.querySelector('.subtitle');
+      if (subtitleElement != null) {
+        subtitleElement.text = widget.subtitle;
+      }
+
+      final body = document?.body;
+      if (body != null) {
+        final bridge = html.ScriptElement()
+          ..type = 'text/javascript'
+          ..text = _resizeScript;
+        body.append(bridge);
+      }
+    } catch (_) {
+      // The iframe load still succeeded. Height polling below is sufficient
+      // if a browser prevents direct document access.
     }
 
     _markLoaded();
@@ -108,13 +110,9 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
     }
   }
 
-  String _withResizeScript(String htmlContent) {
-    final baseUrl = htmlEscape.convert(widget.sourceUrl);
+  String get _resizeScript {
     final subtitle = jsonEncode(widget.subtitle);
-    final injection =
-        '''
-<base href="$baseUrl">
-<script>
+    return '''
 (function () {
   var token = '$_resizeToken';
   var subtitle = $subtitle;
@@ -199,14 +197,7 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
   setTimeout(measure, 250);
   setTimeout(measure, 1000);
 })();
-</script>
 ''';
-
-    if (htmlContent.contains('</head>')) {
-      return htmlContent.replaceFirst('</head>', '$injection</head>');
-    }
-
-    return '$injection$htmlContent';
   }
 
   void _startHeightPolling() {
