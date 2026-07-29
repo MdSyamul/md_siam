@@ -8,13 +8,13 @@ class BlogHtmlView extends StatelessWidget {
     required this.sourceUrl,
     required this.subtitle,
     required this.compact,
-    this.onScroll,
+    required this.initialHeight,
   });
 
   final String sourceUrl;
   final String subtitle;
   final bool compact;
-  final ValueChanged<double>? onScroll;
+  final double initialHeight;
 
   @override
   Widget build(BuildContext context) {

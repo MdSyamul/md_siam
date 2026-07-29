@@ -203,6 +203,9 @@ class _BlogPostPageState extends State<BlogPostPage> {
                             sourceUrl: _blogImageUrl(post.contentUrl),
                             subtitle: post.subtitle,
                             compact: compact,
+                            initialHeight: compact
+                                ? post.compactWebContentHeight
+                                : post.webContentHeight,
                           ),
                         ),
                       ),

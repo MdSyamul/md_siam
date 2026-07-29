@@ -14,11 +14,13 @@ class BlogHtmlView extends StatefulWidget {
     required this.sourceUrl,
     required this.subtitle,
     required this.compact,
+    required this.initialHeight,
   });
 
   final String sourceUrl;
   final String subtitle;
   final bool compact;
+  final double initialHeight;
 
   @override
   State<BlogHtmlView> createState() => _BlogHtmlViewState();
@@ -27,13 +29,17 @@ class BlogHtmlView extends StatefulWidget {
 class _BlogHtmlViewState extends State<BlogHtmlView> {
   late final String _viewType =
       'blog-html-${widget.sourceUrl.hashCode}-${identityHashCode(this)}';
-  late double _height = widget.compact ? 1800 : 2200;
+  late double _height = widget.initialHeight;
   html.IFrameElement? _iframe;
   Timer? _heightPoller;
+  StreamSubscription<html.Event>? _windowResizeSubscription;
 
   @override
   void initState() {
     super.initState();
+    _windowResizeSubscription = html.window.onResize.listen((_) {
+      _startHeightPolling();
+    });
     ui_web.platformViewRegistry.registerViewFactory(_viewType, (int viewId) {
       final iframe = html.IFrameElement()
         ..title = 'Blog content'
@@ -47,6 +53,7 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
       iframe.onLoad.listen((_) => _handleIframeLoad());
       _iframe = iframe;
       iframe.src = widget.sourceUrl;
+      Timer.run(_startHeightPolling);
       return iframe;
     });
   }
@@ -54,6 +61,7 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
   @override
   void dispose() {
     _heightPoller?.cancel();
+    _windowResizeSubscription?.cancel();
     super.dispose();
   }
 
@@ -88,7 +96,7 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
     _heightPoller = Timer.periodic(const Duration(milliseconds: 250), (timer) {
       ticks++;
       _updateHeightFromFrame();
-      if (ticks >= 20) {
+      if (ticks >= 60) {
         timer.cancel();
       }
     });
@@ -114,8 +122,9 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
             return next > current ? next.toDouble() : current;
           });
 
-      if (height > 0 && (height - _height).abs() >= 1) {
-        setState(() => _height = height + 2);
+      final measuredHeight = height.ceilToDouble();
+      if (measuredHeight > 0 && (measuredHeight - _height).abs() >= 1) {
+        setState(() => _height = measuredHeight);
       }
     } catch (_) {
       // Keep the initial height if document measurement is unavailable.
@@ -124,11 +133,9 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 220),
+    return Container(
       width: double.infinity,
       height: _height,
-      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: SiteColors.surface,
         borderRadius: BorderRadius.circular(8),

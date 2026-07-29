@@ -7,6 +7,8 @@ class BlogPost {
     required this.contentUrl,
     this.publishedAt,
     this.updatedAt,
+    this.webContentHeight = 2200,
+    this.compactWebContentHeight = 1800,
   });
 
   final String title;
@@ -16,6 +18,8 @@ class BlogPost {
   final String contentUrl;
   final String? publishedAt;
   final String? updatedAt;
+  final double webContentHeight;
+  final double compactWebContentHeight;
 
   String? get displayDate => updatedAt ?? publishedAt;
 }
@@ -29,6 +33,8 @@ const List<BlogPost> blogPosts = [
     updatedAt: '2026-07-18',
     coverImageUrl: 'blogs/the-self-is-old/cover.jpg',
     contentUrl: 'blogs/the-self-is-old/content.html',
+    webContentHeight: 2700,
+    compactWebContentHeight: 3000,
   ),
   BlogPost(
     title: 'Existing',
