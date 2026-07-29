@@ -169,28 +169,6 @@ class BlogPostPage extends StatefulWidget {
 }
 
 class _BlogPostPageState extends State<BlogPostPage> {
-  final ScrollController _scrollController = ScrollController();
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  void _handleHtmlScroll(double deltaY) {
-    if (!_scrollController.hasClients) {
-      return;
-    }
-
-    final position = _scrollController.position;
-    final nextOffset = (_scrollController.offset + deltaY).clamp(
-      position.minScrollExtent,
-      position.maxScrollExtent,
-    );
-
-    _scrollController.jumpTo(nextOffset);
-  }
-
   @override
   Widget build(BuildContext context) {
     final compact = MediaQuery.sizeOf(context).width < 760;
@@ -212,7 +190,6 @@ class _BlogPostPageState extends State<BlogPostPage> {
               _BlogTopBar(title: post.title),
               Expanded(
                 child: SingleChildScrollView(
-                  controller: _scrollController,
                   child: ContentShell(
                     child: Padding(
                       padding: EdgeInsets.symmetric(
@@ -226,7 +203,6 @@ class _BlogPostPageState extends State<BlogPostPage> {
                             sourceUrl: _blogImageUrl(post.contentUrl),
                             subtitle: post.subtitle,
                             compact: compact,
-                            onScroll: _handleHtmlScroll,
                           ),
                         ),
                       ),
