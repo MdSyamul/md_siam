@@ -204,26 +204,24 @@ consult **Bugs and troubleshooting** before trying a new approach.
   `citation_for_view` in the second Google Scholar URL.
 - **Lesson:** New research resources should follow the same inline convention.
 
-### Full test suite has stale content expectation failures
+### GitHub Pages deployment failed during tests
 
-- **Observed behavior:** `flutter test` reports four failures while the
-  targeted research test passes.
-- **Current failures:**
-  - Expected the first blog cover to be `blogs/productivity/cover.png`, but it
-    is currently `blogs/the-self-is-old/cover.jpg`.
-  - Expected the old `View all research` homepage label, but the current label
-    is `Explore research directions`.
-  - Expected `Productivity` on the blog page, but it is absent.
-  - Expected `Begin gently, then build.` on the homepage, but it is absent.
-- **Root cause:** Blog data/content and the existing test expectations are out
-  of sync. These failures predate and are unrelated to research scrolling and
-  image rendering.
-- **Status:** Not fixed as part of the research work. Do not hide or rewrite
-  these failures when validating an unrelated change; report them separately.
+- **Observed behavior:** The Pages workflow run stopped at `flutter test`, so
+  the web build, artifact upload, and deploy jobs were skipped.
+- **Root cause:** Widget tests still expected the disabled Productivity post,
+  its Personal Growth metadata, and the old `View all research` label. The
+  current site intentionally shows `Quiet Ruin of the Self`, `Philosophy`, and
+  `Explore research directions` instead.
+- **Successful fix:** Updated the content assertions in `test/widget_test.dart`
+  to describe the active blog data and current research call-to-action. Keep
+  these tests synchronized when intentionally changing visible site content.
+- **Lesson:** Run the complete `flutter test` suite before pushing because the
+  Pages workflow treats any widget-test failure as a deployment blocker.
 
 ## Current successful checks
 
 - `flutter analyze` passes.
+- The complete `flutter test` suite passes.
 - `flutter build web` passes.
 - The targeted research navigation/scrolling test passes.
 - The built site contains all four active SVG files in `build/web/research/`.

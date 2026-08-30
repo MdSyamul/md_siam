@@ -9,8 +9,8 @@ import 'package:md_siam/pages/research/sections/research_document.dart';
 import 'package:md_siam/site_theme.dart';
 
 void main() {
-  test('productivity post includes a cover image', () {
-    expect(blogPosts.first.coverImageUrl, 'blogs/productivity/cover.png');
+  test('first blog post includes a cover image', () {
+    expect(blogPosts.first.coverImageUrl, 'blogs/the-self-is-old/cover.jpg');
   });
 
   testWidgets('personal website renders core sections', (
@@ -21,7 +21,7 @@ void main() {
 
     expect(find.text('Md. Syamul Bashar'), findsWidgets);
     expect(find.text('Research Areas'), findsOneWidget);
-    expect(find.text('View all research'), findsOneWidget);
+    expect(find.text('Explore research directions'), findsOneWidget);
     expect(find.text('Intelligent Design and Manufacturing'), findsNothing);
     expect(find.text('Courses Taught'), findsOneWidget);
     expect(find.text('Writing'), findsOneWidget);
@@ -113,15 +113,15 @@ void main() {
 
     expect(find.text('Md. Syamul Bashar'), findsOneWidget);
     expect(find.byType(TextField), findsNothing);
-    expect(find.text('Productivity'), findsWidgets);
-    expect(find.text('Personal Growth'), findsWidgets);
+    expect(find.text('Quiet Ruin of the Self'), findsWidgets);
+    expect(find.text('Philosophy'), findsWidgets);
 
     final readButton = find.text('Read').first;
     await tester.ensureVisible(readButton);
     await tester.tap(readButton);
     await tester.pumpAndSettle();
 
-    expect(find.text('Productivity'), findsWidgets);
+    expect(find.text('Quiet Ruin of the Self'), findsWidgets);
     expect(find.byTooltip('Back'), findsOneWidget);
   });
 
@@ -135,11 +135,14 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Visit Blog'), findsNothing);
-    expect(find.text('Begin gently, then build.'), findsWidgets);
-    expect(find.text('Personal Growth'), findsWidgets);
+    expect(
+      find.text('The self is old - older than the universe.'),
+      findsWidgets,
+    );
+    expect(find.text('Philosophy'), findsWidgets);
     expect(find.text('Browse all writing'), findsOneWidget);
-    expect(find.text('Productivity'), findsWidgets);
-    expect(find.text('Existing'), findsNothing);
+    expect(find.text('Quiet Ruin of the Self'), findsWidgets);
+    expect(find.text('Existing'), findsWidgets);
     expect(find.text('Physical AI for Mechanical Engineering'), findsNothing);
   });
 
