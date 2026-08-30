@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../site_theme.dart';
 
@@ -246,6 +247,24 @@ class SiteContactRow extends StatelessWidget {
   final String value;
   final VoidCallback? onTap;
 
+  Future<void> _copyValue(BuildContext context) async {
+    await Clipboard.setData(ClipboardData(text: value));
+    if (!context.mounted) {
+      return;
+    }
+
+    final messenger = ScaffoldMessenger.maybeOf(context);
+    messenger
+      ?..clearSnackBars()
+      ..showSnackBar(
+        SnackBar(
+          content: Text('$label copied'),
+          behavior: SnackBarBehavior.floating,
+          duration: const Duration(seconds: 2),
+        ),
+      );
+  }
+
   @override
   Widget build(BuildContext context) {
     final narrow = MediaQuery.sizeOf(context).width < 420;
@@ -270,13 +289,26 @@ class SiteContactRow extends StatelessWidget {
                 ).textTheme.labelLarge?.copyWith(color: SiteColors.cyan),
               ),
               const SizedBox(height: 4),
-              InkWell(
-                onTap: onTap,
-                child: Text(
-                  value,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                  softWrap: true,
-                ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: SelectableText(
+                      value,
+                      onTap: onTap,
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  IconButton(
+                    key: ValueKey<String>('copy-$label'),
+                    onPressed: () => _copyValue(context),
+                    tooltip: 'Copy $label',
+                    visualDensity: VisualDensity.compact,
+                    icon: const Icon(Icons.content_copy_rounded, size: 18),
+                    color: SiteColors.navy,
+                  ),
+                ],
               ),
             ],
           ),

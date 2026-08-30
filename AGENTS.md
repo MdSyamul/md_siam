@@ -28,6 +28,8 @@ consult **Bugs and troubleshooting** before trying a new approach.
 
 ## User preferences and recurring instructions
 
+- Do not run a release build or push commits unless the user explicitly asks
+  for that action in the current request.
 - Use conventional, concise hyperlink labels. For research resources, display
   `Paper` and `Code`, not raw URLs or `[paper]: URL`-style text.
 - Keep `Paper` and `Code` side by side, immediately after the corresponding
@@ -41,6 +43,9 @@ consult **Bugs and troubleshooting** before trying a new approach.
   text unchanged.
 - External resource links should open in a new tab/window with safe
   `noopener,noreferrer` behavior.
+- Keep the visible email, phone/WhatsApp number, and department address
+  selectable, with an explicit copy button and brief confirmation message for
+  each value.
 - Visitors must be able to scroll with the mouse wheel or touch gesture while
   the pointer is over research content and illustrations.
 - Preserve responsive behavior across desktop, tablet, and narrow mobile
@@ -121,6 +126,13 @@ consult **Bugs and troubleshooting** before trying a new approach.
 - Use `lib/utils/external_link.dart`, which conditionally exports the web
   implementation. The web implementation validates allowed URL schemes and
   calls `window.open` with `noopener,noreferrer`.
+
+### Contact details
+
+- `SiteContactRow` renders its value with `SelectableText` and provides a
+  clipboard action using `Clipboard.setData`. Preserve the existing email and
+  phone tap actions while keeping all three contact values independently
+  selectable and copyable.
 
 ### Blog content
 

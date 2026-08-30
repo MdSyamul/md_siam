@@ -1,11 +1,14 @@
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:md_siam/blogs.dart';
 import 'package:md_siam/main.dart';
+import 'package:md_siam/pages/home/sections/contact_section.dart';
 import 'package:md_siam/pages/research/sections/research_document.dart';
+import 'package:md_siam/site_content.dart';
 import 'package:md_siam/site_theme.dart';
 
 void main() {
@@ -30,6 +33,49 @@ void main() {
     expect(find.text('Google Scholar'), findsOneWidget);
     expect(find.text('LinkedIn'), findsOneWidget);
     expect(find.text('GitHub'), findsWidgets);
+  });
+
+  testWidgets('contact details are selectable and copyable', (
+    WidgetTester tester,
+  ) async {
+    final copiedValues = <String>[];
+    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+      SystemChannels.platform,
+      (call) async {
+        if (call.method == 'Clipboard.setData') {
+          final arguments = call.arguments as Map<Object?, Object?>;
+          copiedValues.add(arguments['text']! as String);
+        }
+        return null;
+      },
+    );
+    addTearDown(() {
+      tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+        SystemChannels.platform,
+        null,
+      );
+    });
+
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: SingleChildScrollView(
+            child: ContactSection(onEmail: _noop, onPhone: _noop),
+          ),
+        ),
+      ),
+    );
+
+    expect(find.byType(SelectableText), findsNWidgets(3));
+
+    for (final label in ['Email', 'WhatsApp', 'Address']) {
+      final copyButton = find.byKey(ValueKey<String>('copy-$label'));
+      await tester.ensureVisible(copyButton);
+      await tester.tap(copyButton);
+      await tester.pump();
+    }
+
+    expect(copiedValues, [emailAddress, phoneNumber, departmentAddress]);
   });
 
   testWidgets('research section opens the research page', (
@@ -194,3 +240,5 @@ void main() {
     }
   });
 }
+
+void _noop() {}
