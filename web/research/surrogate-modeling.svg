@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="title desc">
+  <title id="title">Surrogate modeling demo</title>
+  <desc id="desc">A field of sample points connected across a curved design space.</desc>
+  <rect width="400" height="300" fill="#f0e4cf"/>
+  <path d="M-20 239C69 148 111 218 181 123S315 55 431 92" fill="none" stroke="#3b768a" stroke-width="24" opacity=".18"/>
+  <path d="M-12 88C83 30 151 108 225 80s119-8 193-64" fill="none" stroke="#b85f45" stroke-width="42" opacity=".13"/>
+  <g stroke="#0f2d3a" stroke-width="2" opacity=".42">
+    <path d="M58 215L118 170 180 204 247 133 332 91"/>
+    <path d="M82 65L118 170 207 74 247 133 313 222"/>
+  </g>
+  <g fill="#fffbf4" stroke="#3b768a" stroke-width="5">
+    <circle cx="58" cy="215" r="9"/><circle cx="82" cy="65" r="9"/><circle cx="118" cy="170" r="11"/>
+    <circle cx="180" cy="204" r="8"/><circle cx="207" cy="74" r="10"/><circle cx="247" cy="133" r="12"/>
+    <circle cx="313" cy="222" r="9"/><circle cx="332" cy="91" r="8"/>
+  </g>
+</svg>

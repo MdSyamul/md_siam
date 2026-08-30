@@ -13,22 +13,3 @@ const String linkedInUrl =
     'https://www.linkedin.com/in/md-syamul-bashar-9293a8161/';
 const String githubRepositoriesUrl =
     'https://github.com/MdSyamul?tab=repositories';
-
-const List<String> researchInterests = [
-  'Physical Artificial Intelligence',
-  'Additive Manufacturing',
-  'Intelligent Mechanical Design',
-  'System dynamics and control',
-];
-
-const List<String> teachingCourses = [
-  'Control Engineering',
-  'Numerical Analysis',
-  'Fluid Mechanics',
-  'Basic Thermodynamics',
-];
-
-const List<String> additionalTeachingCourses = [
-  'Programming Methodology',
-  'Applied Statistics for Engineers',
-];

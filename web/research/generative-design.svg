@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="title desc">
+  <title id="title">Generative airfoil design</title>
+  <desc id="desc">A cambered airfoil with a rounded leading edge, sharp trailing edge, design points, and surrounding flow streamlines.</desc>
+  <rect width="400" height="300" fill="#f0e4cf"/>
+
+  <g fill="none" stroke="#3b768a" stroke-width="3.5" opacity=".72" stroke-linecap="round">
+    <path d="M18 64c77 0 100 29 159 37 68 9 128-22 205-17"/>
+    <path d="M18 94c68 1 92 23 145 31 75 11 139-13 219-7"/>
+    <path d="M18 122c42 1 62 9 82 20"/>
+    <path d="M18 187c43-1 65-9 86-20"/>
+    <path d="M18 216c72-1 97-22 153-28 74-8 132 16 211 10"/>
+    <path d="M18 246c79 0 106-30 166-36 67-7 124 24 198 18"/>
+  </g>
+
+  <path d="M344 146C255 114 132 106 70 134C61 138 56 144 56 150C56 157 62 162 71 165C126 183 238 169 344 146Z" fill="#fffbf4" stroke="#0f2d3a" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M65 151C139 144 239 142 344 146" fill="none" stroke="#b85f45" stroke-width="3" stroke-dasharray="7 7" stroke-linecap="round"/>
+
+  <g fill="#b85f45" stroke="#fffbf4" stroke-width="2">
+    <circle cx="58" cy="150" r="6"/>
+    <circle cx="100" cy="123" r="5"/>
+    <circle cx="164" cy="112" r="5"/>
+    <circle cx="238" cy="117" r="5"/>
+    <circle cx="299" cy="132" r="5"/>
+    <circle cx="344" cy="146" r="6"/>
+    <circle cx="282" cy="157" r="5"/>
+    <circle cx="204" cy="170" r="5"/>
+    <circle cx="127" cy="174" r="5"/>
+    <circle cx="77" cy="166" r="5"/>
+  </g>
+
+  <g transform="translate(277 44)">
+    <path d="M0 25C23 4 52 4 78 17C52 17 25 23 0 25Z" fill="none" stroke="#b85f45" stroke-width="3" opacity=".42"/>
+    <path d="M5 36C29 15 55 14 82 25C55 27 31 32 5 36Z" fill="none" stroke="#b85f45" stroke-width="3" opacity=".7"/>
+    <path d="M74 11l8 6-9 4" fill="none" stroke="#b85f45" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <path d="M350 141l14 5-14 5" fill="none" stroke="#3b768a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

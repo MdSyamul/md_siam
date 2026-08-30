@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Research in additive manufacturing, Physical AI, thermal comfort control, and generative design."
+    />
+    <title>Research</title>
+    <style>
+      :root {
+        --ink: #16242b;
+        --muted: #5a6a72;
+        --navy: #0f2d3a;
+        --accent: #3b768a;
+        --paper: #fffbf4;
+        --soft: #f0e4cf;
+        --rule: #d8c8b0;
+        --link: #a94731;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        background: var(--paper);
+      }
+
+      body {
+        color: var(--ink);
+        font-family: "IBM Plex Sans", Inter, Arial, sans-serif;
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .page {
+        width: 100%;
+        padding: clamp(28px, 5vw, 54px);
+      }
+
+      h1,
+      h2 {
+        color: var(--navy);
+        font-family: Merriweather, Georgia, serif;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(2rem, 5vw, 3.2rem);
+        line-height: 1.12;
+      }
+
+      .intro {
+        max-width: 900px;
+        margin: 18px 0 34px;
+        color: var(--muted);
+        font-size: clamp(1rem, 1.5vw, 1.08rem);
+      }
+
+      .project {
+        display: grid;
+        grid-template-columns: minmax(220px, 0.82fr) minmax(0, 1.7fr);
+        gap: clamp(24px, 4vw, 42px);
+        padding: 34px 0;
+        border-top: 1px solid var(--rule);
+      }
+
+      .project:last-child {
+        border-bottom: 1px solid var(--rule);
+      }
+
+      .project-image {
+        display: block;
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        aspect-ratio: 4 / 3;
+        border: 1px solid var(--rule);
+        border-radius: 14px;
+        background: var(--soft);
+        object-fit: cover;
+      }
+
+      .project-content {
+        min-width: 0;
+      }
+
+      h2 {
+        margin: -4px 0 12px;
+        font-size: clamp(1.35rem, 2.6vw, 1.85rem);
+        line-height: 1.3;
+      }
+
+      .summary {
+        margin: 0;
+        font-size: 0.98rem;
+      }
+
+      .projects-heading {
+        margin: 22px 0 8px;
+        color: var(--navy);
+        font-size: 0.78rem;
+        font-weight: 750;
+        letter-spacing: 0.08em;
+      }
+
+      .project-list {
+        margin: 0;
+        padding-left: 1.25rem;
+      }
+
+      .project-list li {
+        margin: 0 0 8px;
+        padding-left: 4px;
+      }
+
+      .resource-links {
+        display: inline-flex;
+        gap: 0.65rem;
+        margin-left: 0.35rem;
+        white-space: nowrap;
+      }
+
+      a {
+        color: var(--link);
+        font-weight: 650;
+        text-decoration-thickness: 1px;
+        text-underline-offset: 3px;
+      }
+
+      a:focus-visible {
+        outline: 3px solid rgba(59, 118, 138, 0.35);
+        outline-offset: 3px;
+      }
+
+      @media (hover: hover) {
+        a:hover {
+          color: var(--accent);
+        }
+      }
+
+      @media (max-width: 650px) {
+        .page {
+          width: calc(100% - 32px);
+          margin: 0 auto;
+          padding: 26px 8px 38px;
+        }
+
+        .intro {
+          margin-bottom: 26px;
+        }
+
+        .project {
+          grid-template-columns: 1fr;
+          gap: 22px;
+          padding: 28px 0;
+        }
+
+        .project-image {
+          max-height: 300px;
+        }
+
+        h2 {
+          margin-top: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page">
+      <h1>Research</h1>
+      <p class="intro">
+        Engineering intelligence—whether embodied or not—must remain grounded
+        in physical reality. Our research advances intelligent engineering
+        systems, particularly in additive manufacturing, generative design,
+        control, and robotics. Across these fields, we seek to bridge the gap
+        between algorithmic intelligence and engineering practice, where data
+        are scarce, operations are safety-critical, and components degrade over
+        time. To address these challenges, we generate simulated data and
+        develop approaches based on transfer learning, physics-informed neural
+        networks, and adaptive control policies.
+      </p>
+
+      <section class="project">
+        <img
+          class="project-image"
+          src="additive-manufacturing.svg"
+          alt="[An image depicting an ongoing additive manufacturing process.]"
+        />
+        <div class="project-content">
+          <h2>Additive Manufacturing</h2>
+          <p class="summary">
+            Our research investigates the relationships among process
+            parameters, microstructure, and material properties, leveraging
+            these relationships to develop process-optimization models and
+            adaptive control policies.
+          </p>
+          <p class="projects-heading">Current Research Projects:</p>
+          <ul class="project-list">
+            <li>
+              A Computational Process-Structure-Property Dataset of Wire Arc
+              Additive Manufacturing (ongoing).
+            </li>
+            <li>
+              A Stacked Ensemble Learning Framework for Surface Roughness
+              Prediction in Additively Manufactured Parts (Completed).
+            </li>
+            <li>
+              A Cross-Machine Transfer Learning Framework for Mechanical
+              Property Prediction in Laser Powder Bed Fusion (Completed).
+            </li>
+            <li>
+              Explainable Machine Learning for Melt-Pool Geometry Prediction
+              and Defect-Risk Assessment in SS316L Directed Energy Deposition
+              (Completed).
+            </li>
+            <li>
+              Defect-Constrained Process Parameter Optimization for Target
+              Mechanical Properties in Additive Manufacturing (Completed).
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="project">
+        <img
+          class="project-image"
+          src="physical-ai.svg"
+          alt="[An image depicting a robotic manipulator picking an object.]"
+        />
+        <div class="project-content">
+          <h2>Physical AI</h2>
+          <p class="summary">
+            Our research in Physical AI focuses on developing embodied
+            intelligent systems that can perceive their surroundings, reason
+            about physical interactions, and adapt their behavior in real time.
+          </p>
+          <p class="projects-heading">Current Research Projects:</p>
+          <ul class="project-list">
+            <li>
+              Adaptive Vision–Language–Action Policy for Robotic Manipulation
+              Under Joint Malfunction
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="project">
+        <img
+          class="project-image"
+          src="thermal-comfort.svg"
+          alt="[An image depicting a cozy indoor environment.]"
+        />
+        <div class="project-content">
+          <h2>Thermal comfort control</h2>
+          <p class="summary">
+            Our research focuses on developing intelligent and adaptive control
+            strategies for maintaining indoor thermal comfort while reducing
+            energy consumption.
+          </p>
+          <p class="projects-heading">Current Research Projects:</p>
+          <ul class="project-list">
+            <li>
+              Sensor-Lite Model for Thermal Comfort Prediction Using Contextual
+              Proxy Features
+              <span class="resource-links">
+                <a
+                  href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=6Xqz7xgAAAAJ&amp;citation_for_view=6Xqz7xgAAAAJ:Tyk-4Ss8FVUC"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >Paper</a>
+                <a
+                  href="https://github.com/MdSyamul/Sensor-Lite-Model-for-Thermal-Comfort-Prediction-Using-Contextual-Proxy-Features"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >Code</a>
+              </span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="project">
+        <img
+          class="project-image"
+          src="generative-design.svg"
+          alt="[An illustration showing an airfoil moving through a fluid flow.]"
+        />
+        <div class="project-content">
+          <h2>Generative Design</h2>
+          <p class="summary">
+            Our current research focuses on developing conditional generative
+            models that produce optimized airfoil geometries for target flow
+            regimes while satisfying specified design constraints.
+          </p>
+          <p class="projects-heading">Current Research Projects:</p>
+          <ul class="project-list">
+            <li>
+              Conditional Generative Inverse Design of Airfoils in the
+              Incompressible Flow Regime
+              <span class="resource-links">
+                <a
+                  href="https://scholar.google.com/citations?view_op=view_citation&amp;hl=en&amp;user=6Xqz7xgAAAAJ&amp;citation_for_view=6Xqz7xgAAAAJ:Y0pCki6q_DkC"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >Paper</a>
+              </span>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

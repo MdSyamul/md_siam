@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../site_content.dart';
-import '../site_theme.dart';
-import '../widgets/site_widgets.dart';
+import '../../../site_content.dart';
+import '../../../site_theme.dart';
+import '../../../widgets/site_widgets.dart';
 
 class ContactSection extends StatelessWidget {
   const ContactSection({

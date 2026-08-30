@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../site_content.dart';
-import '../site_theme.dart';
-import '../widgets/site_widgets.dart';
+import '../../../site_content.dart';
+import '../../../site_theme.dart';
+import '../../../widgets/site_widgets.dart';
 
 class HomeSection extends StatelessWidget {
   const HomeSection({
@@ -312,7 +312,7 @@ class _HeroPortrait extends StatelessWidget {
                 ),
                 SizedBox(height: 10),
                 SiteMiniBullet(label: 'Physical AI'),
-                SiteMiniBullet(label: 'Intelligent design & manufacturing'),
+                SiteMiniBullet(label: 'Design & manufacturing'),
                 SiteMiniBullet(label: 'Control theory and system dynamics'),
               ],
             ),

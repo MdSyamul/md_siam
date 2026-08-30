@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="title desc">
+  <title id="title">Thermal comfort control</title>
+  <desc id="desc">A comfortable indoor room connected to a thermal comfort control signal.</desc>
+  <rect width="400" height="300" fill="#f0e4cf"/>
+  <path d="M0 226h400v74H0z" fill="#dfcdae"/>
+  <path d="M42 52h316v174H42z" fill="#fffaf0" stroke="#0f2d3a" stroke-width="4"/>
+  <path d="M64 77h91v70H64z" fill="#d8edf0" stroke="#3b768a" stroke-width="4"/>
+  <path d="M109.5 77v70M64 112h91" stroke="#3b768a" stroke-width="3" opacity=".65"/>
+  <path d="M253 73h74v33h-74z" fill="#fffbf4" stroke="#0f2d3a" stroke-width="4"/>
+  <path d="M265 88h49" stroke="#3b768a" stroke-width="4" stroke-linecap="round"/>
+  <g fill="none" stroke="#3b768a" stroke-width="4" stroke-linecap="round" opacity=".8">
+    <path d="M271 118c-8 12-8 22 0 31"/>
+    <path d="M290 118c-8 12-8 22 0 31"/>
+    <path d="M309 118c-8 12-8 22 0 31"/>
+  </g>
+  <path d="M87 224v-44c0-11 9-20 20-20h80c11 0 20 9 20 20v44" fill="#c97d61" stroke="#0f2d3a" stroke-width="4"/>
+  <path d="M78 224h139M103 184h88" stroke="#0f2d3a" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="284" cy="197" r="32" fill="#fffbf4" stroke="#0f2d3a" stroke-width="4"/>
+  <path d="M284 197l14-13" stroke="#b85f45" stroke-width="5" stroke-linecap="round"/>
+  <circle cx="284" cy="197" r="5" fill="#b85f45"/>
+  <path d="M259 170c-22-19-49-28-72-26" fill="none" stroke="#3b768a" stroke-width="4" stroke-dasharray="7 8" stroke-linecap="round"/>
+  <circle cx="176" cy="145" r="8" fill="#3b768a"/>
+  <path d="M249 248h70" stroke="#0f2d3a" stroke-width="4" stroke-linecap="round"/>
+  <path d="M264 239v18M284 234v28M304 242v14" stroke="#b85f45" stroke-width="5" stroke-linecap="round"/>
+</svg>

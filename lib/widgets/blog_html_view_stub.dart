@@ -9,12 +9,16 @@ class BlogHtmlView extends StatelessWidget {
     required this.subtitle,
     required this.compact,
     required this.initialHeight,
+    this.scrollController,
+    this.pointerEventsEnabled = true,
   });
 
   final String sourceUrl;
   final String subtitle;
   final bool compact;
   final double initialHeight;
+  final ScrollController? scrollController;
+  final bool pointerEventsEnabled;
 
   @override
   Widget build(BuildContext context) {

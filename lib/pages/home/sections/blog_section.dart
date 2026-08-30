@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../blogs.dart';
-import '../site_theme.dart';
-import '../widgets/site_widgets.dart';
+import '../../../blogs.dart';
+import '../../../site_theme.dart';
+import '../../../widgets/site_widgets.dart';
 
 class BlogSection extends StatelessWidget {
   const BlogSection({
@@ -18,55 +18,74 @@ class BlogSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<BlogPost>>(
-      future: const BlogRepository().loadPosts(),
-      builder: (context, snapshot) {
-        final posts = (snapshot.data ?? blogPosts).take(3).toList();
+    return SiteSectionBlock(
+      eyebrow: 'Blog',
+      title: 'Writing',
+      subtitle: _blogSectionSubtitle,
+      child: FutureBuilder<List<BlogPost>>(
+        future: const BlogRepository().loadPosts(),
+        builder: (context, snapshot) {
+          final posts = (snapshot.data ?? blogPosts).take(2).toList();
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (posts.isNotEmpty)
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  final availableWidth = constraints.maxWidth;
-                  final cardWidth = availableWidth < 360
-                      ? availableWidth
-                      : compact
-                      ? availableWidth
-                      : availableWidth.clamp(520.0, 620.0);
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (posts.isNotEmpty)
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final availableWidth = constraints.maxWidth;
+                    final cardWidth = availableWidth < 360
+                        ? availableWidth
+                        : compact
+                        ? availableWidth
+                        : availableWidth.clamp(520.0, 620.0);
 
-                  return Wrap(
-                    spacing: 18,
-                    runSpacing: 18,
-                    children: [
-                      for (final post in posts)
-                        SizedBox(
-                          width: cardWidth,
-                          child: _FeaturedBlogCard(
-                            post: post,
-                            onRead: () => onOpenPost(post),
+                    return Wrap(
+                      spacing: 18,
+                      runSpacing: 18,
+                      children: [
+                        for (final post in posts)
+                          SizedBox(
+                            width: cardWidth,
+                            child: _FeaturedBlogCard(
+                              post: post,
+                              onRead: () => onOpenPost(post),
+                            ),
                           ),
-                        ),
-                    ],
-                  );
-                },
+                      ],
+                    );
+                  },
+                ),
+              const SizedBox(height: 16),
+              Align(
+                alignment: compact
+                    ? Alignment.centerLeft
+                    : Alignment.centerRight,
+                child: OutlinedButton.icon(
+                  onPressed: onOpenBlog,
+                  icon: const Icon(Icons.arrow_forward_rounded, size: 18),
+                  label: const Text('Browse all writing'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: SiteColors.navy,
+                    side: const BorderSide(color: SiteColors.cyan),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 18,
+                      vertical: 14,
+                    ),
+                  ),
+                ),
               ),
-            const SizedBox(height: 16),
-            Align(
-              alignment: compact ? Alignment.centerLeft : Alignment.centerRight,
-              child: TextButton.icon(
-                onPressed: onOpenBlog,
-                icon: const Icon(Icons.arrow_forward_rounded, size: 18),
-                label: const Text('Browse all writing'),
-              ),
-            ),
-          ],
-        );
-      },
+            ],
+          );
+        },
+      ),
     );
   }
 }
+
+const String _blogSectionSubtitle = '''
+These writings are meant primarily for myself. I am simply gathering the thoughts of others that have helped me along the way. I have shared them here in the hope that they may bring guidance and comfort to anyone who needs them. If any of these thoughts resonate with you, perhaps it is because they were already yours. As Herbert Paul once wrote, "And, after all, what is originality? It is merely undetected plagiarism."
+''';
 
 class _FeaturedBlogCard extends StatelessWidget {
   const _FeaturedBlogCard({required this.post, required this.onRead});

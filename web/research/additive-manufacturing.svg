@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="title desc">
+  <title id="title">Additive manufacturing process</title>
+  <desc id="desc">A manufacturing nozzle depositing successive material layers.</desc>
+  <rect width="400" height="300" fill="#f0e4cf"/>
+  <path d="M140 35h120l-23 58h-74z" fill="#fffbf4" stroke="#0f2d3a" stroke-width="5"/>
+  <path d="M181 92h38v44h-38z" fill="#3b768a" stroke="#0f2d3a" stroke-width="5"/>
+  <path d="M200 136v31" stroke="#b85f45" stroke-width="8" stroke-linecap="round"/>
+  <g fill="none" stroke="#3b768a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M86 235h228"/>
+    <path d="M108 215h184"/>
+    <path d="M133 195h134"/>
+    <path d="M160 175h80"/>
+  </g>
+  <path d="M58 249h284v18H58z" fill="#0f2d3a"/>
+  <g fill="#b85f45" opacity=".35">
+    <circle cx="114" cy="156" r="6"/><circle cx="287" cy="181" r="5"/><circle cx="83" cy="202" r="4"/>
+    <circle cx="309" cy="143" r="4"/><circle cx="265" cy="119" r="5"/>
+  </g>
+</svg>

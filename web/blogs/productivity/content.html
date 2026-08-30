@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Existing — a brief reflection on mindfulness and the mind that meets the world."
+      content="Productivity - a short reflection on beginning the day calmly."
     />
-    <title>Existing</title>
+    <title>Productivity</title>
     <style>
       :root {
         --ink: #172235;
@@ -46,9 +46,9 @@
         display: block;
         width: 100%;
         aspect-ratio: 16 / 9;
-        height: clamp(220px, 50vw, 420px);
+        max-height: 500px;
         object-fit: cover;
-        object-position: center 42%;
+        object-position: center;
       }
 
       article {
@@ -81,6 +81,13 @@
         text-align: center;
       }
 
+      p {
+        margin: 0;
+        font-size: clamp(1.08rem, 2vw, 1.25rem);
+        text-align: center;
+        text-wrap: pretty;
+      }
+
       .ornament {
         display: flex;
         align-items: center;
@@ -99,26 +106,6 @@
         background: var(--rule);
       }
 
-      h2 {
-        margin: 0 0 0.8em;
-        color: var(--ink);
-        font-family: Georgia, "Times New Roman", serif;
-        font-size: clamp(1.6rem, 4vw, 2.2rem);
-        line-height: 1.25;
-        text-align: center;
-      }
-
-      .pull-quote {
-        margin: 0 auto;
-        color: var(--gold);
-        font-family: Georgia, "Times New Roman", serif;
-        font-size: clamp(1.35rem, 3vw, 1.75rem);
-        font-style: italic;
-        line-height: 1.55;
-        text-align: center;
-        text-wrap: balance;
-      }
-
       @media (max-width: 600px) {
         .page {
           box-shadow: none;
@@ -127,6 +114,10 @@
         article {
           width: min(100% - 32px, 690px);
         }
+
+        p {
+          line-height: 1.68;
+        }
       }
 
       @media print {
@@ -134,10 +125,6 @@
         .page {
           background: #fff;
           box-shadow: none;
-        }
-
-        .opening-image {
-          page-break-after: always;
         }
 
         article {
@@ -151,21 +138,24 @@
       <img
         class="opening-image"
         src="cover.png"
-        alt="A meditating figure containing a luminous inner landscape"
+        alt="A calm morning workspace with a notebook and coffee beside a sunlit window"
       />
       <article>
         <header>
-          <h1>Existing</h1>
-          <!-- <p class="subtitle">Lightness</p> -->
+          <h1>Productivity</h1>
+          <p class="subtitle">Begin gently, then build.</p>
         </header>
 
-        <div class="ornament" aria-hidden="true">◆</div>
+        <div class="ornament" aria-hidden="true">*</div>
 
-        <section>
-          <!-- <h2>Mindfulness</h2> -->
-          <!-- <p class="pull-quote">
-            The world is not fast. Your mind is fast. -Haemin Sunim
-          </p> -->
+        <section aria-label="Reflection">
+          <p>
+            Start your day slowly. You do not want to exhaust your willpower
+            before the day has truly begun. Wake up a little earlier, take a
+            shower, eat breakfast, enjoy a cup of coffee, listen to your
+            favorite song, or do something you find relaxing. A calm and gentle
+            morning can set a positive tone for the rest of your day.
+          </p>
         </section>
       </article>
     </main>

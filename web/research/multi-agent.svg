@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="title desc">
+  <title id="title">Multi-agent learning demo</title>
+  <desc id="desc">Four connected learning agents exchanging information through a network.</desc>
+  <rect width="400" height="300" fill="#f0e4cf"/>
+  <g stroke="#3b768a" stroke-width="5" opacity=".55">
+    <path d="M90 80L200 150 310 80M90 220L200 150 310 220M90 80V220M310 80V220"/>
+  </g>
+  <g fill="#fffbf4" stroke="#0f2d3a" stroke-width="5">
+    <rect x="45" y="45" width="90" height="70" rx="16"/><rect x="265" y="45" width="90" height="70" rx="16"/>
+    <rect x="45" y="185" width="90" height="70" rx="16"/><rect x="265" y="185" width="90" height="70" rx="16"/>
+  </g>
+  <circle cx="200" cy="150" r="47" fill="#3b768a"/>
+  <g fill="#0f2d3a"><circle cx="90" cy="80" r="12"/><circle cx="310" cy="80" r="12"/><circle cx="90" cy="220" r="12"/><circle cx="310" cy="220" r="12"/></g>
+  <path d="M179 150l14 14 29-31" fill="none" stroke="#fffbf4" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

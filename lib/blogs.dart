@@ -7,8 +7,8 @@ class BlogPost {
     required this.contentUrl,
     this.publishedAt,
     this.updatedAt,
-    this.webContentHeight = 2200,
-    this.compactWebContentHeight = 1800,
+    this.webContentHeight = 780,
+    this.compactWebContentHeight = 461,
   });
 
   final String title;
@@ -25,6 +25,17 @@ class BlogPost {
 }
 
 const List<BlogPost> blogPosts = [
+  // BlogPost(
+  //   title: 'Productivity',
+  //   category: 'Personal Growth',
+  //   subtitle: 'Begin gently, then build.',
+  //   publishedAt: '2026-07-29',
+  //   updatedAt: '2026-07-29',
+  //   coverImageUrl: 'blogs/productivity/cover.png',
+  //   contentUrl: 'blogs/productivity/content.html',
+  //   webContentHeight: 1060,
+  //   compactWebContentHeight: 920,
+  // ),
   BlogPost(
     title: 'Quiet Ruin of the Self',
     category: 'Philosophy',
@@ -33,8 +44,8 @@ const List<BlogPost> blogPosts = [
     updatedAt: '2026-07-18',
     coverImageUrl: 'blogs/the-self-is-old/cover.jpg',
     contentUrl: 'blogs/the-self-is-old/content.html',
-    webContentHeight: 2700,
-    compactWebContentHeight: 3000,
+    webContentHeight: 2455,
+    compactWebContentHeight: 2364,
   ),
   BlogPost(
     title: 'Existing',
