@@ -15,15 +15,16 @@ class ResearchDocument extends StatelessWidget {
     _ResearchArea(
       title: 'Additive Manufacturing and Physics AI',
       subtitle:
-          '(Finite Element Analysis; Process-Structure-Property Modeling; '
-          'In-situ Monitoring & Adaptive Control.)',
+          '(In-situ Monitoring & Adaptive Control; Process-Structure-Property '
+          'Modeling; Finite Element Analysis.)',
       summary:
-          'We are actively addressing data scarcity in metal additive '
-          'manufacturing through FEA simulations, physics-informed machine '
-          'learning, and transfer-learning strategies. Our research also '
-          'investigates process–structure–property relationships and builds on '
-          'them to develop defect-constrained optimization models and adaptive '
-          'control policies to achieve target mechanical properties.',
+          'Our research develops data-efficient, physics-guided, and '
+          'uncertainty-aware models for metal additive manufacturing using '
+          'simulation, transfer learning, reduced-order modeling, and '
+          'explainable machine learning. We use these models to predict '
+          'melt-pool behavior, defects, surface quality, and mechanical '
+          'properties, and to enable defect-constrained optimization, '
+          'cross-domain transfer, digital twins, and safe adaptive control.',
       imagePath: 'research/additive-manufacturing.svg',
       imageLabel: 'An ongoing additive manufacturing process.',
       projectsHeading: 'Selected Research Projects:',

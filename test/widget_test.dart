@@ -128,6 +128,19 @@ void main() {
     expect(find.byTooltip('Back'), findsOneWidget);
     expect(find.byKey(const Key('research-content-underlay')), findsOneWidget);
     expect(find.text('Additive Manufacturing and Physics AI'), findsOneWidget);
+    expect(
+      find.text(
+        '(In-situ Monitoring & Adaptive Control; '
+        'Process-Structure-Property Modeling; Finite Element Analysis.)',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.textContaining(
+        'data-efficient, physics-guided, and uncertainty-aware models',
+      ),
+      findsOneWidget,
+    );
     expect(find.text('Selected Research Projects:'), findsNWidgets(3));
     expect(
       find.textContaining('Sabbir S. H. B., & Bashar, M. S.*'),

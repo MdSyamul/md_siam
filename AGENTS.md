@@ -75,9 +75,8 @@ consult **Bugs and troubleshooting** before trying a new approach.
 - The visible `/research` page title is `Research Directions`; keep the route and
   navigation terminology unchanged unless explicitly requested.
 - Research focus lines from the current Word source are:
-  - Additive Manufacturing and Physics AI: `(Finite Element Analysis;
-    Process-Structure-Property Modeling; In-situ Monitoring & Adaptive
-    Control.)`
+  - Additive Manufacturing and Physics AI: `(In-situ Monitoring & Adaptive
+    Control; Process-Structure-Property Modeling; Finite Element Analysis.)`
   - Physical AI for Manufacturing Floor: `(Robotic Manipulator; Industrial
     Robots.)`
   - Indoor Environment Control: `(Thermal Comfort Control; Indoor Farming.)`
@@ -108,9 +107,9 @@ consult **Bugs and troubleshooting** before trying a new approach.
   2026-09-02.
 - The current narrative framing emphasizes physical principles, uncertainty,
   limited data, safety-critical operation, and evolving physical systems. Area
-  summaries cover additive-manufacturing data scarcity, robust embodied
-  intelligence, efficient indoor sensing/control, and an end-to-end airfoil
-  design framework.
+  summaries cover data-efficient, physics-guided, uncertainty-aware additive
+  manufacturing and digital twins; robust embodied intelligence; efficient
+  indoor sensing/control; and an end-to-end airfoil design framework.
 - The current Word source uses `Selected Research Projects:` for Additive
   Manufacturing and Physics AI, Physical AI for Manufacturing Floor, and
   Indoor Environment Control. It uses `Selected Research Projects (Airfoil
