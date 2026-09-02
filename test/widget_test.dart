@@ -6,7 +6,10 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:md_siam/blogs.dart';
 import 'package:md_siam/main.dart';
+import 'package:md_siam/pages/blog/blog_page.dart';
+import 'package:md_siam/pages/blog/widgets/blog_post_card.dart';
 import 'package:md_siam/pages/home/sections/contact_section.dart';
+import 'package:md_siam/pages/home/sections/research_section.dart';
 import 'package:md_siam/pages/research/sections/research_document.dart';
 import 'package:md_siam/site_content.dart';
 import 'package:md_siam/site_theme.dart';
@@ -23,6 +26,7 @@ void main() {
     await tester.pump(const Duration(milliseconds: 900));
 
     expect(find.text('Md. Syamul Bashar'), findsWidgets);
+    expect(find.text('Research Focus'), findsNothing);
     expect(find.text('Research Areas'), findsOneWidget);
     expect(find.text('Explore research directions'), findsOneWidget);
     expect(find.text('Intelligent Design and Manufacturing'), findsNothing);
@@ -30,9 +34,41 @@ void main() {
     expect(find.text('Writing'), findsOneWidget);
     expect(find.text('Get in Touch'), findsOneWidget);
     expect(find.text('University Profile'), findsOneWidget);
-    expect(find.text('Google Scholar'), findsOneWidget);
+    expect(find.text('Google Scholar'), findsNWidgets(2));
+    expect(
+      find.byKey(const Key('research-google-scholar-button')),
+      findsOneWidget,
+    );
     expect(find.text('LinkedIn'), findsOneWidget);
     expect(find.text('GitHub'), findsWidgets);
+  });
+
+  testWidgets('research section Google Scholar button uses its callback', (
+    WidgetTester tester,
+  ) async {
+    var scholarOpenCount = 0;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: SingleChildScrollView(
+            child: ResearchSection(
+              compact: true,
+              onOpenResearchPage: _noop,
+              onGoogleScholar: () => scholarOpenCount++,
+            ),
+          ),
+        ),
+      ),
+    );
+
+    final scholarButton = find.byKey(
+      const Key('research-google-scholar-button'),
+    );
+    await tester.ensureVisible(scholarButton);
+    await tester.tap(scholarButton);
+
+    expect(scholarOpenCount, 1);
   });
 
   testWidgets('contact details are selectable and copyable', (
@@ -91,16 +127,59 @@ void main() {
     expect(find.text('Md. Syamul Bashar'), findsOneWidget);
     expect(find.byTooltip('Back'), findsOneWidget);
     expect(find.byKey(const Key('research-content-underlay')), findsOneWidget);
-    expect(find.text('Additive Manufacturing'), findsOneWidget);
+    expect(find.text('Additive Manufacturing and Physics AI'), findsOneWidget);
+    expect(find.text('Selected Research Projects:'), findsNWidgets(3));
+    expect(
+      find.textContaining('Sabbir S. H. B., & Bashar, M. S.*'),
+      findsOneWidget,
+    );
+    expect(
+      find.textContaining(
+        'Interpretable and Physics-Guided Reduced-Order Modeling',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.textContaining(
+        'robust embodied intelligence for perception, navigation, and '
+        'manipulation under uncertainty',
+      ),
+      findsOneWidget,
+    );
+    expect(
+      find.textContaining('Effects of Fog and Surface Reflectivity'),
+      findsOneWidget,
+    );
 
-    await tester.drag(
-      find.byType(SingleChildScrollView),
-      const Offset(0, -1800),
+    await tester.scrollUntilVisible(
+      find.text('Generative Design'),
+      600,
+      scrollable: find.byType(Scrollable),
     );
     await tester.pumpAndSettle();
 
     expect(find.text('Generative Design'), findsOneWidget);
-    expect(find.text('Paper'), findsWidgets);
+    expect(
+      find.text('Selected Research Projects (Airfoil Design):'),
+      findsOneWidget,
+    );
+    expect(
+      find.textContaining('Predicting Globe Temperature: Model Development'),
+      findsOneWidget,
+    );
+    expect(
+      find.textContaining('A Comprehensive Dataset for NACA 4-digit Airfoils'),
+      findsOneWidget,
+    );
+    expect(find.text('(Airfoil Design)'), findsOneWidget);
+    expect(
+      find.textContaining(
+        'end-to-end framework for airfoil design, linking aerodynamic data',
+      ),
+      findsOneWidget,
+    );
+    expect(find.text('Paper'), findsNWidgets(2));
+    expect(find.text('Code'), findsNWidgets(2));
   });
 
   testWidgets('research typography remains readable across viewports', (
@@ -137,14 +216,68 @@ void main() {
       );
       await tester.pump(const Duration(milliseconds: 100));
 
-      final title = tester.widget<Text>(find.text('Research Direction'));
+      final title = tester.widget<Text>(find.text('Research Directions'));
       final subtitle = tester.widget<Text>(
-        find.text('Robotic Manipulator; Industrial Robots.'),
+        find.text('(Robotic Manipulator; Industrial Robots.)'),
       );
 
       expect(title.style?.fontSize, compact ? 34 : 42);
       expect(subtitle.style?.fontSize, compact ? 14 : 14.5);
+      expect(subtitle.style?.color, SiteColors.textMuted);
+      expect(subtitle.style?.fontWeight, FontWeight.w500);
       expect(subtitle.style?.fontStyle, FontStyle.italic);
+
+      final firstProject = tester.widget<Text>(
+        find.byWidgetPredicate(
+          (widget) =>
+              widget is Text &&
+              (widget.textSpan?.toPlainText().contains(
+                    'A Stacked Ensemble Learning Framework',
+                  ) ??
+                  false),
+        ),
+      );
+      final projectSpans = (firstProject.textSpan! as TextSpan).children!;
+      final boldProjectTitle = projectSpans.whereType<TextSpan>().firstWhere(
+        (span) => span.text?.startsWith('A Stacked Ensemble Learning') ?? false,
+      );
+
+      expect(boldProjectTitle.style?.fontWeight, FontWeight.w700);
+      expect(
+        projectSpans.whereType<TextSpan>().where(
+          (span) =>
+              span.text == 'Completed' &&
+              span.style?.color == const Color(0xFFA94731),
+        ),
+        hasLength(1),
+      );
+      expect(
+        projectSpans.whereType<TextSpan>().where(
+          (span) =>
+              span.text == 'ongoing' &&
+              span.style?.color == const Color(0xFFA94731),
+        ),
+        isEmpty,
+      );
+      final accentTexts = tester
+          .widgetList<Text>(find.byType(Text))
+          .expand<InlineSpan>((text) {
+            final span = text.textSpan;
+            return span is TextSpan ? span.children ?? const [] : const [];
+          })
+          .whereType<TextSpan>()
+          .where((span) => span.style?.color == const Color(0xFFA94731))
+          .map((span) => span.text)
+          .toSet();
+      expect(
+        accentTexts,
+        containsAll(<String>[
+          'Completed',
+          'Ongoing',
+          'Accepted',
+          'Thesis Book',
+        ]),
+      );
       expect(tester.takeException(), isNull);
     }
   });
@@ -169,6 +302,73 @@ void main() {
 
     expect(find.text('Quiet Ruin of the Self'), findsWidgets);
     expect(find.byTooltip('Back'), findsOneWidget);
+  });
+
+  testWidgets('blog listing adapts across mobile, tablet, and desktop widths', (
+    WidgetTester tester,
+  ) async {
+    final view = tester.view;
+    addTearDown(() {
+      view.resetPhysicalSize();
+      view.resetDevicePixelRatio();
+    });
+
+    const viewports = [
+      ui.Size(280, 653),
+      ui.Size(320, 700),
+      ui.Size(390, 844),
+      ui.Size(768, 1024),
+      ui.Size(1024, 768),
+      ui.Size(1440, 900),
+    ];
+
+    for (final viewport in viewports) {
+      view.physicalSize = viewport;
+      view.devicePixelRatio = 1;
+
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: buildSiteTheme(),
+          home: MediaQuery(
+            data: MediaQueryData(
+              size: viewport,
+              textScaler: const TextScaler.linear(1.3),
+            ),
+            child: const BlogPage(),
+          ),
+        ),
+      );
+      await tester.pump(const Duration(milliseconds: 200));
+
+      final cards = find.byType(BlogPostCard);
+      expect(cards, findsNWidgets(blogPosts.length));
+      for (final card in cards.evaluate()) {
+        final size = tester.getSize(find.byWidget(card.widget));
+        expect(size.width, lessThanOrEqualTo(420.1));
+        expect(size.width, lessThanOrEqualTo(viewport.width));
+      }
+      expect(
+        tester.takeException(),
+        isNull,
+        reason:
+            'Blog listing should not overflow at '
+            '${viewport.width}x${viewport.height}.',
+      );
+
+      await tester.drag(
+        find.byType(SingleChildScrollView),
+        const Offset(0, -600),
+      );
+      await tester.pumpAndSettle();
+
+      expect(
+        tester.takeException(),
+        isNull,
+        reason:
+            'Scrolled blog listing should remain stable at '
+            '${viewport.width}x${viewport.height}.',
+      );
+    }
   });
 
   testWidgets('homepage blog section presents featured writing', (

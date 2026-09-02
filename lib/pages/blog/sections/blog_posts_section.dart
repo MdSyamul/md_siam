@@ -51,26 +51,14 @@ class BlogPostsSection extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 18),
-        LayoutBuilder(
-          builder: (context, constraints) {
-            const cardWidth = 370.0;
-            final width = constraints.maxWidth.clamp(0.0, cardWidth).toDouble();
-
-            return Wrap(
-              spacing: 18,
-              runSpacing: 18,
-              children: [
-                for (final post in filteredPosts)
-                  SizedBox(
-                    width: width,
-                    child: BlogPostCard(
-                      post: post,
-                      onRead: () => onOpenPost(post),
-                    ),
-                  ),
-              ],
-            );
-          },
+        AdaptiveWrapGrid(
+          minItemWidth: 280,
+          maxItemWidth: 420,
+          maxColumns: 3,
+          children: [
+            for (final post in filteredPosts)
+              BlogPostCard(post: post, onRead: () => onOpenPost(post)),
+          ],
         ),
       ],
     );

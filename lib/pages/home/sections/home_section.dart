@@ -103,7 +103,7 @@ class HomeSection extends StatelessWidget {
                             compact: compact,
                           ),
                           const SizedBox(height: 28),
-                          const _HeroPortrait(compact: true),
+                          const _HeroPortrait(),
                         ],
                       )
                     : Row(
@@ -121,10 +121,7 @@ class HomeSection extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 28),
-                          const Expanded(
-                            flex: 5,
-                            child: _HeroPortrait(compact: false),
-                          ),
+                          const Expanded(flex: 5, child: _HeroPortrait()),
                         ],
                       ),
               ],
@@ -243,82 +240,31 @@ class _HeroCopy extends StatelessWidget {
 }
 
 class _HeroPortrait extends StatelessWidget {
-  const _HeroPortrait({required this.compact});
-
-  final bool compact;
+  const _HeroPortrait();
 
   @override
   Widget build(BuildContext context) {
-    final veryNarrow = MediaQuery.sizeOf(context).width < 380;
-
-    return Stack(
-      clipBehavior: Clip.none,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(34),
-            color: const Color(0x14FFFFFF),
-            border: Border.all(color: const Color(0x35FFFFFF)),
-          ),
-          child: Semantics(
-            label: 'Portrait of Md. Syamul Bashar',
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(26),
-              child: AspectRatio(
-                aspectRatio: 0.92,
-                child: Image.asset(
-                  profileImagePath,
-                  fit: BoxFit.cover,
-                  alignment: Alignment.topCenter,
-                ),
-              ),
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(34),
+        color: const Color(0x14FFFFFF),
+        border: Border.all(color: const Color(0x35FFFFFF)),
+      ),
+      child: Semantics(
+        label: 'Portrait of Md. Syamul Bashar',
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(26),
+          child: AspectRatio(
+            aspectRatio: 0.92,
+            child: Image.asset(
+              profileImagePath,
+              fit: BoxFit.cover,
+              alignment: Alignment.topCenter,
             ),
           ),
         ),
-        Positioned(
-          left: compact ? 14 : -16,
-          bottom: compact ? 16 : 18,
-          child: Container(
-            width: compact
-                ? veryNarrow
-                      ? 150
-                      : 170
-                : 190,
-            padding: EdgeInsets.all(veryNarrow ? 14 : 16),
-            decoration: BoxDecoration(
-              color: SiteColors.surface,
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(color: SiteColors.line),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.08),
-                  blurRadius: 20,
-                  offset: const Offset(0, 14),
-                ),
-              ],
-            ),
-            child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Research Focus',
-                  style: TextStyle(
-                    fontSize: 11,
-                    fontWeight: FontWeight.w700,
-                    color: SiteColors.cyan,
-                    letterSpacing: 0.6,
-                  ),
-                ),
-                SizedBox(height: 10),
-                SiteMiniBullet(label: 'Physical AI'),
-                SiteMiniBullet(label: 'Design & manufacturing'),
-                SiteMiniBullet(label: 'Control theory and system dynamics'),
-              ],
-            ),
-          ),
-        ),
-      ],
+      ),
     );
   }
 }

@@ -129,6 +129,8 @@ class _SiteHomePageState extends State<SiteHomePage> {
                                 key: _sectionKeys[HomePageSection.research],
                                 compact: compact,
                                 onOpenResearchPage: _openResearch,
+                                onGoogleScholar: () =>
+                                    _openUrl(googleScholarUrl),
                               ),
                             ),
                             SiteAnimatedReveal(

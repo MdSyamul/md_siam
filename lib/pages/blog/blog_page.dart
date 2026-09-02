@@ -57,11 +57,8 @@ class _BlogPageState extends State<BlogPage> {
                         children: [
                           Text(
                             'Blog',
-                            style: Theme.of(context).textTheme.displaySmall,
-                          ),
-                          const SizedBox(height: 12),
-                          ConstrainedBox(
-                            constraints: const BoxConstraints(maxWidth: 760),
+                            style: Theme.of(context).textTheme.displaySmall
+                                ?.copyWith(fontSize: compact ? 32 : null),
                           ),
                           const SizedBox(height: 22),
                           FutureBuilder<List<BlogPost>>(

@@ -13,82 +13,147 @@ class ResearchDocument extends StatelessWidget {
 
   static const _projects = <_ResearchArea>[
     _ResearchArea(
-      title: 'Additive Manufacturing',
+      title: 'Additive Manufacturing and Physics AI',
       subtitle:
-          'Finite Element Analysis; Process-Structure-Property Modeling; '
-          'In-situ Monitoring & Adaptive Control.',
+          '(Finite Element Analysis; Process-Structure-Property Modeling; '
+          'In-situ Monitoring & Adaptive Control.)',
       summary:
-          'Our research investigates the relationships among process '
-          'parameters, microstructure, and material properties, leveraging '
-          'these relationships to develop process-optimization models and '
-          'adaptive control policies.',
+          'We are actively addressing data scarcity in metal additive '
+          'manufacturing through FEA simulations, physics-informed machine '
+          'learning, and transfer-learning strategies. Our research also '
+          'investigates process–structure–property relationships and builds on '
+          'them to develop defect-constrained optimization models and adaptive '
+          'control policies to achieve target mechanical properties.',
       imagePath: 'research/additive-manufacturing.svg',
       imageLabel: 'An ongoing additive manufacturing process.',
+      projectsHeading: 'Selected Research Projects:',
       projects: [
         _ResearchProject(
           title:
-              'A Computational Process-Structure-Property Dataset of Wire Arc '
-              'Additive Manufacturing (ongoing).',
-        ),
-        _ResearchProject(
-          title:
+              'Sabbir S. H. B., & Bashar, M. S.* A Stacked Ensemble Learning '
+              'Framework for Surface Roughness Prediction in Additively '
+              'Manufactured Parts (Completed as part of an ongoing thesis).',
+          projectTitle:
               'A Stacked Ensemble Learning Framework for Surface Roughness '
-              'Prediction in Additively Manufactured Parts (Completed).',
+              'Prediction in Additively Manufactured Parts',
         ),
         _ResearchProject(
           title:
+              'Mahbub, M., & Bashar, M. S.* A Cross-Machine Transfer Learning '
+              'Framework for Mechanical Property Prediction in Laser Powder '
+              'Bed Fusion (Completed as part of an ongoing thesis).',
+          projectTitle:
               'A Cross-Machine Transfer Learning Framework for Mechanical '
-              'Property Prediction in Laser Powder Bed Fusion (Completed).',
+              'Property Prediction in Laser Powder Bed Fusion',
         ),
         _ResearchProject(
           title:
+              'Haque, M. R., Khalil, M. I., & Bashar, M. S.* Explainable '
+              'Machine Learning for Melt-Pool Geometry Prediction and '
+              'Defect-Risk Assessment in SS316L Directed Energy Deposition '
+              '(Completed as part of an ongoing thesis).',
+          projectTitle:
               'Explainable Machine Learning for Melt-Pool Geometry Prediction '
-              'and Defect-Risk Assessment in SS316L Directed Energy Deposition '
-              '(Completed).',
+              'and Defect-Risk Assessment in SS316L Directed Energy Deposition',
         ),
         _ResearchProject(
           title:
+              'Abir M. A. A, & Bashar, M. S.* Defect-Constrained Process '
+              'Parameter Optimization for Target Mechanical Properties in '
+              'Additive Manufacturing (Completed as part of an ongoing thesis).',
+          projectTitle:
               'Defect-Constrained Process Parameter Optimization for Target '
-              'Mechanical Properties in Additive Manufacturing (Completed).',
+              'Mechanical Properties in Additive Manufacturing',
+        ),
+        _ResearchProject(
+          title:
+              'Hadi M. J. A., & Bashar, M. S.* A Computational '
+              'Process-Property Dataset of Wire Arc Additive Manufacturing '
+              '(Ongoing thesis).',
+          projectTitle:
+              'A Computational Process-Property Dataset of Wire Arc Additive '
+              'Manufacturing',
+        ),
+        _ResearchProject(
+          title:
+              'Interpretable and Physics-Guided Reduced-Order Modeling for '
+              'Melt-pool Dynamics (Ongoing thesis).',
+          projectTitle:
+              'Interpretable and Physics-Guided Reduced-Order Modeling for '
+              'Melt-pool Dynamics',
         ),
       ],
     ),
     _ResearchArea(
-      title: 'Physical AI',
-      subtitle: 'Robotic Manipulator; Industrial Robots.',
+      title: 'Physical AI for Manufacturing Floor',
+      subtitle: '(Robotic Manipulator; Industrial Robots.)',
       summary:
-          'Our research in Physical AI focuses on developing embodied '
-          'intelligent systems that can perceive their surroundings, reason '
-          'about physical interactions, and adapt their behavior in real time.',
+          'Our research in Physical AI focuses on developing robust embodied '
+          'intelligence for perception, navigation, and manipulation under '
+          'uncertainty, with particular attention to environmental sensing, '
+          'proprioceptive awareness, system health, and fault-adaptive control.',
       imagePath: 'research/physical-ai.svg',
       imageLabel: 'A robotic manipulator picking an object.',
+      projectsHeading: 'Selected Research Projects:',
       projects: [
         _ResearchProject(
           title:
+              'Raz, A.B. & Bashar, M. S.* (2027). Adaptive '
+              'Vision–Language–Action Policy for Robotic Manipulation Under '
+              'Joint Malfunction, International Conference on Engineering '
+              'Research, Innovation and Education 2027 (ICERIE 2027), Sylhet, '
+              'Bangladesh (Extended Abstract Accepted).',
+          projectTitle:
               'Adaptive Vision–Language–Action Policy for Robotic Manipulation '
               'Under Joint Malfunction',
+        ),
+        _ResearchProject(
+          title:
+              'Parveen, M. L. & Bashar, M. S.* (Academic session 2019-2020). '
+              'Effects of Fog and Surface Reflectivity on LiDAR-Based SLAM and '
+              'Autonomous Mobile Robot Navigation '
+              '(Thesis Book).',
+          projectTitle:
+              'Effects of Fog and Surface Reflectivity on LiDAR-Based SLAM and '
+              'Autonomous Mobile Robot Navigation',
         ),
       ],
     ),
     _ResearchArea(
       title: 'Indoor Environment Control',
-      subtitle: 'Thermal Comfort Control; Indoor Farming.',
+      subtitle: '(Thermal Comfort Control; Indoor Farming.)',
       summary:
-          'Our research focuses on developing intelligent and adaptive control '
-          'strategies for maintaining indoor thermal comfort while reducing '
-          'energy consumption.',
+          'Our research focuses on developing efficient sensing and adaptive '
+          'control strategies for indoor environment control.',
       imagePath: 'research/thermal-comfort.svg',
       imageLabel: 'A cozy indoor environment.',
+      projectsHeading: 'Selected Research Projects:',
       projects: [
         _ResearchProject(
           title:
+              'Shamim, F. M., Haque, M. A., Bashar, M. S.* (2027). Deep '
+              'Reinforcement Learning for Personalized Thermal Comfort Control '
+              'Policy, International Conference on Engineering Research, '
+              'Innovation and Education 2027 (ICERIE 2027), Sylhet, Bangladesh '
+              '(Extended Abstract Accepted).',
+          projectTitle:
+              'Deep Reinforcement Learning for Personalized Thermal Comfort '
+              'Control Policy',
+        ),
+        _ResearchProject(
+          title:
+              'Haque, M. A., Shamim, F. M., & Bashar, M. S.* (2025). '
+              'Sensor-Lite Model for Thermal Comfort Prediction Using '
+              'Contextual Proxy Features, 15th International Conference on '
+              'Mechanical Engineering (ICME 2025), Dhaka, Bangladesh,',
+          projectTitle:
               'Sensor-Lite Model for Thermal Comfort Prediction Using '
               'Contextual Proxy Features',
           resources: [
             _ResearchResource(
               label: 'Paper',
               url:
-                  'https://scholar.google.com/citations?view_op=view_citation&hl=en&user=6Xqz7xgAAAAJ&citation_for_view=6Xqz7xgAAAAJ:Tyk-4Ss8FVUC',
+                  'https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6204578',
             ),
             _ResearchResource(
               label: 'Code',
@@ -97,30 +162,69 @@ class ResearchDocument extends StatelessWidget {
             ),
           ],
         ),
-      ],
-    ),
-    _ResearchArea(
-      title: 'Generative Design',
-      subtitle:
-          'Airfoil Design; Microstructure Generation in Additive Manufacturing.',
-      summary:
-          'Our current research focuses on developing conditional generative '
-          'models that produce optimized airfoil geometries for target flow '
-          'regimes while satisfying specified design constraints.',
-      imagePath: 'research/generative-design.svg',
-      imageLabel: 'An airfoil moving through a fluid flow.',
-      projects: [
         _ResearchProject(
           title:
-              'Conditional Generative Inverse Design of Airfoils in the '
-              'Incompressible Flow Regime',
+              'Haque, M. A., Asaduzzaman, M., & Bashar, M. S.* (2025). '
+              'Predicting Globe Temperature: Model Development and Analysis, '
+              '15th International Conference on Mechanical Engineering (ICME '
+              '2025), Dhaka, Bangladesh,',
+          projectTitle:
+              'Predicting Globe Temperature: Model Development and Analysis',
           resources: [
             _ResearchResource(
               label: 'Paper',
               url:
-                  'https://scholar.google.com/citations?view_op=view_citation&hl=en&user=6Xqz7xgAAAAJ&citation_for_view=6Xqz7xgAAAAJ:Y0pCki6q_DkC',
+                  'https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6200418',
+            ),
+            _ResearchResource(
+              label: 'Code',
+              url: 'https://github.com/MdSyamul/Globe-Temperature-Prediction',
             ),
           ],
+        ),
+      ],
+    ),
+    _ResearchArea(
+      title: 'Generative Design',
+      subtitle: '(Airfoil Design)',
+      summary:
+          'Our current research develops an end-to-end framework for airfoil '
+          'design, linking aerodynamic data generation, physics-guided '
+          'performance prediction, and conditional generative inverse design '
+          'for target flow conditions and design constraints.',
+      imagePath: 'research/generative-design.svg',
+      imageLabel: 'An airfoil moving through a fluid flow.',
+      projectsHeading: 'Selected Research Projects (Airfoil Design):',
+      projects: [
+        _ResearchProject(
+          title:
+              'Samin, A. A., & Bashar, M. S.* (2026). Conditional Generative '
+              'Inverse Design of Airfoils in the Incompressible Flow Regime, '
+              'International Conference on Emerging Frontiers in Advanced '
+              'Sciences and Technologies 2026 (EFAST 2026), Pabna, Bangladesh.',
+          projectTitle:
+              'Conditional Generative Inverse Design of Airfoils in the '
+              'Incompressible Flow Regime',
+        ),
+        _ResearchProject(
+          title:
+              'Samin, A. A., Zihan, S. W., & Bashar, M. S.* (2026). '
+              'Physics-Guided Surrogate Modeling for Airfoils’ Aerodynamic '
+              'Performance in Incompressible Flow Regime, International '
+              'Conference on Engineering and Frontier Technologies 2026 '
+              '(ICEFronT 2026), Tangail, Bangladesh (Accepted).',
+          projectTitle:
+              'Physics-Guided Surrogate Modeling for Airfoils’ Aerodynamic '
+              'Performance in Incompressible Flow Regime',
+        ),
+        _ResearchProject(
+          title:
+              'Zihan, S. W., & Bashar, M. S.* (Academic session 2019-20). A '
+              'Comprehensive Dataset for NACA 4-digit Airfoils’ Aerodynamics in '
+              'Incompressible Flow Regime (Thesis Book).',
+          projectTitle:
+              'A Comprehensive Dataset for NACA 4-digit Airfoils’ Aerodynamics '
+              'in Incompressible Flow Regime',
         ),
       ],
     ),
@@ -161,7 +265,7 @@ class ResearchDocument extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Research Direction',
+              'Research Directions',
               style: compact
                   ? Theme.of(context).textTheme.displaySmall
                   : Theme.of(context).textTheme.displayMedium,
@@ -170,16 +274,14 @@ class ResearchDocument extends StatelessWidget {
             ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 800),
               child: Text(
-                'Engineering intelligence—whether embodied or not—must remain '
-                'grounded in physical reality. Our research advances intelligent '
-                'engineering systems, particularly in additive manufacturing, '
-                'generative design, control, and robotics. Across these fields, '
-                'we seek to bridge the gap between algorithmic intelligence and '
-                'engineering practice, where data are scarce, operations are '
-                'safety-critical, and components degrade over time. To address '
-                'these challenges, we generate simulated data and develop '
-                'approaches based on transfer learning, physics-informed neural '
-                'networks, and adaptive control policies.',
+                'Engineering intelligence—whether embodied or not—must '
+                'incorporate physical principles, account for uncertainty, and '
+                'operate within the constraints of real engineering systems. '
+                'Our research advances intelligent systems across additive '
+                'manufacturing, generative design, control, and robotics by '
+                'addressing key real-world challenges: limited data, '
+                'safety-critical operation, and physical systems that degrade '
+                'and evolve over time.',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                   color: SiteColors.textMuted,
                   fontSize: 16,
@@ -279,15 +381,17 @@ class _ResearchAreaContent extends StatelessWidget {
           area.title,
           style: theme.textTheme.headlineMedium?.copyWith(
             fontSize: compact ? 24 : 28,
+            fontWeight: FontWeight.w700,
             height: 1.2,
           ),
         ),
-        const SizedBox(height: 6),
+        const SizedBox(height: 8),
         Text(
           area.subtitle,
           style: theme.textTheme.bodyMedium?.copyWith(
             color: SiteColors.textMuted,
             fontSize: compact ? 14 : 14.5,
+            fontWeight: FontWeight.w500,
             fontStyle: FontStyle.italic,
             height: 1.5,
           ),
@@ -302,7 +406,7 @@ class _ResearchAreaContent extends StatelessWidget {
         ),
         const SizedBox(height: 22),
         Text(
-          'CURRENT RESEARCH PROJECTS:',
+          area.projectsHeading,
           style: theme.textTheme.labelSmall?.copyWith(
             letterSpacing: 1.05,
             color: SiteColors.navy,
@@ -319,29 +423,52 @@ class _ResearchAreaContent extends StatelessWidget {
 class _ResearchProjectView extends StatelessWidget {
   const _ResearchProjectView(this.project, {required this.compact});
 
-  static final _statusPattern = RegExp(
-    r'\b(?:ongoing|completed)\b',
-    caseSensitive: false,
+  static final _accentPattern = RegExp(
+    r'\b(?:Completed|Ongoing|Accepted)\b|\bThesis Book\b',
   );
 
   final _ResearchProject project;
   final bool compact;
 
   List<InlineSpan> _titleSpans() {
-    final spans = <InlineSpan>[];
-    var start = 0;
+    final styledRanges = <_StyledTextRange>[];
+    final projectTitleStart = project.title.indexOf(project.projectTitle);
 
-    for (final match in _statusPattern.allMatches(project.title)) {
-      if (match.start > start) {
-        spans.add(TextSpan(text: project.title.substring(start, match.start)));
-      }
-      spans.add(
-        TextSpan(
-          text: match.group(0),
+    if (projectTitleStart >= 0) {
+      styledRanges.add(
+        _StyledTextRange(
+          start: projectTitleStart,
+          end: projectTitleStart + project.projectTitle.length,
+          style: const TextStyle(fontWeight: FontWeight.w700),
+        ),
+      );
+    }
+
+    for (final match in _accentPattern.allMatches(project.title)) {
+      styledRanges.add(
+        _StyledTextRange(
+          start: match.start,
+          end: match.end,
           style: const TextStyle(color: _resourceColor),
         ),
       );
-      start = match.end;
+    }
+
+    styledRanges.sort((first, second) => first.start.compareTo(second.start));
+    final spans = <InlineSpan>[];
+    var start = 0;
+
+    for (final range in styledRanges) {
+      if (range.start > start) {
+        spans.add(TextSpan(text: project.title.substring(start, range.start)));
+      }
+      spans.add(
+        TextSpan(
+          text: project.title.substring(range.start, range.end),
+          style: range.style,
+        ),
+      );
+      start = range.end;
     }
 
     if (start < project.title.length) {
@@ -452,6 +579,7 @@ class _ResearchArea {
     required this.summary,
     required this.imagePath,
     required this.imageLabel,
+    required this.projectsHeading,
     required this.projects,
   });
 
@@ -460,14 +588,32 @@ class _ResearchArea {
   final String summary;
   final String imagePath;
   final String imageLabel;
+  final String projectsHeading;
   final List<_ResearchProject> projects;
 }
 
 class _ResearchProject {
-  const _ResearchProject({required this.title, this.resources = const []});
+  const _ResearchProject({
+    required this.title,
+    required this.projectTitle,
+    this.resources = const [],
+  });
 
   final String title;
+  final String projectTitle;
   final List<_ResearchResource> resources;
+}
+
+class _StyledTextRange {
+  const _StyledTextRange({
+    required this.start,
+    required this.end,
+    required this.style,
+  });
+
+  final int start;
+  final int end;
+  final TextStyle style;
 }
 
 class _ResearchResource {

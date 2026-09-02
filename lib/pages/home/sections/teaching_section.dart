@@ -16,8 +16,7 @@ class TeachingSection extends StatelessWidget {
     return SiteSectionBlock(
       eyebrow: 'Teaching',
       title: 'Courses Taught',
-      subtitle:
-          'Core undergraduate courses taught in the Mechanical Engineering Department.',
+      subtitle: 'Core undergraduate courses taught.',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

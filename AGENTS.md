@@ -1,6 +1,6 @@
 # Project Memory — Md. Syamul Bashar Website
 
-Last updated: 2026-08-31
+Last updated: 2026-09-02
 
 This file is the persistent working memory for this repository. Read it before
 making project changes. Update it whenever a preference, decision, dependency,
@@ -38,9 +38,10 @@ consult **Bugs and troubleshooting** before trying a new approach.
 - Give `Paper` and `Code` a conventional underline gap. Use a controlled bottom
   rule with about 3 px of separation instead of Flutter's tight default text
   decoration.
-- Color the status words `ongoing` and `Completed` with the same rust accent
-  used by Paper/Code (`#A94731`); leave their surrounding punctuation and title
-  text unchanged.
+- Map words shown in red or a similar accent in `assets/research.docx` to the
+  same rust accent (`#A94731`) used by Paper and Code links. In the current
+  source these are `Completed`, `Ongoing`, `Accepted`, and `Thesis Book`; keep
+  their surrounding punctuation in the normal citation color.
 - External resource links should open in a new tab/window with safe
   `noopener,noreferrer` behavior.
 - Keep the visible email, phone/WhatsApp number, and department address
@@ -68,21 +69,32 @@ consult **Bugs and troubleshooting** before trying a new approach.
   broader research-area heading.
 - Preserve official project-title capitalization unless explicitly asked to
   edit it.
-- Current research areas are Additive Manufacturing, Physical AI, Indoor
-  Environment Control, and Generative Design.
-- The visible `/research` page title is `Research Direction`; keep the route and
+- Current research-area headings are Additive Manufacturing and Physics AI,
+  Physical AI for Manufacturing Floor, Indoor Environment Control, and
+  Generative Design.
+- The visible `/research` page title is `Research Directions`; keep the route and
   navigation terminology unchanged unless explicitly requested.
 - Research focus lines from the current Word source are:
-  - Additive Manufacturing: Finite Element Analysis;
-    Process-Structure-Property Modeling; In-situ Monitoring & Adaptive Control.
-  - Physical AI: Robotic Manipulator; Industrial Robots.
-  - Indoor Environment Control: Thermal Comfort Control; Indoor Farming.
-  - Generative Design: Airfoil Design; Microstructure Generation in Additive
-    Manufacturing.
+  - Additive Manufacturing and Physics AI: `(Finite Element Analysis;
+    Process-Structure-Property Modeling; In-situ Monitoring & Adaptive
+    Control.)`
+  - Physical AI for Manufacturing Floor: `(Robotic Manipulator; Industrial
+    Robots.)`
+  - Indoor Environment Control: `(Thermal Comfort Control; Indoor Farming.)`
+  - Generative Design: `(Airfoil Design)`
 - Treat those focus lines as italic subtitles directly below their major
   research-area headings, not as part of the descriptive paragraphs.
 
 ## Important implementation decisions
+
+### Home page
+
+- Keep the hero portrait unobstructed. The former floating `Research Focus`
+  card was removed from the portrait; research topics belong in the dedicated
+  Research Areas section instead.
+- Keep the Research Areas actions responsive: `Explore research directions`
+  and `Google Scholar` sit together on wide layouts and wrap on narrow screens.
+  The Scholar action uses the shared safe external-link handler.
 
 ### Research page
 
@@ -92,6 +104,20 @@ consult **Bugs and troubleshooting** before trying a new approach.
   content back into a full-page iframe; the iframe captured wheel/touch input.
 - Research content and Paper/Code URLs live in
   `lib/pages/research/sections/research_document.dart`.
+- The research page was last synchronized with `assets/research.docx` on
+  2026-09-02.
+- The current narrative framing emphasizes physical principles, uncertainty,
+  limited data, safety-critical operation, and evolving physical systems. Area
+  summaries cover additive-manufacturing data scarcity, robust embodied
+  intelligence, efficient indoor sensing/control, and an end-to-end airfoil
+  design framework.
+- The current Word source uses `Selected Research Projects:` for Additive
+  Manufacturing and Physics AI, Physical AI for Manufacturing Floor, and
+  Indoor Environment Control. It uses `Selected Research Projects (Airfoil
+  Design):` for Generative Design.
+- Project entries include the source's full author, session/year, venue, status,
+  and thesis-book wording. Do not shorten these citations when syncing future
+  Word updates.
 - The native document root uses the key `research-content-underlay` and owns
   the light surface, border, and subtle shadow behind all research content.
 - Research typography derives from the global Merriweather/IBM Plex Sans theme
@@ -104,6 +130,14 @@ consult **Bugs and troubleshooting** before trying a new approach.
   - Summary: 16 px desktop, 15.5 px compact, at 1.65 line height.
   - Project item: 15.5 px desktop, 15 px compact, at 1.6 line height.
   - Paper/Code: the global 13 px semibold `labelMedium` style.
+- Within each project citation, render the actual research title in bold while
+  keeping authors, sessions, years, and venue details at regular weight.
+- Present research-focus subtitles as plain italic medium-weight muted text,
+  without a colored callout or accent rule.
+- Mirror red or similar Word-source emphasis with the Paper/Code rust accent
+  (`#A94731`). Currently, only the words `Completed`, `Ongoing`, `Accepted`, and
+  the phrase `Thesis Book` receive this treatment; surrounding status text and
+  punctuation remain in the citation's normal color.
 - Research illustrations use a conditional `ResearchImage` implementation:
   - `lib/pages/research/widgets/research_image_web.dart` renders a browser-native
     `<img>` via `HtmlElementView`.
@@ -136,6 +170,10 @@ consult **Bugs and troubleshooting** before trying a new approach.
 
 ### Blog content
 
+- The blog listing uses `AdaptiveWrapGrid` with a 280 px minimum card width, a
+  420 px maximum card width, and up to three columns. Preserve these bounds so
+  cards remain readable without wasting tablet space or becoming oversized on
+  desktop.
 - Blog articles still use `BlogHtmlView` and an iframe-based height/scroll
   bridge. Do not assume the research page uses the same rendering path.
 - In `blog_html_view_web.dart`, install the frame bridge before optional DOM
@@ -145,6 +183,8 @@ consult **Bugs and troubleshooting** before trying a new approach.
 
 - Run `dart format` for changed Dart files.
 - Run `flutter analyze` after implementation changes.
+- Run the blog viewport regression test when changing blog listing or card
+  layout; it covers 280 px mobile through 1440 px desktop at enlarged text.
 - Run the targeted research test when changing research layout or scrolling:
   `flutter test --plain-name "research section opens the research page"`.
 - Run `flutter build web` for web-platform or asset changes.

@@ -325,12 +325,16 @@ class AdaptiveWrapGrid extends StatelessWidget {
     required this.minItemWidth,
     required this.maxColumns,
     this.spacing = 18,
+    this.maxItemWidth = double.infinity,
+    this.alignment = WrapAlignment.start,
   });
 
   final List<Widget> children;
   final double minItemWidth;
   final int maxColumns;
   final double spacing;
+  final double maxItemWidth;
+  final WrapAlignment alignment;
 
   @override
   Widget build(BuildContext context) {
@@ -347,10 +351,12 @@ class AdaptiveWrapGrid extends StatelessWidget {
             .floor();
         final columns = estimatedColumns.clamp(1, maxColumns);
         final visibleColumns = math.min(columns, children.length);
-        final itemWidth =
+        final availableItemWidth =
             (width - (visibleColumns - 1) * spacing) / visibleColumns;
+        final itemWidth = math.min(availableItemWidth, maxItemWidth);
 
         return Wrap(
+          alignment: alignment,
           spacing: spacing,
           runSpacing: spacing,
           children: [
@@ -465,37 +471,6 @@ class BackgroundDecorations extends StatelessWidget {
                   colors: [Color(0x18B88E58), Color(0x00B88E58)],
                 ),
               ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class SiteMiniBullet extends StatelessWidget {
-  const SiteMiniBullet({super.key, required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 7),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Padding(
-            padding: EdgeInsets.only(top: 6),
-            child: Icon(Icons.circle, size: 6, color: SiteColors.cyan),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Text(
-              label,
-              style: Theme.of(
-                context,
-              ).textTheme.bodySmall?.copyWith(color: SiteColors.text),
             ),
           ),
         ],

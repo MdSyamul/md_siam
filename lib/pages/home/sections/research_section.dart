@@ -8,10 +8,12 @@ class ResearchSection extends StatelessWidget {
     super.key,
     required this.compact,
     required this.onOpenResearchPage,
+    required this.onGoogleScholar,
   });
 
   final bool compact;
   final VoidCallback onOpenResearchPage;
+  final VoidCallback onGoogleScholar;
 
   @override
   Widget build(BuildContext context) {
@@ -27,18 +29,25 @@ class ResearchSection extends StatelessWidget {
           const SizedBox(height: 16),
           Align(
             alignment: compact ? Alignment.centerLeft : Alignment.centerRight,
-            child: OutlinedButton.icon(
-              onPressed: onOpenResearchPage,
-              icon: const Icon(Icons.arrow_forward_rounded, size: 18),
-              label: const Text('Explore research directions'),
-              style: OutlinedButton.styleFrom(
-                foregroundColor: SiteColors.navy,
-                side: const BorderSide(color: SiteColors.cyan),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 18,
-                  vertical: 14,
+            child: Wrap(
+              alignment: compact ? WrapAlignment.start : WrapAlignment.end,
+              spacing: 12,
+              runSpacing: 12,
+              children: [
+                OutlinedButton.icon(
+                  onPressed: onOpenResearchPage,
+                  icon: const Icon(Icons.arrow_forward_rounded, size: 18),
+                  label: const Text('Explore research directions'),
+                  style: _researchButtonStyle,
                 ),
-              ),
+                OutlinedButton.icon(
+                  key: const Key('research-google-scholar-button'),
+                  onPressed: onGoogleScholar,
+                  icon: const Icon(Icons.school_rounded, size: 18),
+                  label: const Text('Google Scholar'),
+                  style: _researchButtonStyle,
+                ),
+              ],
             ),
           ),
         ],
@@ -47,9 +56,14 @@ class ResearchSection extends StatelessWidget {
   }
 }
 
+final ButtonStyle _researchButtonStyle = OutlinedButton.styleFrom(
+  foregroundColor: SiteColors.navy,
+  side: const BorderSide(color: SiteColors.cyan),
+  padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+);
+
 const List<String> _researchInterests = [
-  'Smart & Additive Manufacturing',
-  'Industrial AI',
+  'Additive Manufacturing',
   'Physical AI',
   'System dynamics and control',
   'Generative Mechanical Design',
