@@ -31,12 +31,12 @@ class ResearchDocument extends StatelessWidget {
       projects: [
         _ResearchProject(
           title:
-              'Bashar, M. S.* Safe Reinforcement Learning for '
-              'Defect-Constrained Productivity Optimization in Metal Additive '
-              'Manufacturing (Ongoing).',
+              'Bashar, M. S.* & Rahman, M. Safe Adaptive Reinforcement '
+              'Learning for Defect-Constrained High-Productivity Directed '
+              'Energy Deposition (Ongoing).',
           projectTitle:
-              'Safe Reinforcement Learning for Defect-Constrained Productivity '
-              'Optimization in Metal Additive Manufacturing',
+              'Safe Adaptive Reinforcement Learning for Defect-Constrained '
+              'High-Productivity Directed Energy Deposition',
         ),
         _ResearchProject(
           title:
@@ -84,14 +84,6 @@ class ResearchDocument extends StatelessWidget {
           projectTitle:
               'A Computational Process-Property Dataset of Wire Arc Additive '
               'Manufacturing',
-        ),
-        _ResearchProject(
-          title:
-              'Interpretable and Physics-Guided Reduced-Order Modeling for '
-              'Melt-pool Dynamics (Ongoing thesis).',
-          projectTitle:
-              'Interpretable and Physics-Guided Reduced-Order Modeling for '
-              'Melt-pool Dynamics',
         ),
       ],
     ),

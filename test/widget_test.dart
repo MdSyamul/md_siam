@@ -144,10 +144,12 @@ void main() {
     expect(find.text('Selected Research Projects:'), findsNWidgets(3));
     expect(
       find.textContaining(
-        'Safe Reinforcement Learning for Defect-Constrained Productivity',
+        'Safe Adaptive Reinforcement Learning for Defect-Constrained '
+        'High-Productivity Directed Energy Deposition',
       ),
       findsOneWidget,
     );
+    expect(find.textContaining('Bashar, M. S.* & Rahman, M.'), findsOneWidget);
     expect(
       find.textContaining('Sabbir S. H. B., & Bashar, M. S.*'),
       findsOneWidget,
@@ -156,7 +158,7 @@ void main() {
       find.textContaining(
         'Interpretable and Physics-Guided Reduced-Order Modeling',
       ),
-      findsOneWidget,
+      findsNothing,
     );
     expect(
       find.textContaining(

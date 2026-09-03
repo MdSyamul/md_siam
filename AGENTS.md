@@ -117,11 +117,11 @@ consult **Bugs and troubleshooting** before trying a new approach.
 - Project entries include the source's full author, session/year, venue, status,
   and thesis-book wording. Do not shorten these citations when syncing future
   Word updates.
-- The first Additive Manufacturing project is `Safe Reinforcement Learning for
-  Defect-Constrained Productivity Optimization in Metal Additive Manufacturing
+- The first Additive Manufacturing project is `Safe Adaptive Reinforcement
+  Learning for Defect-Constrained High-Productivity Directed Energy Deposition
   (Ongoing).`, followed by the transfer-learning, parameter-optimization,
-  explainable-ML, surface-roughness, WAAM-dataset, and reduced-order-modeling
-  projects in the Word source's order.
+  explainable-ML, surface-roughness, and WAAM-dataset projects in the Word
+  source's order.
 - The native document root uses the key `research-content-underlay` and owns
   the light surface, border, and subtle shadow behind all research content.
 - Research typography derives from the global Merriweather/IBM Plex Sans theme
