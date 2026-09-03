@@ -143,6 +143,12 @@ void main() {
     );
     expect(find.text('Selected Research Projects:'), findsNWidgets(3));
     expect(
+      find.textContaining(
+        'Safe Reinforcement Learning for Defect-Constrained Productivity',
+      ),
+      findsOneWidget,
+    );
+    expect(
       find.textContaining('Sabbir S. H. B., & Bashar, M. S.*'),
       findsOneWidget,
     );

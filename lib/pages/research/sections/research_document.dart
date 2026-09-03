@@ -31,12 +31,12 @@ class ResearchDocument extends StatelessWidget {
       projects: [
         _ResearchProject(
           title:
-              'Sabbir S. H. B., & Bashar, M. S.* A Stacked Ensemble Learning '
-              'Framework for Surface Roughness Prediction in Additively '
-              'Manufactured Parts (Completed as part of an ongoing thesis).',
+              'Bashar, M. S.* Safe Reinforcement Learning for '
+              'Defect-Constrained Productivity Optimization in Metal Additive '
+              'Manufacturing (Ongoing).',
           projectTitle:
-              'A Stacked Ensemble Learning Framework for Surface Roughness '
-              'Prediction in Additively Manufactured Parts',
+              'Safe Reinforcement Learning for Defect-Constrained Productivity '
+              'Optimization in Metal Additive Manufacturing',
         ),
         _ResearchProject(
           title:
@@ -46,6 +46,16 @@ class ResearchDocument extends StatelessWidget {
           projectTitle:
               'A Cross-Machine Transfer Learning Framework for Mechanical '
               'Property Prediction in Laser Powder Bed Fusion',
+        ),
+        _ResearchProject(
+          title:
+              'Abir M. A. A, & Bashar, M. S.* Defect-Constrained Process '
+              'Parameter Optimization for Target Mechanical Properties in '
+              'Additive Manufacturing '
+              '(Completed as part of an ongoing thesis).',
+          projectTitle:
+              'Defect-Constrained Process Parameter Optimization for Target '
+              'Mechanical Properties in Additive Manufacturing',
         ),
         _ResearchProject(
           title:
@@ -59,12 +69,12 @@ class ResearchDocument extends StatelessWidget {
         ),
         _ResearchProject(
           title:
-              'Abir M. A. A, & Bashar, M. S.* Defect-Constrained Process '
-              'Parameter Optimization for Target Mechanical Properties in '
-              'Additive Manufacturing (Completed as part of an ongoing thesis).',
+              'Sabbir S. H. B., & Bashar, M. S.* A Stacked Ensemble Learning '
+              'Framework for Surface Roughness Prediction in Additively '
+              'Manufactured Parts (Completed as part of an ongoing thesis).',
           projectTitle:
-              'Defect-Constrained Process Parameter Optimization for Target '
-              'Mechanical Properties in Additive Manufacturing',
+              'A Stacked Ensemble Learning Framework for Surface Roughness '
+              'Prediction in Additively Manufactured Parts',
         ),
         _ResearchProject(
           title:

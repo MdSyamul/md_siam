@@ -1,6 +1,6 @@
 # Project Memory — Md. Syamul Bashar Website
 
-Last updated: 2026-09-02
+Last updated: 2026-09-03
 
 This file is the persistent working memory for this repository. Read it before
 making project changes. Update it whenever a preference, decision, dependency,
@@ -104,7 +104,7 @@ consult **Bugs and troubleshooting** before trying a new approach.
 - Research content and Paper/Code URLs live in
   `lib/pages/research/sections/research_document.dart`.
 - The research page was last synchronized with `assets/research.docx` on
-  2026-09-02.
+  2026-09-03.
 - The current narrative framing emphasizes physical principles, uncertainty,
   limited data, safety-critical operation, and evolving physical systems. Area
   summaries cover data-efficient, physics-guided, uncertainty-aware additive
@@ -117,6 +117,11 @@ consult **Bugs and troubleshooting** before trying a new approach.
 - Project entries include the source's full author, session/year, venue, status,
   and thesis-book wording. Do not shorten these citations when syncing future
   Word updates.
+- The first Additive Manufacturing project is `Safe Reinforcement Learning for
+  Defect-Constrained Productivity Optimization in Metal Additive Manufacturing
+  (Ongoing).`, followed by the transfer-learning, parameter-optimization,
+  explainable-ML, surface-roughness, WAAM-dataset, and reduced-order-modeling
+  projects in the Word source's order.
 - The native document root uses the key `research-content-underlay` and owns
   the light surface, border, and subtle shadow behind all research content.
 - Research typography derives from the global Merriweather/IBM Plex Sans theme
