@@ -151,6 +151,13 @@ void main() {
     );
     expect(find.textContaining('Bashar, M. S.* & Rahman, M.'), findsOneWidget);
     expect(
+      find.textContaining(
+        'A Computational Process-Structure-Property Dataset of Wire Arc '
+        'Additive Manufacturing',
+      ),
+      findsOneWidget,
+    );
+    expect(
       find.textContaining('Sabbir S. H. B., & Bashar, M. S.*'),
       findsOneWidget,
     );
@@ -402,10 +409,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Visit Blog'), findsNothing);
-    expect(
-      find.text('The self is old - older than the universe.'),
-      findsWidgets,
-    );
+    expect(find.text('The self is old—older than the universe.'), findsWidgets);
     expect(find.text('Philosophy'), findsWidgets);
     expect(find.text('Browse all writing'), findsOneWidget);
     expect(find.text('Quiet Ruin of the Self'), findsWidgets);

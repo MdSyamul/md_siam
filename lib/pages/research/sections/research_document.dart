@@ -40,6 +40,15 @@ class ResearchDocument extends StatelessWidget {
         ),
         _ResearchProject(
           title:
+              'Hadi M. J. A., & Bashar, M. S.* A Computational '
+              'Process-Structure-Property Dataset of Wire Arc Additive '
+              'Manufacturing (Ongoing thesis).',
+          projectTitle:
+              'A Computational Process-Structure-Property Dataset of Wire Arc '
+              'Additive Manufacturing',
+        ),
+        _ResearchProject(
+          title:
               'Mahbub, M., & Bashar, M. S.* A Cross-Machine Transfer Learning '
               'Framework for Mechanical Property Prediction in Laser Powder '
               'Bed Fusion (Completed as part of an ongoing thesis).',
@@ -75,15 +84,6 @@ class ResearchDocument extends StatelessWidget {
           projectTitle:
               'A Stacked Ensemble Learning Framework for Surface Roughness '
               'Prediction in Additively Manufactured Parts',
-        ),
-        _ResearchProject(
-          title:
-              'Hadi M. J. A., & Bashar, M. S.* A Computational '
-              'Process-Property Dataset of Wire Arc Additive Manufacturing '
-              '(Ongoing thesis).',
-          projectTitle:
-              'A Computational Process-Property Dataset of Wire Arc Additive '
-              'Manufacturing',
         ),
       ],
     ),

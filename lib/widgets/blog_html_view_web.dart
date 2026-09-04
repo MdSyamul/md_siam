@@ -32,15 +32,29 @@ class BlogHtmlView extends StatefulWidget {
 }
 
 class _BlogHtmlViewState extends State<BlogHtmlView> {
+  static const _compactFallbackHeight = 720.0;
+  static const _wideFallbackHeight = 920.0;
+  static const _heightCheckDelays = <Duration>[
+    Duration.zero,
+    Duration(milliseconds: 100),
+    Duration(milliseconds: 350),
+    Duration(milliseconds: 900),
+    Duration(milliseconds: 1800),
+    Duration(milliseconds: 3000),
+  ];
+
   late final String _viewType =
       'blog-html-${widget.sourceUrl.hashCode}-${identityHashCode(this)}';
-  late double _height = widget.initialHeight;
+  late double _height;
   html.IFrameElement? _iframe;
   StreamSubscription<html.MessageEvent>? _windowMessageSubscription;
+  final List<Timer> _heightCheckTimers = [];
+  final List<StreamSubscription<html.Event>> _contentSubscriptions = [];
 
   @override
   void initState() {
     super.initState();
+    _height = _adaptiveFallbackHeight;
     _windowMessageSubscription = html.window.onMessage.listen(
       _handleFrameMessage,
     );
@@ -64,7 +78,17 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
   @override
   void dispose() {
     _windowMessageSubscription?.cancel();
+    _cancelContentMeasurements();
     super.dispose();
+  }
+
+  double get _adaptiveFallbackHeight {
+    final safeFallback = widget.compact
+        ? _compactFallbackHeight
+        : _wideFallbackHeight;
+    return widget.initialHeight > safeFallback
+        ? widget.initialHeight
+        : safeFallback;
   }
 
   void _handleIframeLoad() {
@@ -84,6 +108,8 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
     if (document == null) {
       return;
     }
+
+    _cancelContentMeasurements();
 
     // Install the scroll bridge before making any optional document changes.
     // A failed subtitle lookup or DOM cast must never leave the iframe
@@ -117,9 +143,51 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
 
     try {
       _updateHeightFromDocument(document);
+      _watchContentMeasurements(document);
     } catch (_) {
       // Keep the configured fallback height when document access is blocked.
     }
+  }
+
+  void _watchContentMeasurements(dynamic document) {
+    for (final delay in _heightCheckDelays) {
+      _heightCheckTimers.add(
+        Timer(delay, () {
+          if (mounted) {
+            _updateHeightFromDocument(document);
+          }
+        }),
+      );
+    }
+
+    try {
+      final images = document?.querySelectorAll('img');
+      if (images is Iterable) {
+        for (final image in images.whereType<html.Element>()) {
+          _contentSubscriptions
+            ..add(
+              image.onLoad.listen((_) => _updateHeightFromDocument(document)),
+            )
+            ..add(
+              image.onError.listen((_) => _updateHeightFromDocument(document)),
+            );
+        }
+      }
+    } catch (_) {
+      // Timed checks and the frame bridge still cover dynamic content.
+    }
+  }
+
+  void _cancelContentMeasurements() {
+    for (final timer in _heightCheckTimers) {
+      timer.cancel();
+    }
+    _heightCheckTimers.clear();
+
+    for (final subscription in _contentSubscriptions) {
+      subscription.cancel();
+    }
+    _contentSubscriptions.clear();
   }
 
   void _installFrameBridge(dynamic document) {
@@ -167,17 +235,25 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
 
   function reportHeight() {
     var page = document.querySelector('.page');
-    var content = page || document.body || document.documentElement;
-    if (!content) {
-      return;
-    }
+    var candidates = page
+      ? [page]
+      : [document.body, document.documentElement];
+    var height = 0;
 
-    var rect = content.getBoundingClientRect();
-    var height = Math.ceil(Math.max(
-      rect.height || 0,
-      content.scrollHeight || 0,
-      content.offsetHeight || 0
-    ));
+    candidates.forEach(function (content) {
+      if (!content) {
+        return;
+      }
+
+      var rect = content.getBoundingClientRect();
+      height = Math.max(
+        height,
+        rect.height || 0,
+        content.scrollHeight || 0,
+        content.offsetHeight || 0
+      );
+    });
+
     if (height <= 0) {
       return;
     }
@@ -185,7 +261,7 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
     postMessageToParent({
       type: 'blog-html-resize',
       viewType: viewType,
-      height: height
+      height: Math.ceil(height) + 2
     });
   }
 
@@ -262,6 +338,21 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
     var resizeObserver = new ResizeObserver(reportHeight);
     resizeObserver.observe(document.querySelector('.page') || document.body);
   }
+  if (window.MutationObserver) {
+    var mutationObserver = new MutationObserver(function () {
+      requestAnimationFrame(reportHeight);
+    });
+    mutationObserver.observe(document.querySelector('.page') || document.body, {
+      attributes: true,
+      characterData: true,
+      childList: true,
+      subtree: true
+    });
+  }
+  Array.prototype.forEach.call(document.images || [], function (image) {
+    listen(image, 'load', reportHeight);
+    listen(image, 'error', reportHeight);
+  });
   listen(window, 'load', reportHeight);
   listen(window, 'resize', reportHeight);
   if (document.fonts && document.fonts.ready) {
@@ -270,6 +361,9 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
   requestAnimationFrame(function () {
     reportHeight();
     requestAnimationFrame(reportHeight);
+  });
+  [50, 250, 750, 1500, 3000].forEach(function (delay) {
+    window.setTimeout(reportHeight, delay);
   });
 })();
 ''';
@@ -377,12 +471,25 @@ class _BlogHtmlViewState extends State<BlogHtmlView> {
   void _updateHeightFromDocument(dynamic document) {
     try {
       final page = document?.querySelector('.page');
-      final pageHeight = [page?.scrollHeight, page?.offsetHeight]
-          .whereType<num>()
-          .fold<double>(0, (current, next) {
-            return next > current ? next.toDouble() : current;
-          });
-      _setHeight(pageHeight.ceilToDouble());
+      final body = document?.body;
+      final root = document?.documentElement;
+      final candidates = page != null
+          ? [
+              page.getBoundingClientRect()?.height,
+              page.scrollHeight,
+              page.offsetHeight,
+            ]
+          : [body?.scrollHeight, body?.offsetHeight, root?.scrollHeight];
+      final contentHeight = candidates.whereType<num>().fold<double>(0, (
+        current,
+        next,
+      ) {
+        return next > current ? next.toDouble() : current;
+      });
+      if (contentHeight <= 0) {
+        return;
+      }
+      _setHeight(contentHeight.ceilToDouble() + 2);
     } catch (_) {
       // The frame bridge will report the height after layout settles.
     }

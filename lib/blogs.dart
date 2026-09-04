@@ -39,7 +39,7 @@ const List<BlogPost> blogPosts = [
   BlogPost(
     title: 'Quiet Ruin of the Self',
     category: 'Philosophy',
-    subtitle: 'The self is old - older than the universe.',
+    subtitle: 'The self is old—older than the universe.',
     publishedAt: '2026-07-18',
     updatedAt: '2026-07-18',
     coverImageUrl: 'blogs/the-self-is-old/cover.jpg',

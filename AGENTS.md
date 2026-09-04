@@ -1,6 +1,6 @@
 # Project Memory — Md. Syamul Bashar Website
 
-Last updated: 2026-09-03
+Last updated: 2026-09-04
 
 This file is the persistent working memory for this repository. Read it before
 making project changes. Update it whenever a preference, decision, dependency,
@@ -22,6 +22,10 @@ consult **Bugs and troubleshooting** before trying a new approach.
   focused on active decisions and operational knowledge.
 - Treat `assets/research.docx` as the authoritative source for research-page
   wording and project information unless the user provides a newer source.
+- Treat `assets/Blogs.docx` as the authoritative source for the published blog
+  catalog, metadata, asset paths, image descriptions, and article wording.
+  Future blog additions, edits, and removals should be synchronized from this
+  document into `lib/blogs.dart` and the matching `web/blogs/` content.
 - The working tree commonly contains user-owned, uncommitted refactors and
   assets. Preserve unrelated changes and do not assume a dirty file is safe to
   replace wholesale.
@@ -30,6 +34,9 @@ consult **Bugs and troubleshooting** before trying a new approach.
 
 - Do not run a release build or push commits unless the user explicitly asks
   for that action in the current request.
+- Do not automatically run analysis or tests after every code edit. For small,
+  localized changes, perform a focused code review and reserve validation for
+  major updates, risky or crucial behavior, and deployment preparation.
 - Use conventional, concise hyperlink labels. For research resources, display
   `Paper` and `Code`, not raw URLs or `[paper]: URL`-style text.
 - Keep `Paper` and `Code` side by side, immediately after the corresponding
@@ -104,7 +111,7 @@ consult **Bugs and troubleshooting** before trying a new approach.
 - Research content and Paper/Code URLs live in
   `lib/pages/research/sections/research_document.dart`.
 - The research page was last synchronized with `assets/research.docx` on
-  2026-09-03.
+  2026-09-04.
 - The current narrative framing emphasizes physical principles, uncertainty,
   limited data, safety-critical operation, and evolving physical systems. Area
   summaries cover data-efficient, physics-guided, uncertainty-aware additive
@@ -119,9 +126,9 @@ consult **Bugs and troubleshooting** before trying a new approach.
   Word updates.
 - The first Additive Manufacturing project is `Safe Adaptive Reinforcement
   Learning for Defect-Constrained High-Productivity Directed Energy Deposition
-  (Ongoing).`, followed by the transfer-learning, parameter-optimization,
-  explainable-ML, surface-roughness, and WAAM-dataset projects in the Word
-  source's order.
+  (Ongoing).`, followed by the WAAM process-structure-property dataset,
+  transfer-learning, parameter-optimization, explainable-ML, and
+  surface-roughness projects in the Word source's order.
 - The native document root uses the key `research-content-underlay` and owns
   the light surface, border, and subtle shadow behind all research content.
 - Research typography derives from the global Merriweather/IBM Plex Sans theme
@@ -174,6 +181,13 @@ consult **Bugs and troubleshooting** before trying a new approach.
 
 ### Blog content
 
+- `assets/Blogs.docx` contains one repeatable `BLOG: Title` section per
+  published post, followed by labeled metadata and a `Body` section. A missing
+  blog section means the post should not be published. The disabled
+  Productivity draft is intentionally absent from the document.
+- The blog catalog and article content were last synchronized with
+  `assets/Blogs.docx` on 2026-09-04. The `Existing` post currently publishes
+  the Chase Hughes pull quote recorded in that document.
 - The blog listing uses `AdaptiveWrapGrid` with a 280 px minimum card width, a
   420 px maximum card width, and up to three columns. Preserve these bounds so
   cards remain readable without wasting tablet space or becoming oversized on
@@ -182,14 +196,20 @@ consult **Bugs and troubleshooting** before trying a new approach.
   bridge. Do not assume the research page uses the same rendering path.
 - In `blog_html_view_web.dart`, install the frame bridge before optional DOM
   changes; a subtitle lookup or DOM cast must not abort bridge setup.
+- Blog iframe height is content-driven. Keep the ResizeObserver and
+  MutationObserver bridge, delayed same-origin measurements, image-load
+  measurements, and adaptive 920 px wide / 720 px compact fallback heights so
+  delayed fonts, images, or short initial-height metadata cannot crop a post.
 
 ## Verification expectations
 
-- Run `dart format` for changed Dart files.
-- Run `flutter analyze` after implementation changes.
+- Run `dart format` for changed Dart files when formatting is needed.
+- Run `flutter analyze` for major, risky, or deployment-bound implementation
+  changes rather than after every small edit.
 - Run the blog viewport regression test when changing blog listing or card
   layout; it covers 280 px mobile through 1440 px desktop at enlarged text.
-- Run the targeted research test when changing research layout or scrolling:
+- Run the targeted research test when materially changing research layout or
+  scrolling:
   `flutter test --plain-name "research section opens the research page"`.
 - Run `flutter build web` for web-platform or asset changes.
 - The targeted research test scrolls from Additive Manufacturing toward
